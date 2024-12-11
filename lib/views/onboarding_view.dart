@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/views/register_view.dart';
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({super.key});
@@ -93,7 +94,7 @@ class OnboardingView extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginView()),
+                            builder: (context) => const RegisterView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/register_view.dart';
+import 'package:projectsyeti/views/login_view.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               const SizedBox(height: 35),
               const Text(
-                'Login',
+                'Create Account',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -60,21 +55,27 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               const SizedBox(height: 10),
-              Container(
-                alignment: Alignment.bottomRight,
-                child: SizedBox(
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, elevation: 0),
-                      onPressed: () {},
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Color.fromARGB(255, 3, 26, 65)),
-                      )),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  hintText: 'Confirm Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
+              const SizedBox(height: 20),
+              TextFormField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  hintText: 'Enter your phone number',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               const SizedBox(height: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,7 +92,7 @@ class _LoginViewState extends State<LoginView> {
                             )),
                         onPressed: () {},
                         child: const Text(
-                          "Sign In",
+                          "Sign Up",
                           style: TextStyle(fontSize: 25, color: Colors.white),
                         )),
                   ),
@@ -107,13 +108,13 @@ class _LoginViewState extends State<LoginView> {
                             )),
                         onPressed: () {
                           Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterView()),
-                      );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginView()),
+                          );
                         },
                         child: const Text(
-                          "I don't have an account",
+                          "Already Have An Account?",
                           style: TextStyle(
                               fontSize: 20,
                               color: Color.fromARGB(255, 10, 63, 154)),
