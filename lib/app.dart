@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/views/splash_screen_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -10,7 +11,8 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       debugShowCheckedModeBanner: false,
       routes:{
-        "/":(context)=>const LoginView(),
+        "/":(context)=>const SplashScreen(),
+        "/login":(context)=>const LoginView(),
       }
     );
   }
