@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/views/onboarding_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,10 +16,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToLogin() async {
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
       Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoginView()),
+      MaterialPageRoute(builder: (context) => const OnboardingView()),
   );
   }
 

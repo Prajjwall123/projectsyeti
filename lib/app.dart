@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/views/onboarding_view.dart';
 import 'package:projectsyeti/views/splash_screen_view.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
       routes:{
         "/":(context)=>const SplashScreen(),
         "/login":(context)=>const LoginView(),
+        "/onboarding":(context)=> const OnboardingView(),
       }
     );
   }
