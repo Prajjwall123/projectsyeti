@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/views/dashboard_view.dart';
 import 'package:projectsyeti/views/register_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -89,7 +90,13 @@ class _LoginViewState extends State<LoginView> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                             )),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DashboardView()),
+                      );
+                        },
                         child: const Text(
                           "Sign In",
                           style: TextStyle(fontSize: 25, color: Colors.white),

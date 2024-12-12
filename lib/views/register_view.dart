@@ -66,6 +66,7 @@ class RegisterView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                keyboardType: TextInputType.number,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
