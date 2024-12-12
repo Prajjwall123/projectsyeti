@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/common/my_card.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -76,28 +77,54 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                     Container(
-                alignment: Alignment.topLeft,
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding:  EdgeInsets.all(8.0),
-                      child:  Text('Filter', style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold,),),
+                      alignment: Alignment.topLeft,
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Projects',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          DropdownButton<String>(
+                            dropdownColor: Colors.white,
+                            items: <String>[
+                              'All Projects',
+                              'Mobile Application',
+                              'Web Development',
+                              'Graphics Design'
+                            ].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (_) {},
+                          ),
+                        ],
+                      ),
                     ),
-                    const Spacer(),
-                    DropdownButton<String>(
-                      dropdownColor: Colors.white,
-                      items: <String>['All Projects', 'Mobile Application', 'Web Development', 'Graphics Design'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
-                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
-                  ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: List.generate(10, (index) {
+                      return const Column(
+                        children: [
+                          MyCard(),
+                          SizedBox(height: 10),
+                        ],
+                      );
+                    }),
+                  ),
                 ),
               ),
             ],
