@@ -10,6 +10,8 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  bool _obscurePassword = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +46,7 @@ class _LoginViewState extends State<LoginView> {
                 decoration: InputDecoration(
                   labelText: 'Email',
                   hintText: 'Enter your email',
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -51,10 +54,23 @@ class _LoginViewState extends State<LoginView> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                obscureText: true,
+                obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   hintText: 'Enter your password',
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -65,15 +81,15 @@ class _LoginViewState extends State<LoginView> {
                 alignment: Alignment.bottomRight,
                 child: SizedBox(
                   child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, elevation: 0),
-                      onPressed: () {},
-                      child: const Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Color.fromARGB(255, 3, 26, 65)),
-                      )),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, elevation: 0),
+                    onPressed: () {},
+                    child: const Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          fontSize: 17, color: Color.fromARGB(255, 3, 26, 65)),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -92,10 +108,10 @@ class _LoginViewState extends State<LoginView> {
                             )),
                         onPressed: () {
                           Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const DashboardView()),
-                      );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DashboardView()),
+                          );
                         },
                         child: const Text(
                           "Sign In",
@@ -114,10 +130,10 @@ class _LoginViewState extends State<LoginView> {
                             )),
                         onPressed: () {
                           Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterView()),
-                      );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterView()),
+                          );
                         },
                         child: const Text(
                           "I don't have an account",
