@@ -16,14 +16,14 @@ class MyCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey),
+                    const Icon(Icons.calendar_today_outlined,
+                        size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
                       "Posted Today",
@@ -35,7 +35,8 @@ class MyCard extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(8),
@@ -91,9 +92,10 @@ class MyCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.blue[700],
+                    color: const Color(0xFF1976D2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
@@ -103,7 +105,8 @@ class MyCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.blue[700],
                     borderRadius: BorderRadius.circular(12),
@@ -130,17 +133,10 @@ class MyCard extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
                 onPressed: () {},
                 child: const Text(
                   "View Details",
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/views/onboarding_page.dart';
 import 'package:projectsyeti/views/onboarding_view.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
       Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const OnboardingView()),
+      MaterialPageRoute(builder: (context) => const OnboardingPage()),
   );
   }
 

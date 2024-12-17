@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/common/my_card.dart';
-import 'package:projectsyeti/common/navigation_menu.dart';
+import 'package:projectsyeti/core/common/my_card.dart';
+import 'package:projectsyeti/core/common/navigation_menu.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
