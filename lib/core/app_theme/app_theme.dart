@@ -15,5 +15,8 @@ ThemeData getApplicationTheme() {
           borderRadius: BorderRadius.circular(10),
         ),
       )),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.black,
+      ),
       scaffoldBackgroundColor: Colors.grey[200]);
 }

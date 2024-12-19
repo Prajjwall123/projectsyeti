@@ -16,10 +16,10 @@ class NavigationMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(size: 30,Icons.home, color: Colors.white),
-          Icon(size: 30,Icons.message, color: Colors.white),
-          Icon(size: 30,Icons.wallet, color: Colors.white),
-          Icon(size: 30,Icons.person, color: Colors.white),
+          Icon(size: 30, Icons.home, color: Colors.white),
+          Icon(size: 30, Icons.message, color: Colors.white),
+          Icon(size: 30, Icons.wallet, color: Colors.white),
+          Icon(size: 30, Icons.person, color: Colors.white),
         ],
       ),
     );

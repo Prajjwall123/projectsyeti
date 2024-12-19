@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/core/common/my_card.dart';
-import 'package:projectsyeti/core/common/navigation_menu.dart';
+import 'package:projectsyeti/views/account_view.dart';
+import 'package:projectsyeti/views/home_view.dart';
+import 'package:projectsyeti/views/wallet_view.dart';
+import 'package:projectsyeti/views/chat_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -10,226 +12,46 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeView(),
+    const ChatView(),
+    const WalletView(),
+    const AccountView(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.asset(
-                            'assets/images/round_login.png',
-                            height: 40,
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: const Row(
-                                children: [
-                                  Icon(Icons.search, color: Colors.grey),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Search Projects',
-                                        border: InputBorder.none,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              'assets/images/Profile.png',
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 40,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Mobile Application',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Web Development',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'UI Design',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Graphics Design',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Data Science',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Cloud Computing',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Explore Projects',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const Column(
-                  children: [
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                    MyCard(),
-                    SizedBox(height: 10),
-                  ],
-                )
-              ],
-            ),
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(25),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
           ),
-          child: const NavigationMenu(),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label: 'Wallet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Account',
+          ),
+        ],
       ),
     );
   }
