@@ -22,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 75),
               Center(
                 child: SizedBox(
                   height: 50,

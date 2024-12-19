@@ -22,7 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 75),
               Center(
                 child: SizedBox(
                   height: 50,
@@ -73,7 +73,9 @@ class _RegisterViewState extends State<RegisterView> {
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                      _obscurePassword
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -119,8 +121,7 @@ class _RegisterViewState extends State<RegisterView> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 3, 26, 65),
+                        backgroundColor: const Color.fromARGB(255, 3, 26, 65),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
