@@ -123,7 +123,7 @@ class _LoginViewState extends State<LoginView> {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                const Color.fromARGB(255, 3, 26, 65),
+                                Theme.of(context).colorScheme.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                             )),
@@ -156,11 +156,11 @@ class _LoginViewState extends State<LoginView> {
                                 builder: (context) => const RegisterView()),
                           );
                         },
-                        child: const Text(
+                        child: Text(
                           "I don't have an account",
                           style: TextStyle(
                               fontSize: 20,
-                              color: Color.fromARGB(255, 10, 63, 154)),
+                              color: Theme.of(context).colorScheme.primary),
                         )),
                   ),
                 ],

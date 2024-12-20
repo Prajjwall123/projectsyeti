@@ -142,7 +142,7 @@ class _RegisterViewState extends State<RegisterView> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 3, 26, 65),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
@@ -173,11 +173,11 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         "Already Have An Account?",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Color.fromARGB(255, 10, 63, 154),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
