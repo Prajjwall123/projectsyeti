@@ -118,7 +118,7 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
@@ -129,7 +129,7 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

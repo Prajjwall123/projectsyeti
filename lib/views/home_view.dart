@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/core/common/my_card.dart';
+import 'package:projectsyeti/core/common/my_voucher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,7 +13,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -180,6 +180,34 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      SizedBox(
+                        height: 120,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: const [
+                            VoucherCard(
+                              title: 'Become A Premium Member',
+                              description:
+                                  'Find better freelancing opportunities',
+                              backgroundColor: Color.fromARGB(255, 77, 173, 45),
+                            ),
+                            VoucherCard(
+                              title: 'Referral Awards',
+                              description:
+                                  'Invite a collegue and get Rs. 500 in credit',
+                              backgroundColor:
+                                  Color.fromARGB(255, 92, 103, 178),
+                            ),
+                            VoucherCard(
+                              title: 'Optimize Your Profile',
+                              description:
+                                  'Become more attractive to potential clients',
+                              backgroundColor: Colors.purpleAccent,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
@@ -195,8 +223,6 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Column(
                   children: [
-                    MyCard(),
-                    SizedBox(height: 10),
                     MyCard(),
                     SizedBox(height: 10),
                     MyCard(),
