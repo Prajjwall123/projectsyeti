@@ -57,7 +57,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   },
                   child: const Text(
                     "Skip",
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 16.0, color: Color(0xFF1976D2)),
                   ),
                 ),
                 Row(
@@ -76,7 +76,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                     );
                   }),
                 ),
-                TextButton(
+                ElevatedButton(
                   onPressed: () {
                     if (_currentIndex < 2) {
                       _controller.nextPage(
@@ -87,13 +87,17 @@ class _OnboardingViewState extends State<OnboardingView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginView()),
+                          builder: (context) => const LoginView(),
+                        ),
                       );
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 16.0),
+                  ),
                   child: Text(
                     _currentIndex == 2 ? "Finish" : "Next",
-                    style: const TextStyle(fontSize: 16.0),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ],

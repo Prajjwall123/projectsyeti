@@ -79,8 +79,8 @@ class MyCard extends StatelessWidget {
                         "E-Commerce Mobile Application",
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          fontFamily: 'NotoSans Bold',
+                          color: Colors.black,
                         ),
                       ),
                     ],
