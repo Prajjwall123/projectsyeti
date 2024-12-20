@@ -70,6 +70,44 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
+                        height: 120,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: const [
+                            VoucherCard(
+                              title: 'Become A Premium Member',
+                              description:
+                                  'Find better freelancing opportunities',
+                              backgroundColor: Color.fromARGB(255, 77, 173, 45),
+                            ),
+                            VoucherCard(
+                              title: 'Referral Awards',
+                              description:
+                                  'Invite a collegue and get Rs. 500 in credit',
+                              backgroundColor:
+                                  Color.fromARGB(255, 92, 103, 178),
+                            ),
+                            VoucherCard(
+                              title: 'Optimize Your Profile',
+                              description:
+                                  'Become more attractive to potential',
+                              backgroundColor: Colors.purpleAccent,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Explore Projects',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
                         height: 40,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
@@ -179,45 +217,9 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 120,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: const [
-                            VoucherCard(
-                              title: 'Become A Premium Member',
-                              description:
-                                  'Find better freelancing opportunities',
-                              backgroundColor: Color.fromARGB(255, 77, 173, 45),
-                            ),
-                            VoucherCard(
-                              title: 'Referral Awards',
-                              description:
-                                  'Invite a collegue and get Rs. 500 in credit',
-                              backgroundColor:
-                                  Color.fromARGB(255, 92, 103, 178),
-                            ),
-                            VoucherCard(
-                              title: 'Optimize Your Profile',
-                              description:
-                                  'Become more attractive to potential clients',
-                              backgroundColor: Colors.purpleAccent,
-                            ),
-                          ],
-                        ),
+                      const SizedBox(
+                        height: 10,
                       ),
-                      const SizedBox(height: 20),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Explore Projects',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
