@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/core/common/my_card.dart';
+import 'package:projectsyeti/core/common/my_tag.dart';
 import 'package:projectsyeti/core/common/my_voucher.dart';
 
 class HomeView extends StatefulWidget {
@@ -111,108 +112,54 @@ class _HomeViewState extends State<HomeView> {
                         height: 40,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Mobile Application',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                          children: const [
+                            MyTag(
+                              text: 'Mobile Application',
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              borderColor: Colors.blue,
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Web Development',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            MyTag(
+                              text: 'Web Development',
+                              backgroundColor: Colors.white,
+                              textColor: Colors.blue,
+                              borderColor: Colors.blue,
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'UI Design',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            MyTag(
+                              text: 'UI Design',
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              borderColor: Colors.blue,
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Graphics Design',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            MyTag(
+                              text: 'Graphics Design',
+                              backgroundColor: Colors.white,
+                              textColor: Colors.blue,
+                              borderColor: Colors.blue,
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Data Science',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            MyTag(
+                              text: 'Data Science',
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              borderColor: Colors.blue,
                             ),
-                            Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue),
-                              ),
-                              child: const Text(
-                                'Cloud Computing',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                            MyTag(
+                              text: 'Cloud Computing',
+                              backgroundColor: Colors.white,
+                              textColor: Colors.blue,
+                              borderColor: Colors.blue,
+                            ),
+                            MyTag(
+                              text: 'Machine Learning',
+                              backgroundColor: Colors.blue,
+                              textColor: Colors.white,
+                              borderColor: Colors.blue,
+                            ),
+                            MyTag(
+                              text: 'Photography',
+                              backgroundColor: Colors.white,
+                              textColor: Colors.blue,
+                              borderColor: Colors.blue,
                             ),
                           ],
                         ),
