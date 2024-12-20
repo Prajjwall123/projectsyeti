@@ -13,7 +13,6 @@ class _AccountViewState extends State<AccountView> {
     return const Center(
       child: Text(
         'Account Page',
-        style: TextStyle(fontFamily: 'Montserrat Bold', fontSize: 20),
       ),
     );
   }
