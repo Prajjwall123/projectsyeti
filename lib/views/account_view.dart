@@ -10,10 +10,9 @@ class AccountView extends StatefulWidget {
 class _AccountViewState extends State<AccountView> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Account Page',
-      ),
-    );
+    return const Scaffold(
+        body: SafeArea(
+      child: Center(child: Text("Account Page")),
+    ));
   }
 }

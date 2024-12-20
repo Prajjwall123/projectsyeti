@@ -10,8 +10,9 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Messages'),
-    );
+    return const Scaffold(
+        body: SafeArea(
+      child: Center(child: Text("Messages")),
+    ));
   }
 }

@@ -10,8 +10,9 @@ class WalletView extends StatefulWidget {
 class _WalletViewState extends State<WalletView> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Wallet Page'),
-    );
+    return const Scaffold(
+        body: SafeArea(
+      child: Center(child: Text("Wallet Page")),
+    ));
   }
 }
