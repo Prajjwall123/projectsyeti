@@ -4,7 +4,7 @@ import 'package:projectsyeti/views/dashboard_view.dart';
 import 'package:projectsyeti/views/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:projectsyeti/views/register_view.dart';
-import 'package:projectsyeti/views/splash_screen_view.dart';
+import 'package:projectsyeti/features/splash/presentation/view/splash_screen_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
