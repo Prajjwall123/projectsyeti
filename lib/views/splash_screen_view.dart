@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/onboarding_view.dart';
+import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
