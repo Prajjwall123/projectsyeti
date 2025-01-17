@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/core/common/my_card.dart';
-import 'package:projectsyeti/core/common/my_tag.dart';
-import 'package:projectsyeti/core/common/my_voucher.dart';
+import 'package:projectsyeti/app/widgets/my_card.dart';
+import 'package:projectsyeti/app/widgets/my_tag.dart';
+import 'package:projectsyeti/app/widgets/my_voucher.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
