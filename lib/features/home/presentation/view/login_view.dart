@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/register_view.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _LoginViewState extends State<LoginView> {
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 75),
+              const SizedBox(height: 100),
               Center(
                 child: SizedBox(
                   height: 50,
@@ -52,25 +52,13 @@ class _RegisterViewState extends State<RegisterView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
-                      'Create Account',
+                      'Login',
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 40),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Phone Number',
-                        hintText: 'Enter your phone number',
-                        prefixIcon: const Icon(Icons.phone),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -106,27 +94,19 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    TextFormField(
-                      obscureText: _obscureConfirmPassword,
-                      decoration: InputDecoration(
-                        labelText: 'Confirm Password',
-                        hintText: 'Confirm your password',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureConfirmPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      child: SizedBox(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white, elevation: 0),
+                          onPressed: () {},
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Color.fromARGB(255, 3, 26, 65)),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureConfirmPassword =
-                                  !_obscureConfirmPassword;
-                            });
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                     ),
@@ -141,49 +121,50 @@ class _RegisterViewState extends State<RegisterView> {
                     width: screenWidth,
                     height: 50,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                      ),
-                    ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            )),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DashboardView()),
+                          );
+                        },
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(fontSize: 25, color: Colors.white),
+                        )),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: screenWidth,
                     height: 50,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginView(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Already Have An Account?",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            )),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterView()),
+                          );
+                        },
+                        child: Text(
+                          "I don't have an account",
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.primary),
+                        )),
                   ),
                 ],
-              ),
+              )
             ],
           ),
         ),

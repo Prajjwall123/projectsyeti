@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/login_view.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});

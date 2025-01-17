@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/core/app_theme/app_theme.dart';
-import 'package:projectsyeti/views/dashboard_view.dart';
-import 'package:projectsyeti/views/login_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
-import 'package:projectsyeti/views/register_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/register_view.dart';
 import 'package:projectsyeti/features/splash/presentation/view/splash_screen_view.dart';
 
 class MyApp extends StatelessWidget {

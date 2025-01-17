@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/views/account_view.dart';
-import 'package:projectsyeti/views/home_view.dart';
-import 'package:projectsyeti/views/chat_view.dart';
-import 'package:projectsyeti/views/wallet_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
 
 class NavigationMenu extends StatelessWidget {
   final int currentIndex;
