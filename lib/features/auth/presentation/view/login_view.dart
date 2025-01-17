@@ -7,7 +7,6 @@ import 'package:projectsyeti/features/auth/presentation/view/register_view.dart'
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
