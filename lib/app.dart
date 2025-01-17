@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projectsyeti/core/app_theme/app_theme.dart';
+import 'package:projectsyeti/app/constants/app_theme.dart';
 import 'package:projectsyeti/views/dashboard_view.dart';
 import 'package:projectsyeti/views/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
