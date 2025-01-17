@@ -1,49 +1,49 @@
-import 'package:hive/hive.dart';
+import 'package:equatable/equatable.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:projectsyeti/app/constants/hive_table_constant.dart';
-import 'package:projectsyeti/features/auth/domain/entity/auth_entity.dart';
 import 'package:uuid/uuid.dart';
 
-@HiveType(typeId: HiveTableConstant.authTableId)
-class AuthHiveModel {
-  @HiveField(0)
-  final String? userId;
+part 'auth_hive_model.g.dart';
 
+@HiveType(typeId: HiveTableConstant.userTableId)
+class UserHiveModel extends Equatable {
+  @HiveField(0)
+  final String? id;
   @HiveField(1)
   final String email;
-
   @HiveField(2)
   final String password;
 
-  AuthHiveModel({
-    String? userId,
+  UserHiveModel({
+    String? id,
     required this.email,
     required this.password,
-  }) : userId = userId ?? const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 
-  //initial constructor
-  const AuthHiveModel.intial()
-      : userId = '',
+  // Initial Constructor
+  const UserHiveModel.initial()
+      : id = '',
         email = '',
         password = '';
 
-  //from entity- top to bottom
-  factory AuthHiveModel.fromEntity(AuthEntity entity) {
-    return AuthHiveModel(
-      userId: entity.userId,
-      email: entity.email,
-      password: entity.password,
+  // From Entity
+  factory UserHiveModel.fromJson(Map<String, dynamic> json) {
+    return UserHiveModel(
+      id: json['id'] as String?,
+      email: json['email'] as String,
+      password: json['password'] as String,
     );
   }
 
-  //to entity
-  AuthEntity toEntity() {
-    return AuthEntity(
-      userId: userId,
-      email: email,
-      password: password,
-    );
+  // To Entity
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'password': password,
+    };
   }
 
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [id, email, password];
 }
