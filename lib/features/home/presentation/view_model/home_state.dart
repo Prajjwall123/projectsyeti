@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
 
@@ -21,7 +20,6 @@ class HomeState extends Equatable {
       views: [
         HomeView(),
         ChatView(),
-        DashboardView(),
         WalletView(),
         HomeView(),
         AccountView(),
