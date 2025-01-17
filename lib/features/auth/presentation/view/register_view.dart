@@ -16,6 +16,8 @@ class _RegisterViewState extends State<RegisterView> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
@@ -29,9 +31,6 @@ class _RegisterViewState extends State<RegisterView> {
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Registration Successful")),
-            );
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => LoginView()),
@@ -87,6 +86,26 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           const SizedBox(height: 40),
+                          // Full Name field
+                          TextFormField(
+                            controller: _fnameController,
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              hintText: 'Enter your full name',
+                              prefixIcon: const Icon(Icons.person),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Full Name is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          // Email field
                           TextFormField(
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -110,6 +129,27 @@ class _RegisterViewState extends State<RegisterView> {
                             },
                           ),
                           const SizedBox(height: 20),
+                          // Phone field
+                          TextFormField(
+                            controller: _phoneController,
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              labelText: 'Phone Number',
+                              hintText: 'Enter your phone number',
+                              prefixIcon: const Icon(Icons.phone),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Phone number is required";
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          // Password field
                           TextFormField(
                             controller: _passwordController,
                             obscureText: _obscurePassword,
@@ -144,6 +184,7 @@ class _RegisterViewState extends State<RegisterView> {
                             },
                           ),
                           const SizedBox(height: 10),
+                          // Confirm Password field
                           TextFormField(
                             controller: _confirmPasswordController,
                             obscureText: _obscureConfirmPassword,
@@ -204,6 +245,8 @@ class _RegisterViewState extends State<RegisterView> {
                                       context: context,
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text,
+                                      phone: _phoneController.text,
+                                      fname: _fnameController.text,
                                       confirmPassword:
                                           _confirmPasswordController.text,
                                     ),

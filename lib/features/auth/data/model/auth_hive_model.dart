@@ -13,18 +13,26 @@ class UserHiveModel extends Equatable {
   final String email;
   @HiveField(2)
   final String password;
+  @HiveField(3)
+  final String fname;
+  @HiveField(4)
+  final String phone;
 
   UserHiveModel({
     String? id,
     required this.email,
     required this.password,
+    required this.fname,
+    required this.phone,
   }) : id = id ?? const Uuid().v4();
 
   // Initial Constructor
   const UserHiveModel.initial()
       : id = '',
         email = '',
-        password = '';
+        password = '',
+        fname = '',
+        phone = '';
 
   // From Entity
   factory UserHiveModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +40,8 @@ class UserHiveModel extends Equatable {
       id: json['id'] as String?,
       email: json['email'] as String,
       password: json['password'] as String,
+      fname: json['fname'] as String,
+      phone: json['phone'] as String,
     );
   }
 
@@ -41,9 +51,11 @@ class UserHiveModel extends Equatable {
       'id': id,
       'email': email,
       'password': password,
+      'fname': fname,
+      'phone': phone,
     };
   }
 
   @override
-  List<Object?> get props => [id, email, password];
+  List<Object?> get props => [id, email, password, fname, phone];
 }

@@ -11,10 +11,12 @@ class AuthLocalDataSource implements IAuthDataSource {
 
   @override
   Future<AuthEntity> getCurrentUser() {
-    return Future.value(const AuthEntity(
+    return Future.value(AuthEntity(
       id: "1",
       email: "",
       password: "",
+      phone: "",
+      fname: "",
     ));
   }
 
@@ -39,6 +41,8 @@ class AuthLocalDataSource implements IAuthDataSource {
         id: user.id,
         email: user.email,
         password: user.password,
+        fname: user.fname,
+        phone: user.phone,
       );
 
       await _hiveService.addUser(userHiveModel);

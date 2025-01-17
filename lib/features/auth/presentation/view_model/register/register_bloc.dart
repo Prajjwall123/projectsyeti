@@ -35,7 +35,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       RegisterUserParams(
         email: event.email,
         password: event.password,
-        // isAdmin: false, // Update if admin option is required
+        fname: event.fname,
+        phone: event.phone,
       ),
     );
 
