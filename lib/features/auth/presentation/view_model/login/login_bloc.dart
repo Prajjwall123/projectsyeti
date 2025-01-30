@@ -38,6 +38,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         },
         (success) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
+          ScaffoldMessenger.of(event.context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Successfull'),
+              backgroundColor: Colors.green,
+            ),
+          );
           Navigator.pushReplacement(
             event.context,
             MaterialPageRoute(

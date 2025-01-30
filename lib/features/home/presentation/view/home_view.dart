@@ -61,11 +61,10 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             ),
                           ),
-                          const CircleAvatar(
-                            radius: 20,
-                            backgroundImage: AssetImage(
-                              'assets/images/Profile.png',
-                            ),
+                          const Icon(
+                            Icons.notifications,
+                            color: Colors.black,
+                            size: 30,
                           ),
                         ],
                       ),

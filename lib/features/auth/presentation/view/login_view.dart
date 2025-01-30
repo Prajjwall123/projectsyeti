@@ -24,14 +24,7 @@ class LoginView extends StatelessWidget {
                 builder: (context) => const DashboardView(),
               ),
             );
-          } else if (!state.isSuccess && !state.isLoading) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Invalid Credentials'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
+          } else if (!state.isSuccess && !state.isLoading) {}
         },
         builder: (context, state) {
           return SingleChildScrollView(
@@ -57,11 +50,11 @@ class LoginView extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black,
                           blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                         ),
                       ],
                     ),
@@ -124,9 +117,7 @@ class LoginView extends StatelessWidget {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white, elevation: 0),
-                            onPressed: () {
-                              // Handle forgot password logic
-                            },
+                            onPressed: () {},
                             child: const Text(
                               "Forgot Password?",
                               style: TextStyle(
