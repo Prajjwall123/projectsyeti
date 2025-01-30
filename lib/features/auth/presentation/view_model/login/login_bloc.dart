@@ -50,7 +50,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
-    on<LoginStudentEvent>((event, emit) async {
+    on<loginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
       final result = await _loginUseCase(

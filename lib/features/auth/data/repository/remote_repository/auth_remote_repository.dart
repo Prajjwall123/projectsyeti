@@ -17,12 +17,12 @@ class AuthRemoteRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginStudent(
+  Future<Either<Failure, String>> loginUser(
       String email, String password) async {
     debugPrint(email);
     try {
       debugPrint("calling for token");
-      final token = await _authRemoteDataSource.loginStudent(email, password);
+      final token = await _authRemoteDataSource.loginUser(email, password);
       return Right(token);
     } catch (e) {
       //

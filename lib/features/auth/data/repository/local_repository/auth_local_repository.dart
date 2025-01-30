@@ -21,12 +21,12 @@ class AuthLocalRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> loginStudent(
+  Future<Either<Failure, String>> loginUser(
     String email,
     String password,
   ) async {
     try {
-      final result = await _authLocalDataSource.loginStudent(email, password);
+      final result = await _authLocalDataSource.loginUser(email, password);
       return Right(result);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
