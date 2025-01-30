@@ -1,22 +1,28 @@
-abstract class Failure {
+import 'package:equatable/equatable.dart';
+
+abstract class Failure extends Equatable {
   final String message;
 
-  Failure({
-    required this.message,
-  });
+  const Failure({required this.message});
+
+  @override
+  List<Object> get props => [message];
 }
 
-//local database ko failure
 class LocalDatabaseFailure extends Failure {
-  LocalDatabaseFailure({
-    required super.message,
-  });
+  const LocalDatabaseFailure({required super.message});
 }
 
 class ApiFailure extends Failure {
   final int? statusCode;
-  ApiFailure({
+  const ApiFailure({
     this.statusCode,
+    required super.message,
+  });
+}
+
+class SharedPrefsFailure extends Failure {
+  const SharedPrefsFailure({
     required super.message,
   });
 }
