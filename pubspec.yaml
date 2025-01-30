@@ -47,6 +47,7 @@ dependencies:
   dio: ^5.8.0+1
   pretty_dio_logger: ^1.4.0
   shared_preferences: ^2.5.1
+  json_serializable: ^6.7.0
 
 dev_dependencies:
   flutter_test:

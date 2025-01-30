@@ -13,9 +13,11 @@ class AuthEntity extends Equatable {
     required this.email,
     required this.password,
     required this.fname,
-    required this.phone,
+    required this.phone, String? image,
   }) : id = id ?? const Uuid().v4();
 
   @override
   List<Object> get props => [id, email, password, fname, phone];
+
+  get image => null;
 }
