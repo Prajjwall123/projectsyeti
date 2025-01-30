@@ -13,11 +13,10 @@ class LocalDatabaseFailure extends Failure {
   });
 }
 
-//local database ko failure
-class WebApiFailure extends Failure {
-  final int statusCode;
-  WebApiFailure({
+class ApiFailure extends Failure {
+  final int? statusCode;
+  ApiFailure({
+    this.statusCode,
     required super.message,
-    required this.statusCode,
   });
 }
