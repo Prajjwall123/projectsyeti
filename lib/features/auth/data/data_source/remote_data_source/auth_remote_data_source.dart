@@ -15,7 +15,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<String> loginStudent(String email, String password) async {
+  Future<String> loginUser(String email, String password) async {
     try {
       // Sending a POST
       Response response = await _dio.post(

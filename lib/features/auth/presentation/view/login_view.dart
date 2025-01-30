@@ -148,7 +148,7 @@ class LoginView extends StatelessWidget {
                             if (_emailController.text.isNotEmpty &&
                                 _passwordController.text.isNotEmpty) {
                               context.read<LoginBloc>().add(
-                                    LoginStudentEvent(
+                                    loginUserEvent(
                                       context: context,
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text.trim(),
