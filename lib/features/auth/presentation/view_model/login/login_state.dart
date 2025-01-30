@@ -4,17 +4,14 @@ class LoginState {
   final bool isLoading;
   final bool isSuccess;
 
-  const LoginState({
+  LoginState({
     required this.isLoading,
     required this.isSuccess,
   });
 
-  factory LoginState.initial() {
-    return const LoginState(
-      isLoading: false,
-      isSuccess: false,
-    );
-  }
+  LoginState.initial()
+      : isLoading = false,
+        isSuccess = false;
 
   LoginState copyWith({
     bool? isLoading,

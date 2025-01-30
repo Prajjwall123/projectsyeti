@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/app/di/di.dart';
+import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/login_usecase.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/register/register_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
@@ -11,17 +12,50 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final RegisterBloc _registerBloc;
+  final HomeCubit _homeCubit;
   final LoginUseCase _loginUseCase;
 
-  LoginBloc({required LoginUseCase loginUseCase, required HomeCubit homeCubit})
-      : _loginUseCase = loginUseCase,
+  LoginBloc({
+    required RegisterBloc registerBloc,
+    required HomeCubit homeCubit,
+    required LoginUseCase loginUseCase,
+  })  : _registerBloc = registerBloc,
+        _homeCubit = homeCubit,
+        _loginUseCase = loginUseCase,
         super(LoginState.initial()) {
+    on<NavigateRegisterScreenEvent>((event, emit) {
+      Navigator.push(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: _registerBloc),
+            ],
+            child: event.destination,
+          ),
+        ),
+      );
+    });
+
+    on<NavigateHomeScreenEvent>((event, emit) {
+      Navigator.pushReplacement(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: _homeCubit,
+            child: event.destination,
+          ),
+        ),
+      );
+    });
+
     on<LoginStudentEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
       final result = await _loginUseCase(
         LoginParams(
-          email: event.username,
+          email: event.email,
           password: event.password,
         ),
       );
@@ -29,40 +63,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       result.fold(
         (failure) {
           emit(state.copyWith(isLoading: false, isSuccess: false));
-          ScaffoldMessenger.of(event.context).showSnackBar(
-            const SnackBar(
-              content: Text('Invalid Credentials'),
-              backgroundColor: Colors.red,
-            ),
+          showMySnackBar(
+            context: event.context,
+            message: "Invalid Credentials",
+            color: Colors.red,
           );
         },
-        (success) {
+        (token) {
           emit(state.copyWith(isLoading: false, isSuccess: true));
-          ScaffoldMessenger.of(event.context).showSnackBar(
-            const SnackBar(
-              content: Text('Login Successfull'),
-              backgroundColor: Colors.green,
+          showMySnackBar(
+            context: event.context,
+            message: "Login Successful",
+            color: Colors.lightGreen,
+          );
+          add(
+            NavigateHomeScreenEvent(
+              context: event.context,
+              destination: const DashboardView(),
             ),
           );
-          Navigator.pushReplacement(
-            event.context,
-            MaterialPageRoute(
-              builder: (context) => const DashboardView(),
-            ),
-          );
+          // _homeCubit.setToken(token); // If token needs to be stored
         },
-      );
-    });
-
-    on<NavigateRegisterScreenEvent>((event, emit) {
-      Navigator.push(
-        event.context,
-        MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => getIt<RegisterBloc>(),
-            child: event.destination,
-          ),
-        ),
       );
     });
   }
