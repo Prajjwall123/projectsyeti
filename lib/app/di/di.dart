@@ -34,22 +34,22 @@ void _initApiService() {
 }
 
 void _initAuthDependencies() {
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-      () => AuthLocalDataSource(getIt<HiveService>()));
+  // getIt.registerLazySingleton<AuthLocalDataSource>(
+  //     () => AuthLocalDataSource(getIt<HiveService>()));
 
-  getIt.registerLazySingleton<AuthLocalRepository>(
-      () => AuthLocalRepository(getIt<AuthLocalDataSource>()));
-
-  getIt.registerLazySingleton<LoginUseCase>(
-      () => LoginUseCase(getIt<AuthLocalRepository>()));
-  getIt.registerLazySingleton<RegisterUseCase>(
-      () => RegisterUseCase(getIt<AuthLocalRepository>()));
+  // getIt.registerLazySingleton<AuthLocalRepository>(
+  //     () => AuthLocalRepository(getIt<AuthLocalDataSource>()));
 
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(getIt<Dio>()),
   );
   getIt.registerLazySingleton<AuthRemoteRepository>(
       () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()));
+
+  getIt.registerLazySingleton<LoginUseCase>(
+      () => LoginUseCase(getIt<AuthRemoteRepository>()));
+  getIt.registerLazySingleton<RegisterUseCase>(
+      () => RegisterUseCase(getIt<AuthRemoteRepository>()));
 
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(

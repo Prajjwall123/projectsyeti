@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:projectsyeti/core/error/failure.dart';
 import 'package:projectsyeti/features/auth/data/data_source/remote_data_source/auth_remote_data_source.dart';
 import 'package:projectsyeti/features/auth/domain/entity/auth_entity.dart';
 import 'package:projectsyeti/features/auth/domain/repository/auth_repository.dart';
 
-class AuthRemoteRepository implements IAuthRepository{
+class AuthRemoteRepository implements IAuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
 
   AuthRemoteRepository(this._authRemoteDataSource);
@@ -16,10 +17,12 @@ class AuthRemoteRepository implements IAuthRepository{
   }
 
   @override
-  Future<Either<Failure, String>> loginStudent(String email, String password) async{
+  Future<Either<Failure, String>> loginStudent(
+      String email, String password) async {
+    debugPrint(email);
     try {
-      final token =
-          await _authRemoteDataSource.loginStudent(email, password);
+      debugPrint("calling for token");
+      final token = await _authRemoteDataSource.loginStudent(email, password);
       return Right(token);
     } catch (e) {
       //

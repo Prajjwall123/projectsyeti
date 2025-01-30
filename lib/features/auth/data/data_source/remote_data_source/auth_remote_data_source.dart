@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/constants/api_endpoints.dart';
 import 'package:projectsyeti/features/auth/data/data_source/auth_data_source.dart';
 import 'package:projectsyeti/features/auth/domain/entity/auth_entity.dart';
@@ -24,6 +25,8 @@ class AuthRemoteDataSource implements IAuthDataSource {
           "password": password,
         },
       );
+      debugPrint("sent the post request");
+
       //
       if (response.statusCode == 200) {
         return response.data['token'];
