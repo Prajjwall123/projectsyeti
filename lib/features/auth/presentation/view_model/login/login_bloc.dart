@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/app/di/di.dart';
 import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/login_usecase.dart';
-import 'package:projectsyeti/features/auth/presentation/view_model/register/register_bloc.dart';
+import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 
@@ -82,7 +82,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               destination: const DashboardView(),
             ),
           );
-          // _homeCubit.setToken(token); // If token needs to be stored
         },
       );
     });

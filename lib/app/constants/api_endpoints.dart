@@ -12,6 +12,7 @@ class ApiEndpoints {
   static const String register = "auth/register";
   static const String imageUrl = "http://10.0.2.2:3000/images/";
   static const String uploadImage = "auth/upload";
+  static const String verifyOtp = "auth/verify-otp";
 
   // ====================== Skills Routes ======================
   static const String getAllSkills = "skills/";

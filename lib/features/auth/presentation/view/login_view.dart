@@ -184,7 +184,7 @@ class LoginView extends StatelessWidget {
                             context.read<LoginBloc>().add(
                                   NavigateRegisterScreenEvent(
                                     context: context,
-                                    destination: const RegisterView(),
+                                    destination:  RegisterView(),
                                   ),
                                 );
                           },

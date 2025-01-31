@@ -1,21 +1,40 @@
 import 'package:equatable/equatable.dart';
+import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 import 'package:uuid/uuid.dart';
 
 class AuthEntity extends Equatable {
-  final String id;
+  final String? userId;
+  final String freelancerName;
+  final String? profileImage;
+  final List<SkillEntity> skills;
   final String email;
   final String password;
-  final String fname;
-  final String phone;
+  final String portfolio;
+  final String availability;
+  final int experienceYears;
 
-  AuthEntity({
-    String? id,
+  const AuthEntity({
+    this.userId,
+    required this.freelancerName,
+    required this.portfolio,
+    this.profileImage,
     required this.email,
     required this.password,
-    required this.fname,
-    required this.phone,
-  }) : id = id ?? const Uuid().v4();
+    required this.skills,
+    required this.availability,
+    required this.experienceYears,
+  });
 
   @override
-  List<Object> get props => [id, email, password, fname, phone];
+  List<Object?> get props => [
+        userId,
+        freelancerName,
+        portfolio,
+        email,
+        profileImage,
+        password,
+        skills,
+        availability,
+        experienceYears,
+      ];
 }
