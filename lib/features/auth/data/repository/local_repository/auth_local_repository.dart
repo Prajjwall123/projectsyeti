@@ -1,45 +1,59 @@
-import 'package:dartz/dartz.dart';
+// import 'dart:io';
 
-import '../../../../../core/error/failure.dart';
-import '../../../domain/entity/auth_entity.dart';
-import '../../../domain/repository/auth_repository.dart';
-import '../../data_source/local_data_source/auth_local_data_source.dart';
+// import 'package:dartz/dartz.dart';
 
-class AuthLocalRepository implements IAuthRepository {
-  final AuthLocalDataSource _authLocalDataSource;
+// import '../../../../../core/error/failure.dart';
+// import '../../../domain/entity/auth_entity.dart';
+// import '../../../domain/repository/auth_repository.dart';
+// import '../../data_source/local_data_source/auth_local_data_source.dart';
 
-  AuthLocalRepository(this._authLocalDataSource);
+// class AuthLocalRepository implements IAuthRepository {
+//   final AuthLocalDataSource _authLocalDataSource;
 
-  @override
-  Future<Either<Failure, AuthEntity>> getCurrentUser() async {
-    try {
-      final currentUser = await _authLocalDataSource.getCurrentUser();
-      return Right(currentUser);
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
+//   AuthLocalRepository(this._authLocalDataSource);
 
-  @override
-  Future<Either<Failure, String>> loginUser(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _authLocalDataSource.loginUser(email, password);
-      return Right(result);
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
+//   @override
+//   Future<Either<Failure, AuthEntity>> getCurrentUser() async {
+//     try {
+//       final currentUser = await _authLocalDataSource.getCurrentUser();
+//       return Right(currentUser);
+//     } catch (e) {
+//       return Left(LocalDatabaseFailure(message: e.toString()));
+//     }
+//   }
 
-  @override
-  Future<Either<Failure, void>> registerStudent(AuthEntity student) async {
-    try {
-      await _authLocalDataSource.registerStudent(student);
-      return const Right(null);
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
-}
+//   @override
+//   Future<Either<Failure, String>> loginUser(
+//     String email,
+//     String password,
+//   ) async {
+//     try {
+//       final result = await _authLocalDataSource.loginUser(email, password);
+//       return Right(result);
+//     } catch (e) {
+//       return Left(LocalDatabaseFailure(message: e.toString()));
+//     }
+//   }
+
+//   @override
+//   Future<Either<Failure, void>> registerStudent(AuthEntity student) async {
+//     try {
+//       await _authLocalDataSource.registerStudent(student);
+//       return const Right(null);
+//     } catch (e) {
+//       return Left(LocalDatabaseFailure(message: e.toString()));
+//     }
+//   }
+
+//   @override
+//   Future<Either<Failure, void>> registerUser(AuthEntity user) {
+//     // TODO: implement registerUser
+//     throw UnimplementedError();
+//   }
+
+//   @override
+//   Future<Either<Failure, String>> uploadProfilePicture(File file) {
+//     // TODO: implement uploadProfilePicture
+//     throw UnimplementedError();
+//   }
+// }
