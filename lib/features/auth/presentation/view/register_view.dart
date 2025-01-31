@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projectsyeti/features/auth/presentation/view/login_view.dart';
-import 'package:projectsyeti/features/auth/presentation/view_model/register/register_bloc.dart';
-import 'package:projectsyeti/features/auth/presentation/view_model/register/register_event.dart';
-import 'package:projectsyeti/features/auth/presentation/view_model/register/register_state.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
+import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
+import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -13,294 +19,268 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _fnameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _gap = const SizedBox(height: 8);
+  final _key = GlobalKey<FormState>();
+  final _freelancerNameController = TextEditingController();
+  final _portfolioController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _experienceController = TextEditingController();
+  final _availabilityController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  SkillEntity? _dropDownValue;
+  final List<SkillEntity> _selectedSkills = [];
+
+  File? _img;
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          context.read<RegisterBloc>().add(
+                UploadImage(file: _img!),
+              );
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  // Check for camera permission
+  Future<void> checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: BlocConsumer<RegisterBloc, RegisterState>(
-        listener: (context, state) {
-          if (state.isSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => LoginView()),
-            );
-          } else if (state.errorMessage.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
-            );
-          }
-        },
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
+      appBar: AppBar(
+        title: const Text('Register Freelancer'),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Form(
+              key: _key,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 75),
-                  Center(
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        backgroundColor: Colors.grey[300],
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  checkCameraPermission();
+                                  _browseImage(ImageSource.camera);
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(Icons.camera),
+                                label: const Text('Camera'),
+                              ),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  _browseImage(ImageSource.gallery);
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(Icons.image),
+                                label: const Text('Gallery'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                     child: SizedBox(
-                      height: 50,
-                      width: 300,
-                      child: Image.asset(
-                        "assets/images/logo.png",
-                        fit: BoxFit.fill,
+                      height: 200,
+                      width: 200,
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: _img != null
+                            ? FileImage(_img!)
+                            : const AssetImage(
+                                    'assets/images/default_avatar.png')
+                                as ImageProvider,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 35),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                  const SizedBox(height: 25),
+                  TextFormField(
+                    controller: _freelancerNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Freelancer Name',
                     ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Create Account',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 40),
-                          // Full Name field
-                          TextFormField(
-                            controller: _fnameController,
-                            decoration: InputDecoration(
-                              labelText: 'Full Name',
-                              hintText: 'Enter your full name',
-                              prefixIcon: const Icon(Icons.person),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Full Name is required";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          // Email field
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'Enter your email',
-                              prefixIcon: const Icon(Icons.email),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Email is required";
-                              }
-                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                  .hasMatch(value)) {
-                                return "Enter a valid email";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          // Phone field
-                          TextFormField(
-                            controller: _phoneController,
-                            keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                              labelText: 'Phone Number',
-                              hintText: 'Enter your phone number',
-                              prefixIcon: const Icon(Icons.phone),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Phone number is required";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          // Password field
-                          TextFormField(
-                            controller: _passwordController,
-                            obscureText: _obscurePassword,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: 'Enter your password',
-                              prefixIcon: const Icon(Icons.lock),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Password is required";
-                              }
-                              if (value.length < 6) {
-                                return "Password must be at least 6 characters";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          // Confirm Password field
-                          TextFormField(
-                            controller: _confirmPasswordController,
-                            obscureText: _obscureConfirmPassword,
-                            decoration: InputDecoration(
-                              labelText: 'Confirm Password',
-                              hintText: 'Confirm your password',
-                              prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscureConfirmPassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscureConfirmPassword =
-                                        !_obscureConfirmPassword;
-                                  });
-                                },
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Confirm Password is required";
-                              }
-                              if (value != _passwordController.text) {
-                                return "Passwords do not match";
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter freelancer name';
+                      }
+                      return null;
+                    }),
                   ),
-                  const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: screenWidth,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
+                  _gap,
+                  TextFormField(
+                    controller: _portfolioController,
+                    decoration: const InputDecoration(
+                      labelText: 'Portfolio URL',
+                    ),
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter portfolio URL';
+                      }
+                      return null;
+                    }),
+                  ),
+                  _gap,
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                    ),
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email';
+                      }
+                      return null;
+                    }),
+                  ),
+                  _gap,
+                  TextFormField(
+                    controller: _experienceController,
+                    decoration: const InputDecoration(
+                      labelText: 'Experience (in years)',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter experience years';
+                      }
+                      return null;
+                    }),
+                  ),
+                  _gap,
+                  BlocBuilder<SkillBloc, SkillState>(
+                      builder: (context, skillState) {
+                    return MultiSelectDialogField(
+                      title: const Text('Select Skills'),
+                      items: skillState.skills
+                          .map(
+                            (skill) => MultiSelectItem(
+                              skill,
+                              skill.skillName,
                             ),
-                          ),
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              context.read<RegisterBloc>().add(
-                                    RegisterStudentEvent(
-                                      context: context,
-                                      email: _emailController.text.trim(),
-                                      password: _passwordController.text,
-                                      phone: _phoneController.text,
-                                      fname: _fnameController.text,
-                                      confirmPassword:
-                                          _confirmPasswordController.text,
-                                    ),
-                                  );
-                            }
-                          },
-                          child: state.isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : const Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                  ),
+                          )
+                          .toList(),
+                      listType: MultiSelectListType.CHIP,
+                      buttonText: const Text(
+                        'Select Skills',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      buttonIcon: const Icon(Icons.search),
+                      onConfirm: (values) {
+                        _selectedSkills.clear();
+                        _selectedSkills.addAll(values);
+                      },
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black87,
+                        ),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      validator: ((value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select skills';
+                        }
+                        return null;
+                      }),
+                    );
+                  }),
+                  _gap,
+                  TextFormField(
+                    controller: _availabilityController,
+                    decoration: const InputDecoration(
+                      labelText: 'Availability (e.g., Full-time)',
+                    ),
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter availability';
+                      }
+                      return null;
+                    }),
+                  ),
+                  _gap,
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    }),
+                  ),
+                  _gap,
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_key.currentState!.validate()) {
+                          // Create a new freelancer registration event
+                          final freelancerName = _freelancerNameController.text;
+                          final portfolio = _portfolioController.text;
+                          final email = _emailController.text;
+                          final experienceYears =
+                              int.parse(_experienceController.text);
+                          final availability = _availabilityController.text;
+                          final password = _passwordController.text;
+                          final profileImage = _img?.path;
+
+                          // Dispatch an event to register the freelancer
+                          context.read<RegisterBloc>().add(
+                                RegisterUser(
+                                  context: context,
+                                  freelancerName: freelancerName,
+                                  portfolio: portfolio,
+                                  email: email,
+                                  experienceYears: experienceYears,
+                                  skills: _selectedSkills,
+                                  availability: availability,
+                                  password: password,
+                                  profileImage: profileImage,
                                 ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: screenWidth,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginView(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "Already Have An Account?",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                              );
+                        }
+                      },
+                      child: const Text('Register'),
+                    ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
