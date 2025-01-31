@@ -8,11 +8,11 @@ part 'skill_api_model.g.dart';
 class SkillApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? skillId;
-  final String skillName;
+  final String name;
 
   const SkillApiModel({
     this.skillId,
-    required this.skillName,
+    required this.name,
   });
 
   factory SkillApiModel.fromJson(Map<String, dynamic> json) =>
@@ -26,7 +26,7 @@ class SkillApiModel extends Equatable {
   factory SkillApiModel.fromEntity(SkillEntity entity) {
     return SkillApiModel(
       skillId: entity.skillId,
-      skillName: entity.skillName,
+      name: entity.name,
     );
   }
 
@@ -34,7 +34,7 @@ class SkillApiModel extends Equatable {
   SkillEntity toEntity() {
     return SkillEntity(
       skillId: skillId,
-      skillName: skillName,
+      name: name,
     );
   }
 

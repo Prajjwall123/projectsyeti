@@ -27,11 +27,12 @@ class SkillRemoteDataSource implements ISkillDataSource {
     try {
       var response = await _dio.get(ApiEndpoints.getAllSkills);
       if (response.statusCode == 200) {
-        // Convert API response to DTO
-        var SkillDTO = GetAllSkillDTO.fromJson(response.data);
-        debugPrint(response.data);
-        // Convert DTO to Entity
-        return SkillApiModel.toEntityList(SkillDTO.data);
+        // Ensure response is treated as a List
+        List<dynamic> skillList = response.data;
+
+        // Convert to DTO and then to Entity List
+        var skillDTO = GetAllSkillDTO.fromJson(skillList);
+        return skillDTO.skills.map((skill) => skill.toEntity()).toList();
       } else {
         throw Exception(response.statusMessage);
       }

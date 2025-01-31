@@ -6,4 +6,5 @@ sealed class SkillEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-final class LoadSkills extends SkillEvent {}
+
+class LoadSkills extends SkillEvent {}

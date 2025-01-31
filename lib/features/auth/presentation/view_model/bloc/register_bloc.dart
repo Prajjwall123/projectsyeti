@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -24,20 +23,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   })  : _skillBloc = skillBloc,
         _registerUseCase = registerUseCase,
         _uploadImageUsecase = uploadImageUsecase,
-        super(const RegisterState.initial()) {
+        super(RegisterState.initial()) {
     on<RegisterUser>(_onRegisterEvent);
     on<UploadImage>(_onUploadImage);
-    on<LoadSkills>(_onLoadSkills);
+    on<FetchSkills>(_onFetchSkills);
 
-    add(LoadSkills());
+    add(FetchSkills());
   }
 
-  void _onLoadSkills(
-    LoadSkills event,
+  void _onFetchSkills(
+    FetchSkills event,
     Emitter<RegisterState> emit,
   ) {
     emit(state.copyWith(isLoading: true));
-    _skillBloc.add(LoadSkills() as SkillEvent);
+
+    // Dispatch LoadSkills event from SkillBloc
+    _skillBloc.add(LoadSkills()); // ✅ This now works correctly
+
     emit(state.copyWith(isLoading: false, isSuccess: true));
   }
 

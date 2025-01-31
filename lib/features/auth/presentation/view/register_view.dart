@@ -186,7 +186,7 @@ class _RegisterViewState extends State<RegisterView> {
                           .map(
                             (skill) => MultiSelectItem(
                               skill,
-                              skill.skillName,
+                              skill.name,
                             ),
                           )
                           .toList(),
@@ -255,7 +255,7 @@ class _RegisterViewState extends State<RegisterView> {
                               int.parse(_experienceController.text);
                           final availability = _availabilityController.text;
                           final password = _passwordController.text;
-                          final profileImage = _img?.path;
+                          final profileImage = _img?.path ?? "";
 
                           // Dispatch an event to register the freelancer
                           context.read<RegisterBloc>().add(

@@ -9,11 +9,11 @@ part of 'skill_api_model.dart';
 SkillApiModel _$SkillApiModelFromJson(Map<String, dynamic> json) =>
     SkillApiModel(
       skillId: json['_id'] as String?,
-      skillName: json['skillName'] as String,
+      name: json['name'] as String,
     );
 
 Map<String, dynamic> _$SkillApiModelToJson(SkillApiModel instance) =>
     <String, dynamic>{
       '_id': instance.skillId,
-      'skillName': instance.skillName,
+      'name': instance.name,
     };

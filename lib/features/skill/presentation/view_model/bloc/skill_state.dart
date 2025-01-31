@@ -19,12 +19,12 @@ class SkillState extends Equatable {
   }
 
   SkillState copyWith({
-    List<SkillEntity>? batches,
+    List<SkillEntity>? skills,
     bool? isLoading,
     String? error,
   }) {
     return SkillState(
-      skills: batches ?? skills,
+      skills: skills ?? this.skills,
       isLoading: isLoading ?? this.isLoading,
       error: error,
     );

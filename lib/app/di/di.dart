@@ -25,10 +25,10 @@ Future<void> initDependencies() async {
   _initHiveService();
   _initApiService();
   _initSharedPreferences();
+  _initSkillDependencies();
   _initAuthDependencies();
   _initLoginDependencies();
   _initHomeDependencies();
-  _initSkillDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -90,11 +90,10 @@ void _initLoginDependencies() {
 }
 
 void _initHomeDependencies() {
-  getIt.registerFactory<HomeCubit>(() => HomeCubit());
+  getIt.registerLazySingleton<HomeCubit>(() => HomeCubit());
 }
 
 void _initSkillDependencies() {
-  // Register GetAllSkillsUsecase with the SkillRepository dependency
   getIt.registerLazySingleton<GetAllSkillsUsecase>(
     () => GetAllSkillsUsecase(skillRepository: getIt<SkillRemoteRepository>()),
   );
@@ -105,11 +104,10 @@ void _initSkillDependencies() {
     ),
   );
 
-  getIt.registerFactory<SkillRemoteDataSource>(
+  getIt.registerLazySingleton<SkillRemoteDataSource>(
       () => SkillRemoteDataSource(getIt<Dio>()));
 
-  // Register SkillBloc
-  getIt.registerFactory<SkillBloc>(
+  getIt.registerLazySingleton<SkillBloc>(
     () => SkillBloc(getAllSkillsUsecase: getIt<GetAllSkillsUsecase>()),
   );
 }

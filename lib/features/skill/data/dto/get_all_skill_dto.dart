@@ -5,14 +5,17 @@ part 'get_all_skill_dto.g.dart';
 
 @JsonSerializable()
 class GetAllSkillDTO {
-  final List<SkillApiModel> data;
+  final List<SkillApiModel> skills;
 
   GetAllSkillDTO({
-    required this.data,
+    required this.skills,
   });
 
-  factory GetAllSkillDTO.fromJson(Map<String, dynamic> json) =>
-      _$GetAllSkillDTOFromJson(json);
+  factory GetAllSkillDTO.fromJson(List<dynamic> json) {
+    return GetAllSkillDTO(
+      skills: json.map((e) => SkillApiModel.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$GetAllSkillDTOToJson(this);
+  List<Map<String, dynamic>> toJson() => skills.map((e) => e.toJson()).toList();
 }

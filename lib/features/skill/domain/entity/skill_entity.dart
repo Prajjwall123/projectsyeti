@@ -2,13 +2,13 @@ import 'package:equatable/equatable.dart';
 
 class SkillEntity extends Equatable {
   final String? skillId;
-  final String skillName;
+  final String name;
 
   const SkillEntity({
     this.skillId,
-    required this.skillName,
+    required this.name,
   });
 
   @override
-  List<Object?> get props => [skillId, skillName];
+  List<Object?> get props => [skillId, name];
 }

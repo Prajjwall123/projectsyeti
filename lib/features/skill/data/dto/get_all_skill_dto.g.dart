@@ -8,12 +8,12 @@ part of 'get_all_skill_dto.dart';
 
 GetAllSkillDTO _$GetAllSkillDTOFromJson(Map<String, dynamic> json) =>
     GetAllSkillDTO(
-      data: (json['data'] as List<dynamic>)
+      skills: (json['skills'] as List<dynamic>)
           .map((e) => SkillApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$GetAllSkillDTOToJson(GetAllSkillDTO instance) =>
     <String, dynamic>{
-      'data': instance.data,
+      'skills': instance.skills,
     };
