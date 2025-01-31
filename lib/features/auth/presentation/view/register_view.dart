@@ -125,16 +125,26 @@ class _RegisterViewState extends State<RegisterView> {
                                       _browseImage(ImageSource.camera);
                                       Navigator.pop(context);
                                     },
-                                    icon: const Icon(Icons.camera),
-                                    label: const Text('Camera'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                    icon: const Icon(Icons.camera,
+                                        color: Colors.white),
+                                    label: const Text('Camera',
+                                        style: TextStyle(color: Colors.white)),
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       _browseImage(ImageSource.gallery);
                                       Navigator.pop(context);
                                     },
-                                    icon: const Icon(Icons.image),
-                                    label: const Text('Gallery'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                    ),
+                                    icon: const Icon(Icons.image,
+                                        color: Colors.white),
+                                    label: const Text('Gallery',
+                                        style: TextStyle(color: Colors.white)),
                                   ),
                                 ],
                               ),

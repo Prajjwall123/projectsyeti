@@ -62,7 +62,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       availability: event.availability,
       experienceYears: event.experienceYears,
       password: event.password,
-      profileImage: state.profileImage ?? "", // ✅ Now using uploaded image URL
+      profileImage: state.profileImage ?? "",
     ));
 
     result.fold(
@@ -95,7 +95,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     final result = await _verifyOtpUsecase.call(
       VerifyOtpParams(
-        email: event.email, // ✅ Use email from event instead of state
+        email: event.email,
         otp: event.otp,
       ),
     );
@@ -111,7 +111,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         showMySnackBar(
             context: event.context, message: "OTP Verified Successfully");
 
-        // ✅ Navigate to Login after OTP verification
         Navigator.pushReplacementNamed(event.context, '/login');
       },
     );
@@ -130,7 +129,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     result.fold(
       (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
       (imageUrl) {
-        // ✅ Now storing image URL
         debugPrint(imageUrl);
         emit(state.copyWith(
             isLoading: false, isSuccess: true, profileImage: imageUrl));

@@ -73,7 +73,7 @@ void _initAuthDependencies() {
     () => RegisterBloc(
       registerUseCase: getIt<RegisterUseCase>(),
       uploadImageUsecase: getIt<UploadImageUsecase>(),
-      verifyOtpUsecase: getIt<VerifyOtpUsecase>(), // ✅ Pass VerifyOtpUsecase
+      verifyOtpUsecase: getIt<VerifyOtpUsecase>(),
       skillBloc: getIt<SkillBloc>(),
     ),
   );
