@@ -9,6 +9,21 @@ sealed class RegisterEvent extends Equatable {
 
 class FetchSkills extends RegisterEvent {}
 
+class VerifyOtp extends RegisterEvent {
+  final String otp;
+  final BuildContext context;
+  final String email;
+
+  const VerifyOtp({
+    required this.otp,
+    required this.context,
+    required this.email,
+  });
+
+  @override
+  List<Object> get props => [otp, context];
+}
+
 class UploadImage extends RegisterEvent {
   final File file;
 
@@ -53,4 +68,20 @@ class RegisterUser extends RegisterEvent {
         profileImage,
         context,
       ];
+}
+
+// New event for verifying OTP
+class VerifyOtpEvent extends RegisterEvent {
+  final String email;
+  final String otp;
+  final BuildContext context;
+
+  const VerifyOtpEvent({
+    required this.email,
+    required this.otp,
+    required this.context,
+  });
+
+  @override
+  List<Object> get props => [email, otp, context];
 }

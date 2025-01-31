@@ -20,7 +20,6 @@ class AuthRemoteDataSource implements IAuthDataSource {
   @override
   Future<String> loginUser(String email, String password) async {
     try {
-      // Sending a POST
       Response response = await _dio.post(
         ApiEndpoints.login,
         data: {
@@ -30,7 +29,6 @@ class AuthRemoteDataSource implements IAuthDataSource {
       );
       debugPrint("sent the post request");
 
-      //
       if (response.statusCode == 200) {
         return response.data['token'];
       } else {
@@ -39,7 +37,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
     } on DioException catch (e) {
       throw Exception(e.response?.data['message'] ?? e.message);
     } catch (e) {
-      throw Exception('An error required in $e');
+      throw Exception('An error occurred: $e');
     }
   }
 
@@ -102,6 +100,29 @@ class AuthRemoteDataSource implements IAuthDataSource {
       throw Exception(e);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> verifyOtp(String email, String otp) async {
+    try {
+      Response response = await _dio.post(
+        ApiEndpoints.verifyOtp,
+        data: {
+          "email": email,
+          "otp": otp,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(response.data['message'] ?? 'OTP verification failed');
+      }
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      throw Exception('An error occurred: $e');
     }
   }
 }

@@ -9,6 +9,7 @@ import 'package:projectsyeti/features/auth/domain/repository/auth_repository.dar
 import 'package:projectsyeti/features/auth/domain/use_case/login_usecase.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/register_usecase.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
+import 'package:projectsyeti/features/auth/domain/use_case/verify_otp_usecase.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
@@ -63,10 +64,16 @@ void _initAuthDependencies() {
     ),
   );
 
+  getIt.registerLazySingleton<VerifyOtpUsecase>(
+    // ✅ Register Verify OTP UseCase
+    () => VerifyOtpUsecase(getIt<AuthRemoteRepository>()),
+  );
+
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       registerUseCase: getIt<RegisterUseCase>(),
       uploadImageUsecase: getIt<UploadImageUsecase>(),
+      verifyOtpUsecase: getIt<VerifyOtpUsecase>(), // ✅ Pass VerifyOtpUsecase
       skillBloc: getIt<SkillBloc>(),
     ),
   );

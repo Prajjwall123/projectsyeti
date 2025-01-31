@@ -27,7 +27,6 @@ class AuthRemoteRepository implements IAuthRepository {
       final token = await _authRemoteDataSource.loginUser(email, password);
       return Right(token);
     } catch (e) {
-      //
       return Left(ApiFailure(message: e.toString()));
     }
   }
@@ -47,6 +46,16 @@ class AuthRemoteRepository implements IAuthRepository {
     try {
       final imageName = await _authRemoteDataSource.uploadProfilePicture(file);
       return Right(imageName);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> verifyOtp(String email, String otp) async {
+    try {
+      final result = await _authRemoteDataSource.verifyOtp(email, otp);
+      return Right(result);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));
     }
