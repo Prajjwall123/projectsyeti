@@ -30,14 +30,18 @@ void main() {
     verifyNoMoreInteractions(repository);
   });
 
-  test('should return true', () async {
+  test('should return [Failure] when OTP verification fails', () async {
+    // Arrange
+    const failure = ApiFailure(message: "incorrect OTP");
     when(() => repository.verifyOtp(any(), any())).thenAnswer(
-      (_) async => const Left(ApiFailure(message: 'Incorrect OTP')),
+      (_) async => const Left(failure),
     );
 
+    // Act
     final result = await usecase(params);
 
-    expect(result, const Right(true));
+    // Assert
+    expect(result, const Left(failure));
 
     verify(() => repository.verifyOtp(params.email, params.otp)).called(1);
     verifyNoMoreInteractions(repository);

@@ -51,19 +51,19 @@ void main() {
     verifyNoMoreInteractions(tokenSharedPrefs);
   });
 
-  test('should return [Failure] when repository fails', () async {
+  test('should return failure when login fails', () async {
     // Arrange
     when(() => repository.loginUser(any(), any())).thenAnswer(
-      (_) async => const Left(ApiFailure(message: 'incorrect credentials')),
+      (_) async =>
+          const Left(ApiFailure(message: 'Incorrect login creadentials')),
     );
 
     // Act
     final result = await usecase(loginParams);
 
     // Assert
-    expect(result, const Right(token));
+    expect(result, isA<Left<Failure, String>>());
 
-    // Verify repository was called but token was not saved
     verify(() => repository.loginUser(email, password)).called(1);
     verifyNever(() => tokenSharedPrefs.saveToken(any()));
     verifyNever(() => tokenSharedPrefs.getToken());

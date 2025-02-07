@@ -38,20 +38,7 @@ void main() {
     verify(() => repository.getSkills()).called(1);
   });
 
-  // test('should return a Failure when repository call fails', () async {
-  //   const tFailure = ApiFailure(message: "Something went wrong");
-
-  //   when(() => repository.getSkills())
-  //       .thenAnswer((_) async => const Left(tFailure));
-
-  //   final result = await usecase();
-
-  //   expect(result, const Left(tFailure));
-
-  //   verify(() => repository.getSkills()).called(1);
-  // });
-
-  test('should get all skills from repository', () async {
+  test('should return a Failure when repository call fails', () async {
     const tFailure = ApiFailure(message: "Something went wrong");
 
     when(() => repository.getSkills())
@@ -59,7 +46,7 @@ void main() {
 
     final result = await usecase();
 
-    expect(result, Right(tSkills));
+    expect(result, const Left(tFailure));
 
     verify(() => repository.getSkills()).called(1);
   });

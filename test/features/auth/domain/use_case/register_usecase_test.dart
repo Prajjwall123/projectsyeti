@@ -50,10 +50,10 @@ void main() {
     verifyNoMoreInteractions(repository);
   });
 
-  test('should return failure when repository fails', () async {
+  test('should return [Failure] when repository fails', () async {
     // Arrange
     when(() => repository.registerUser(any())).thenAnswer(
-      (_) async => const Left(ApiFailure(message: 'user already exists')),
+      (_) async => const Left(ApiFailure(message: "user already esists")),
     );
 
     // Act
@@ -69,7 +69,7 @@ void main() {
     ));
 
     // Assert
-    expect(result, const Right(null));
+    expect(result, isA<Left<Failure, void>>());
 
     // Verify
     verify(() => repository.registerUser(any())).called(1);
