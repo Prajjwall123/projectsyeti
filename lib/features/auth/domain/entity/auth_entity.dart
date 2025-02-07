@@ -25,6 +25,17 @@ class AuthEntity extends Equatable {
     required this.experienceYears,
   });
 
+  const AuthEntity.empty()
+      : userId = null,
+        freelancerName = '',
+        portfolio = '',
+        profileImage = null,
+        email = '',
+        password = '',
+        skills = const [],
+        availability = '',
+        experienceYears = 0;
+
   @override
   List<Object?> get props => [
         userId,
