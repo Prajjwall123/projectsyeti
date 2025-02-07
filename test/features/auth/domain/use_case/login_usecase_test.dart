@@ -62,7 +62,10 @@ void main() {
     final result = await usecase(loginParams);
 
     // Assert
-    expect(result, isA<Left<Failure, String>>());
+    expect(
+      result,
+      const Left(ApiFailure(message: 'Incorrect login creadentials')),
+    );
 
     verify(() => repository.loginUser(email, password)).called(1);
     verifyNever(() => tokenSharedPrefs.saveToken(any()));
