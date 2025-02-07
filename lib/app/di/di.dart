@@ -66,7 +66,7 @@ void _initAuthDependencies() {
 
   getIt.registerLazySingleton<VerifyOtpUsecase>(
     // ✅ Register Verify OTP UseCase
-    () => VerifyOtpUsecase(getIt<AuthRemoteRepository>()),
+    () => VerifyOtpUsecase(authRepository: getIt<AuthRemoteRepository>()),
   );
 
   getIt.registerFactory<RegisterBloc>(
