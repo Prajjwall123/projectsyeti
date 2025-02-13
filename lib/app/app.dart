@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/core/app_theme/app_theme.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
+import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
@@ -9,7 +10,8 @@ import 'package:projectsyeti/features/auth/presentation/view/register_view.dart'
 import 'package:projectsyeti/features/splash/presentation/view/splash_screen_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
-import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart'; // Import SkillBloc
+import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
+import 'package:projectsyeti/features/company/presentation/view_model/bloc/company_bloc.dart';
 import 'package:projectsyeti/app/di/di.dart';
 
 class MyApp extends StatelessWidget {
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SkillBloc>(
           create: (_) => getIt<SkillBloc>(),
+        ),
+        BlocProvider<CompanyBloc>(
+          create: (_) => getIt<CompanyBloc>(),
         ),
       ],
       child: MaterialApp(

@@ -3,6 +3,7 @@ import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
+import 'package:projectsyeti/features/company/presentation/view/company_view.dart'; // Import CompanyView
 
 class NavigationMenu extends StatelessWidget {
   final int currentIndex;
@@ -54,9 +55,17 @@ class NavigationMenu extends StatelessWidget {
           GestureDetector(
             onTap: () => onTabSelected(3),
             child: Icon(
-              Icons.person,
+              Icons.business,
               size: 30,
               color: currentIndex == 3 ? Colors.white : Colors.grey,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => onTabSelected(4),
+            child: Icon(
+              Icons.person,
+              size: 30,
+              color: currentIndex == 4 ? Colors.white : Colors.grey,
             ),
           ),
         ],
@@ -79,6 +88,7 @@ class _DashboardViewState extends State<DashboardView> {
     const HomeView(),
     const ChatView(),
     const WalletView(),
+    const CompanyView(companyId: "679e52a2570ca2c950216916"),
     const AccountView(),
   ];
 

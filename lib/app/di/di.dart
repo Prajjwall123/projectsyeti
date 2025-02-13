@@ -12,12 +12,17 @@ import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.
 import 'package:projectsyeti/features/auth/domain/use_case/verify_otp_usecase.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:projectsyeti/features/company/data/data_source/remote_data_source/company_remote_data_source.dart';
+import 'package:projectsyeti/features/company/data/repository/remote_repository/company_remote_repository.dart';
+import 'package:projectsyeti/features/company/domain/entity/repository/company_repository.dart';
+import 'package:projectsyeti/features/company/domain/use_case/get_company_by_id_usecase.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/skill/data/data_source/remote_data_source/skill_remote_data_source.dart';
 import 'package:projectsyeti/features/skill/data/repository/skill_remote_repository.dart';
 import 'package:projectsyeti/features/skill/domain/repository/skill_repository.dart';
 import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_usecase.dart';
 import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
+import 'package:projectsyeti/features/company/presentation/view_model/bloc/company_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -30,6 +35,7 @@ Future<void> initDependencies() async {
   _initAuthDependencies();
   _initLoginDependencies();
   _initHomeDependencies();
+  _initCompanyDependencies(); // Initialize company dependencies
 }
 
 Future<void> _initSharedPreferences() async {
@@ -65,7 +71,6 @@ void _initAuthDependencies() {
   );
 
   getIt.registerLazySingleton<VerifyOtpUsecase>(
-    // ✅ Register Verify OTP UseCase
     () => VerifyOtpUsecase(authRepository: getIt<AuthRemoteRepository>()),
   );
 
@@ -106,15 +111,32 @@ void _initSkillDependencies() {
   );
 
   getIt.registerLazySingleton<SkillRemoteRepository>(
-    () => SkillRemoteRepository(
-      getIt<SkillRemoteDataSource>(),
-    ),
+    () => SkillRemoteRepository(getIt<SkillRemoteDataSource>()),
   );
 
   getIt.registerLazySingleton<SkillRemoteDataSource>(
-      () => SkillRemoteDataSource(getIt<Dio>()));
+    () => SkillRemoteDataSource(getIt<Dio>()),
+  );
 
   getIt.registerLazySingleton<SkillBloc>(
     () => SkillBloc(getAllSkillsUsecase: getIt<GetAllSkillsUsecase>()),
+  );
+}
+
+void _initCompanyDependencies() {
+  getIt.registerLazySingleton<CompanyRemoteDataSource>(
+    () => CompanyRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ICompanyRepository>(
+    () => CompanyRemoteRepository(getIt<CompanyRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetCompanyByIdUseCase>(
+    () => GetCompanyByIdUseCase(getIt<ICompanyRepository>()),
+  );
+
+  getIt.registerFactory<CompanyBloc>(
+    () => CompanyBloc(getIt<GetCompanyByIdUseCase>()),
   );
 }
