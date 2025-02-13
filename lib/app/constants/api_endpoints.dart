@@ -16,4 +16,7 @@ class ApiEndpoints {
 
   // ====================== Skills Routes ======================
   static const String getAllSkills = "skills/";
+
+  // ====================== Projects Routes ======================
+  static const String getAllProjects = "projects/";
 }
