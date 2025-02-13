@@ -30,7 +30,7 @@ void main() {
     verifyNoMoreInteractions(repository);
   });
 
-  test('should return [Failure] when OTP verification fails', () async {
+  test('should return Failure when OTP verification fails', () async {
     // Arrange
     const failure = ApiFailure(message: "incorrect OTP");
     when(() => repository.verifyOtp(any(), any())).thenAnswer(

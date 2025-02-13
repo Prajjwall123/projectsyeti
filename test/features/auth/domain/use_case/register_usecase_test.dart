@@ -50,7 +50,7 @@ void main() {
     verifyNoMoreInteractions(repository);
   });
 
-  test('should return [Failure] when repository fails', () async {
+  test('should return Failure when repository fails', () async {
     // Arrange
     when(() => repository.registerUser(any())).thenAnswer(
       (_) async => const Left(ApiFailure(message: "user already esists")),
