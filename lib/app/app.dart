@@ -7,6 +7,7 @@ import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart
 import 'package:projectsyeti/features/auth/presentation/view/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view/register_view.dart';
+import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 import 'package:projectsyeti/features/splash/presentation/view/splash_screen_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
@@ -35,6 +36,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CompanyBloc>(
           create: (_) => getIt<CompanyBloc>(),
+        ),
+        BlocProvider<ProjectBloc>(
+          create: (_) => getIt<ProjectBloc>(),
         ),
       ],
       child: MaterialApp(
