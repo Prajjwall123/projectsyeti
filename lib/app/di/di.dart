@@ -17,10 +17,17 @@ import 'package:projectsyeti/features/company/data/repository/remote_repository/
 import 'package:projectsyeti/features/company/domain/entity/repository/company_repository.dart';
 import 'package:projectsyeti/features/company/domain/use_case/get_company_by_id_usecase.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
+import 'package:projectsyeti/features/project/data/data_source/remote_data_source/project_remote_data_source.dart';
+import 'package:projectsyeti/features/project/data/repository/remote_repository/project_remote_repository.dart';
+import 'package:projectsyeti/features/project/domain/repository/project_repository.dart';
+import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
+import 'package:projectsyeti/features/project/domain/use_case/get_project_by_id_usecase.dart';
+import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 import 'package:projectsyeti/features/skill/data/data_source/remote_data_source/skill_remote_data_source.dart';
 import 'package:projectsyeti/features/skill/data/repository/skill_remote_repository.dart';
 import 'package:projectsyeti/features/skill/domain/repository/skill_repository.dart';
 import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_usecase.dart';
+import 'package:projectsyeti/features/skill/domain/use_case/get_skill_by_id_usecase.dart';
 import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
 import 'package:projectsyeti/features/company/presentation/view_model/bloc/company_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +42,8 @@ Future<void> initDependencies() async {
   _initAuthDependencies();
   _initLoginDependencies();
   _initHomeDependencies();
-  _initCompanyDependencies(); // Initialize company dependencies
+  _initCompanyDependencies();
+  _initProjectDependencies();
 }
 
 Future<void> _initSharedPreferences() async {
@@ -107,7 +115,11 @@ void _initHomeDependencies() {
 
 void _initSkillDependencies() {
   getIt.registerLazySingleton<GetAllSkillsUsecase>(
-    () => GetAllSkillsUsecase(skillRepository: getIt<SkillRemoteRepository>()),
+    () => GetAllSkillsUsecase(skillRepository: getIt<ISkillRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetSkillByIdUsecase>(
+    () => GetSkillByIdUsecase(skillRepository: getIt<ISkillRepository>()),
   );
 
   getIt.registerLazySingleton<SkillRemoteRepository>(
@@ -119,7 +131,10 @@ void _initSkillDependencies() {
   );
 
   getIt.registerLazySingleton<SkillBloc>(
-    () => SkillBloc(getAllSkillsUsecase: getIt<GetAllSkillsUsecase>()),
+    () => SkillBloc(
+      getAllSkillsUsecase: getIt<GetAllSkillsUsecase>(),
+      getSkillByIdUsecase: getIt<GetSkillByIdUsecase>(),
+    ),
   );
 }
 
@@ -138,5 +153,30 @@ void _initCompanyDependencies() {
 
   getIt.registerFactory<CompanyBloc>(
     () => CompanyBloc(getIt<GetCompanyByIdUseCase>()),
+  );
+}
+
+void _initProjectDependencies() {
+  getIt.registerLazySingleton<ProjectRemoteDataSource>(
+    () => ProjectRemoteDataSource(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<IProjectRepository>(
+    () => ProjectRemoteRepository(getIt<ProjectRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetAllProjectsUsecase>(
+    () => GetAllProjectsUsecase(projectRepository: getIt<IProjectRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetProjectByIdUsecase>(
+    () => GetProjectByIdUsecase(projectRepository: getIt<IProjectRepository>()),
+  );
+
+  getIt.registerFactory<ProjectBloc>(
+    () => ProjectBloc(
+      getAllProjectsUsecase: getIt<GetAllProjectsUsecase>(),
+      getProjectByIdUsecase: getIt<GetProjectByIdUsecase>(),
+    ),
   );
 }
