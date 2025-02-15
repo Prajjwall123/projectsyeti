@@ -1,11 +1,29 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
+import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeState.initial());
+  final GetAllProjectsUsecase _getAllProjectsUsecase;
+
+  HomeCubit(this._getAllProjectsUsecase) : super(HomeState.initial());
 
   void selectTab(int index) {
     emit(state.copyWith(selectedIndex: index));
+  }
+
+  Future<void> fetchProjects() async {
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+    final result = await _getAllProjectsUsecase(const NoParams());
+    result.fold(
+      (failure) {
+        emit(state.copyWith(
+            isLoading: false, errorMessage: "Failed to load projects"));
+      },
+      (projects) {
+        emit(state.copyWith(isLoading: false, projects: projects));
+      },
+    );
   }
 }

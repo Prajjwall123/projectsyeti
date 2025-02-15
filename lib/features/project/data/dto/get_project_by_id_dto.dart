@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:projectsyeti/features/project/data/model/project_api_model.dart';
 
 part 'get_project_by_id_dto.g.dart';
 

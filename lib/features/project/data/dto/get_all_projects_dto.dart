@@ -1,18 +1,54 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:projectsyeti/features/project/data/model/project_api_model.dart';
 
 part 'get_all_projects_dto.g.dart';
 
 @JsonSerializable()
 class GetAllProjectsDTO {
-  final bool success;
-  final int count;
-  final List<ProjectApiModel> data;
+  @JsonKey(name: 'projectId')
+  final String projectId;
+
+  @JsonKey(name: 'title')
+  final String title;
+
+  @JsonKey(name: 'companyId')
+  final String companyId;
+
+  @JsonKey(name: 'companyName')
+  final String companyName;
+
+  @JsonKey(name: 'companyLogo')
+  final String companyLogo;
+
+  @JsonKey(name: 'category')
+  final List<String> category;
+
+  @JsonKey(name: 'requirements')
+  final String requirements;
+
+  @JsonKey(name: 'description')
+  final String description;
+
+  @JsonKey(name: 'duration')
+  final String duration;
+
+  @JsonKey(name: 'postedDate')
+  final DateTime postedDate;
+
+  @JsonKey(name: 'status')
+  final String status;
 
   GetAllProjectsDTO({
-    required this.success,
-    required this.count,
-    required this.data,
+    required this.projectId,
+    required this.title,
+    required this.companyId,
+    required this.companyName,
+    required this.companyLogo,
+    required this.category,
+    required this.requirements,
+    required this.description,
+    required this.duration,
+    required this.postedDate,
+    required this.status,
   });
 
   factory GetAllProjectsDTO.fromJson(Map<String, dynamic> json) =>

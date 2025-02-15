@@ -4,6 +4,7 @@ import 'package:projectsyeti/app/constants/api_endpoints.dart';
 import 'package:projectsyeti/features/project/data/data_source/project_data_source.dart';
 import 'package:projectsyeti/features/project/data/dto/get_all_projects_dto.dart';
 import 'package:projectsyeti/features/project/data/dto/get_project_by_id_dto.dart';
+import 'package:projectsyeti/features/project/data/model/project_api_model.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/skill/data/model/skill_api_model.dart';
 import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
@@ -24,9 +25,12 @@ class ProjectRemoteDataSource implements IProjectDataSource {
     try {
       var response = await _dio.get(ApiEndpoints.getAllProjects);
       if (response.statusCode == 200) {
-        GetAllProjectsDTO projectsDTO =
-            GetAllProjectsDTO.fromJson(response.data);
-        return projectsDTO.data.map((project) => project.toEntity()).toList();
+        List<dynamic> projectsList = response.data;
+        List<ProjectEntity> projects = projectsList
+            .map((projectJson) =>
+                ProjectApiModel.fromJson(projectJson).toEntity())
+            .toList();
+        return projects;
       } else {
         throw Exception(response.statusMessage);
       }

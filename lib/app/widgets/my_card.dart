@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 
 class MyCard extends StatelessWidget {
+  final ProjectEntity project;
+
   const MyCard({
     super.key,
+    required this.project,
   });
 
   @override
@@ -16,6 +20,7 @@ class MyCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,7 +31,7 @@ class MyCard extends StatelessWidget {
                         size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(
-                      "Posted Today",
+                      _formatDate(project.postedDate),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -41,9 +46,9 @@ class MyCard extends StatelessWidget {
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    "New",
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  child: Text(
+                    project.status.toUpperCase(),
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
               ],
@@ -56,30 +61,32 @@ class MyCard extends StatelessWidget {
                   width: 50,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      "assets/images/technergy.png",
-                      fit: BoxFit.cover,
-                    ),
+                    child: project.companyLogo != null
+                        ? Image.network(
+                            "http://10.0.2.2:3000/${project.companyLogo}",
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset("assets/images/default_company.png"),
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Technergy Global Pvt.Ltd.",
-                        style: TextStyle(
+                        project.companyName,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        "E-Commerce Mobile Application",
-                        style: TextStyle(
+                        project.title,
+                        style: const TextStyle(
                           fontSize: 18,
-                          fontFamily: 'NotoSans Bold',
+                          fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
                       ),
@@ -89,34 +96,22 @@ class MyCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
+            Wrap(
+              spacing: 8,
+              children: project.category.map((skill) {
+                return Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Text(
-                    'Mobile Application',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  child: Text(
+                    skill,
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[700],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Flutter',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ),
-              ],
+                );
+              }).toList(),
             ),
             const SizedBox(height: 15),
             Row(
@@ -124,7 +119,7 @@ class MyCard extends StatelessWidget {
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
-                  "4-6 months",
+                  "${project.duration} months",
                   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                 ),
               ],
@@ -144,5 +139,9 @@ class MyCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 }

@@ -1,42 +1,42 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
+import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
-  final List<Widget> views;
+  final List<ProjectEntity> projects;
+  final bool isLoading;
+  final String? errorMessage;
 
   const HomeState({
     required this.selectedIndex,
-    required this.views,
+    required this.projects,
+    required this.isLoading,
+    this.errorMessage,
   });
 
   static HomeState initial() {
     return const HomeState(
       selectedIndex: 0,
-      views: [
-        HomeView(),
-        ChatView(),
-        WalletView(),
-        HomeView(),
-        AccountView(),
-      ],
+      projects: [],
+      isLoading: false,
+      errorMessage: null,
     );
   }
 
   HomeState copyWith({
     int? selectedIndex,
-    List<Widget>? views,
+    List<ProjectEntity>? projects,
+    bool? isLoading,
+    String? errorMessage,
   }) {
     return HomeState(
       selectedIndex: selectedIndex ?? this.selectedIndex,
-      views: views ?? this.views,
+      projects: projects ?? this.projects,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [selectedIndex, views];
+  List<Object?> get props => [selectedIndex, projects, isLoading, errorMessage];
 }

@@ -131,7 +131,9 @@ void _initLoginDependencies() {
 }
 
 void _initHomeDependencies() {
-  getIt.registerLazySingleton<HomeCubit>(() => HomeCubit());
+  getIt.registerLazySingleton<HomeCubit>(
+    () => HomeCubit(getIt<GetAllProjectsUsecase>()),
+  );
 }
 
 void _initCompanyDependencies() {
@@ -155,9 +157,7 @@ void _initCompanyDependencies() {
 void _initProjectDependencies() {
   getIt.registerLazySingleton<ProjectRemoteDataSource>(
     () => ProjectRemoteDataSource(
-      dio: getIt<Dio>(),
-      skillRepository: getIt<ISkillRepository>(),
-    ),
+        dio: getIt<Dio>(), skillRepository: getIt<ISkillRepository>()),
   );
 
   getIt.registerLazySingleton<IProjectRepository>(
