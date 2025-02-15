@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:projectsyeti/features/skill/data/model/skill_api_model.dart';
 import '../../domain/entity/project_entity.dart';
 
 part 'project_api_model.g.dart';
@@ -10,8 +9,10 @@ class ProjectApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? projectId;
   final String companyId;
+  final String companyName;
+  final String companyLogo;
   final String title;
-  final List<SkillApiModel> category;
+  final List<String> category;
   final String requirements;
   final String description;
   final String duration;
@@ -21,6 +22,8 @@ class ProjectApiModel extends Equatable {
   const ProjectApiModel({
     this.projectId,
     required this.companyId,
+    required this.companyName,
+    required this.companyLogo,
     required this.title,
     required this.category,
     required this.requirements,
@@ -30,20 +33,19 @@ class ProjectApiModel extends Equatable {
     required this.status,
   });
 
-  /// From JSON
   factory ProjectApiModel.fromJson(Map<String, dynamic> json) =>
       _$ProjectApiModelFromJson(json);
 
-  /// To JSON
   Map<String, dynamic> toJson() => _$ProjectApiModelToJson(this);
 
-  /// Convert to Domain Entity
   ProjectEntity toEntity() {
     return ProjectEntity(
       projectId: projectId,
       companyId: companyId,
+      companyName: companyName,
+      companyLogo: companyLogo,
       title: title,
-      category: category.map((e) => e.toEntity()).toList(),
+      category: category,
       requirements: requirements,
       description: description,
       duration: duration,
@@ -52,26 +54,12 @@ class ProjectApiModel extends Equatable {
     );
   }
 
-  /// Create API Model from Domain Entity
-  factory ProjectApiModel.fromEntity(ProjectEntity entity) {
-    return ProjectApiModel(
-      projectId: entity.projectId,
-      companyId: entity.companyId,
-      title: entity.title,
-      category:
-          entity.category.map((e) => SkillApiModel.fromEntity(e)).toList(),
-      requirements: entity.requirements,
-      description: entity.description,
-      duration: entity.duration,
-      postedDate: entity.postedDate,
-      status: entity.status,
-    );
-  }
-
   @override
   List<Object?> get props => [
         projectId,
         companyId,
+        companyName,
+        companyLogo,
         title,
         category,
         requirements,

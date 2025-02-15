@@ -37,7 +37,7 @@ final getIt = GetIt.instance;
 Future<void> initDependencies() async {
   _initHiveService();
   _initApiService();
-  _initSharedPreferences();
+  await _initSharedPreferences();
   _initSkillDependencies();
   _initAuthDependencies();
   _initLoginDependencies();
@@ -46,18 +46,41 @@ Future<void> initDependencies() async {
   _initProjectDependencies();
 }
 
-Future<void> _initSharedPreferences() async {
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
-}
-
 void _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
 }
 
 void _initApiService() {
-  getIt.registerLazySingleton<Dio>(
-    () => ApiService(Dio()).dio,
+  getIt.registerLazySingleton<Dio>(() => ApiService(Dio()).dio);
+}
+
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+void _initSkillDependencies() {
+  getIt.registerLazySingleton<SkillRemoteDataSource>(
+    () => SkillRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ISkillRepository>(
+    () => SkillRemoteRepository(getIt<SkillRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetAllSkillsUsecase>(
+    () => GetAllSkillsUsecase(skillRepository: getIt<ISkillRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetSkillByIdUsecase>(
+    () => GetSkillByIdUsecase(skillRepository: getIt<ISkillRepository>()),
+  );
+
+  getIt.registerFactory<SkillBloc>(
+    () => SkillBloc(
+      getAllSkillsUsecase: getIt<GetAllSkillsUsecase>(),
+      getSkillByIdUsecase: getIt<GetSkillByIdUsecase>(),
+    ),
   );
 }
 
@@ -73,9 +96,7 @@ void _initAuthDependencies() {
   );
 
   getIt.registerLazySingleton<UploadImageUsecase>(
-    () => UploadImageUsecase(
-      getIt<AuthRemoteRepository>(),
-    ),
+    () => UploadImageUsecase(getIt<AuthRemoteRepository>()),
   );
 
   getIt.registerLazySingleton<VerifyOtpUsecase>(
@@ -113,31 +134,6 @@ void _initHomeDependencies() {
   getIt.registerLazySingleton<HomeCubit>(() => HomeCubit());
 }
 
-void _initSkillDependencies() {
-  getIt.registerLazySingleton<GetAllSkillsUsecase>(
-    () => GetAllSkillsUsecase(skillRepository: getIt<ISkillRepository>()),
-  );
-
-  getIt.registerLazySingleton<GetSkillByIdUsecase>(
-    () => GetSkillByIdUsecase(skillRepository: getIt<ISkillRepository>()),
-  );
-
-  getIt.registerLazySingleton<SkillRemoteRepository>(
-    () => SkillRemoteRepository(getIt<SkillRemoteDataSource>()),
-  );
-
-  getIt.registerLazySingleton<SkillRemoteDataSource>(
-    () => SkillRemoteDataSource(getIt<Dio>()),
-  );
-
-  getIt.registerLazySingleton<SkillBloc>(
-    () => SkillBloc(
-      getAllSkillsUsecase: getIt<GetAllSkillsUsecase>(),
-      getSkillByIdUsecase: getIt<GetSkillByIdUsecase>(),
-    ),
-  );
-}
-
 void _initCompanyDependencies() {
   getIt.registerLazySingleton<CompanyRemoteDataSource>(
     () => CompanyRemoteDataSource(getIt<Dio>()),
@@ -158,7 +154,10 @@ void _initCompanyDependencies() {
 
 void _initProjectDependencies() {
   getIt.registerLazySingleton<ProjectRemoteDataSource>(
-    () => ProjectRemoteDataSource(dio: getIt<Dio>()),
+    () => ProjectRemoteDataSource(
+      dio: getIt<Dio>(),
+      skillRepository: getIt<ISkillRepository>(),
+    ),
   );
 
   getIt.registerLazySingleton<IProjectRepository>(

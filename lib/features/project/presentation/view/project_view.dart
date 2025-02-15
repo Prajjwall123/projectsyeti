@@ -56,7 +56,19 @@ class _ProjectViewState extends State<ProjectView> {
         children: [
           const SizedBox(height: 20),
           _buildDetailRow("Title", project.title),
-          _buildDetailRow("Company", project.companyId),
+          _buildDetailRow("Company Name", project.companyName),
+          // _buildDetailRow("Company ID", project.companyId),
+          const SizedBox(height: 10),
+          if (project.companyLogo.isNotEmpty)
+            Center(
+              child: Image.network(
+                "http://10.0.2.2:3000/${project.companyLogo}",
+                height: 100,
+                width: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
+          const SizedBox(height: 20),
           _buildDetailRow("Requirements", project.requirements),
           _buildDetailRow("Description", project.description),
           _buildDetailRow("Duration", "${project.duration} months"),
@@ -66,6 +78,7 @@ class _ProjectViewState extends State<ProjectView> {
             project.postedDate.toLocal().toString().split(' ')[0],
           ),
           const SizedBox(height: 20),
+          _buildSkillList(project.category),
         ],
       ),
     );
@@ -86,6 +99,29 @@ class _ProjectViewState extends State<ProjectView> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSkillList(List<String> skills) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Skills Required:",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 10),
+        ...skills.map((skill) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Row(
+                children: [
+                  const Icon(Icons.check_circle, size: 16, color: Colors.green),
+                  const SizedBox(width: 8),
+                  Text(skill, style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+            )),
+      ],
     );
   }
 }
