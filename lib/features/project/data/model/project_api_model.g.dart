@@ -8,7 +8,7 @@ part of 'project_api_model.dart';
 
 ProjectApiModel _$ProjectApiModelFromJson(Map<String, dynamic> json) =>
     ProjectApiModel(
-      projectId: json['_id'] as String?,
+      projectId: json['projectId'] as String?,
       companyId: json['companyId'] as String,
       companyName: json['companyName'] as String,
       companyLogo: json['companyLogo'] as String,
@@ -24,7 +24,7 @@ ProjectApiModel _$ProjectApiModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ProjectApiModelToJson(ProjectApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.projectId,
+      'projectId': instance.projectId,
       'companyId': instance.companyId,
       'companyName': instance.companyName,
       'companyLogo': instance.companyLogo,

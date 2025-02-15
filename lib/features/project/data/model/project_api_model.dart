@@ -6,7 +6,7 @@ part 'project_api_model.g.dart';
 
 @JsonSerializable()
 class ProjectApiModel extends Equatable {
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'projectId')
   final String? projectId;
   final String companyId;
   final String companyName;

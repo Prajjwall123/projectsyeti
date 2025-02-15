@@ -26,10 +26,14 @@ class ProjectRemoteDataSource implements IProjectDataSource {
       var response = await _dio.get(ApiEndpoints.getAllProjects);
       if (response.statusCode == 200) {
         List<dynamic> projectsList = response.data;
-        List<ProjectEntity> projects = projectsList
-            .map((projectJson) =>
-                ProjectApiModel.fromJson(projectJson).toEntity())
-            .toList();
+
+        List<ProjectEntity> projects = projectsList.map((projectJson) {
+          ProjectApiModel projectModel = ProjectApiModel.fromJson(projectJson);
+          debugPrint('Fetched Project ID: ${projectModel.projectId}');
+          return projectModel.toEntity();
+        }).toList();
+
+        debugPrint('Total Projects Fetched: ${projects.length}');
         return projects;
       } else {
         throw Exception(response.statusMessage);

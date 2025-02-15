@@ -188,10 +188,6 @@ class MyCard extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              project.projectId ?? 'N/A',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
           ],
         ),
       ),
