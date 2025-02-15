@@ -10,6 +10,9 @@ class GetProjectByIdDTO {
   @JsonKey(name: 'title')
   final String title;
 
+  @JsonKey(name: 'headquarters')
+  final String headquarters;
+
   @JsonKey(name: 'companyId')
   final String companyId;
 
@@ -45,6 +48,7 @@ class GetProjectByIdDTO {
     required this.companyLogo,
     required this.category,
     required this.requirements,
+    required this.headquarters,
     required this.description,
     required this.duration,
     required this.postedDate,

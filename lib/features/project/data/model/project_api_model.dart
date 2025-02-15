@@ -11,6 +11,7 @@ class ProjectApiModel extends Equatable {
   final String companyId;
   final String companyName;
   final String companyLogo;
+  final String headquarters;
   final String title;
   final List<String> category;
   final String requirements;
@@ -25,6 +26,7 @@ class ProjectApiModel extends Equatable {
     required this.companyName,
     required this.companyLogo,
     required this.title,
+    required this.headquarters,
     required this.category,
     required this.requirements,
     required this.description,
@@ -45,6 +47,7 @@ class ProjectApiModel extends Equatable {
       companyName: companyName,
       companyLogo: companyLogo,
       title: title,
+      headquarters: headquarters,
       category: category,
       requirements: requirements,
       description: description,
@@ -61,6 +64,7 @@ class ProjectApiModel extends Equatable {
         companyName,
         companyLogo,
         title,
+        headquarters,
         category,
         requirements,
         description,

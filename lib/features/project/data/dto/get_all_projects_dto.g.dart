@@ -12,6 +12,7 @@ GetAllProjectsDTO _$GetAllProjectsDTOFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       companyId: json['companyId'] as String,
       companyName: json['companyName'] as String,
+      headquarters: json['headquarters'] as String,
       companyLogo: json['companyLogo'] as String,
       category:
           (json['category'] as List<dynamic>).map((e) => e as String).toList(),
@@ -27,6 +28,7 @@ Map<String, dynamic> _$GetAllProjectsDTOToJson(GetAllProjectsDTO instance) =>
       'projectId': instance.projectId,
       'title': instance.title,
       'companyId': instance.companyId,
+      'headquarters': instance.headquarters,
       'companyName': instance.companyName,
       'companyLogo': instance.companyLogo,
       'category': instance.category,

@@ -13,6 +13,9 @@ class GetAllProjectsDTO {
   @JsonKey(name: 'companyId')
   final String companyId;
 
+  @JsonKey(name: 'headquarters')
+  final String headquarters;
+
   @JsonKey(name: 'companyName')
   final String companyName;
 
@@ -42,6 +45,7 @@ class GetAllProjectsDTO {
     required this.title,
     required this.companyId,
     required this.companyName,
+    required this.headquarters,
     required this.companyLogo,
     required this.category,
     required this.requirements,

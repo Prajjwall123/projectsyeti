@@ -5,6 +5,7 @@ class ProjectEntity extends Equatable {
   final String companyId;
   final String companyName;
   final String companyLogo;
+  final String headquarters;
   final String title;
   final List<String> category;
   final String requirements;
@@ -18,6 +19,7 @@ class ProjectEntity extends Equatable {
     required this.companyId,
     required this.companyName,
     required this.companyLogo,
+    required this.headquarters,
     required this.title,
     required this.category,
     required this.requirements,
@@ -33,6 +35,7 @@ class ProjectEntity extends Equatable {
     String? companyName,
     String? companyLogo,
     String? title,
+    String? headquarters,
     List<String>? category,
     String? requirements,
     String? description,
@@ -45,6 +48,7 @@ class ProjectEntity extends Equatable {
       companyId: companyId ?? this.companyId,
       companyName: companyName ?? this.companyName,
       companyLogo: companyLogo ?? this.companyLogo,
+      headquarters: headquarters ?? this.headquarters,
       title: title ?? this.title,
       category: category ?? this.category,
       requirements: requirements ?? this.requirements,
@@ -61,6 +65,7 @@ class ProjectEntity extends Equatable {
         companyId,
         companyName,
         companyLogo,
+        headquarters,
         title,
         category,
         requirements,

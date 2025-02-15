@@ -13,6 +13,7 @@ ProjectApiModel _$ProjectApiModelFromJson(Map<String, dynamic> json) =>
       companyName: json['companyName'] as String,
       companyLogo: json['companyLogo'] as String,
       title: json['title'] as String,
+      headquarters: json['headquarters'] as String,
       category:
           (json['category'] as List<dynamic>).map((e) => e as String).toList(),
       requirements: json['requirements'] as String,
@@ -28,6 +29,7 @@ Map<String, dynamic> _$ProjectApiModelToJson(ProjectApiModel instance) =>
       'companyId': instance.companyId,
       'companyName': instance.companyName,
       'companyLogo': instance.companyLogo,
+      'headquarters': instance.headquarters,
       'title': instance.title,
       'category': instance.category,
       'requirements': instance.requirements,

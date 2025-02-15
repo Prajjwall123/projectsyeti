@@ -16,6 +16,7 @@ GetProjectByIdDTO _$GetProjectByIdDTOFromJson(Map<String, dynamic> json) =>
       category:
           (json['category'] as List<dynamic>).map((e) => e as String).toList(),
       requirements: json['requirements'] as String,
+      headquarters: json['headquarters'] as String,
       description: json['description'] as String,
       duration: json['duration'] as String,
       postedDate: DateTime.parse(json['postedDate'] as String),
@@ -26,6 +27,7 @@ Map<String, dynamic> _$GetProjectByIdDTOToJson(GetProjectByIdDTO instance) =>
     <String, dynamic>{
       'projectId': instance.projectId,
       'title': instance.title,
+      'headquarters': instance.headquarters,
       'companyId': instance.companyId,
       'companyName': instance.companyName,
       'companyLogo': instance.companyLogo,
