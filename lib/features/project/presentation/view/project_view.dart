@@ -54,74 +54,140 @@ class _ProjectViewState extends State<ProjectView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
-          _buildDetailRow("Title", project.title),
-          _buildDetailRow("Company Name", project.companyName),
-          // _buildDetailRow("Company ID", project.companyId),
-          const SizedBox(height: 10),
-          if (project.companyLogo.isNotEmpty)
-            Center(
-              child: Image.network(
-                "http://10.0.2.2:3000/${project.companyLogo}",
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-          const SizedBox(height: 20),
-          _buildDetailRow("Requirements", project.requirements),
-          _buildDetailRow("Description", project.description),
-          _buildDetailRow("Duration", "${project.duration} months"),
-          _buildDetailRow("Status", project.status),
-          _buildDetailRow(
-            "Posted Date",
-            project.postedDate.toLocal().toString().split(' ')[0],
-          ),
-          const SizedBox(height: 20),
-          _buildSkillList(project.category),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+          // Project Title
           Text(
-            "$label: ",
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            project.title,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          Expanded(
-            child: Text(value, style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
+
+          // Company Name and Logo
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: project.companyLogo.isNotEmpty
+                    ? NetworkImage("http://10.0.2.2:3000/${project.companyLogo}")
+                    : const AssetImage("assets/images/default_company.png")
+                        as ImageProvider,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  project.companyName,
+                  style: const TextStyle(fontSize: 18, color: Colors.black54),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Description
+          Text(
+            project.description,
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
+          ),
+          const SizedBox(height: 20),
+
+          // Detail Cards (Posted Date, Duration, Status)
+          Row(
+            children: [
+              Expanded(child: _buildDetailCard(Icons.calendar_today, "Posted Date", _formatDate(project.postedDate))),
+              const SizedBox(width: 8),
+              Expanded(child: _buildDetailCard(Icons.work, "Duration", "${project.duration} months")),
+            ],
+          ),
+          const SizedBox(height: 8),
+          _buildDetailCard(Icons.check_circle, "Status", project.status),
+
+          const SizedBox(height: 20),
+
+          // Skills Section
+          _buildSkillSection(project.category),
+
+          const SizedBox(height: 20),
+
+          // Requirements Section
+          const Text(
+            "Requirements",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          ...project.requirements.split('\n').map(
+                (requirement) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.arrow_right, size: 20, color: Colors.black54),
+                      const SizedBox(width: 8),
+                      Expanded(child: Text(requirement.trim())),
+                    ],
+                  ),
+                ),
+              ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailCard(IconData icon, String label, String value) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: Colors.blue),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: const TextStyle(fontSize: 14, color: Colors.black54)),
+              const SizedBox(height: 4),
+              Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSkillList(List<String> skills) {
+  Widget _buildSkillSection(List<String> skills) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Skills Required:",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          "Categories:",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
-        ...skills.map((skill) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.check_circle, size: 16, color: Colors.green),
-                  const SizedBox(width: 8),
-                  Text(skill, style: const TextStyle(fontSize: 16)),
-                ],
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: skills.map((skill) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(12),
               ),
-            )),
+              child: Text(
+                skill,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            );
+          }).toList(),
+        ),
       ],
     );
+  }
+
+  String _formatDate(DateTime date) {
+    return "${date.day}/${date.month}/${date.year}";
   }
 }

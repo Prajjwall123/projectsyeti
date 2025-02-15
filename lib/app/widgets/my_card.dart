@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
+import 'package:projectsyeti/features/project/presentation/view/project_view.dart';
 
 class MyCard extends StatelessWidget {
   final ProjectEntity project;
@@ -11,6 +12,7 @@ class MyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Project ID: ${project.projectId}");
     return Card(
       elevation: 8,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -23,6 +25,7 @@ class MyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Date and Status Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -54,7 +57,10 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 12),
+
+            // Company Logo and Title Row
             Row(
               children: [
                 SizedBox(
@@ -62,7 +68,7 @@ class MyCard extends StatelessWidget {
                   width: 50,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: project.companyLogo != null
+                    child: project.companyLogo.isNotEmpty
                         ? Image.network(
                             "http://10.0.2.2:3000/${project.companyLogo}",
                             fit: BoxFit.cover,
@@ -96,7 +102,10 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 16),
+
+            // Categories
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -115,7 +124,10 @@ class MyCard extends StatelessWidget {
                 );
               }).toList(),
             ),
+
             const SizedBox(height: 16),
+
+            // Description (Trimmed)
             Text(
               _trimDescription(project.description),
               style: TextStyle(
@@ -124,7 +136,10 @@ class MyCard extends StatelessWidget {
                 height: 1.5,
               ),
             ),
+
             const SizedBox(height: 16),
+
+            // Duration
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
@@ -135,11 +150,28 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
+
             const SizedBox(height: 16),
+
+            // View Details Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (project.projectId != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProjectView(projectId: project.projectId!),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Project ID not found!")),
+                    );
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
@@ -147,13 +179,18 @@ class MyCard extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  "View Details",
+                  "View Details ",
                   style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+            ),
+            Text(
+              project.projectId ?? 'N/A',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),

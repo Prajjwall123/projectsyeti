@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
@@ -22,6 +23,9 @@ class HomeCubit extends Cubit<HomeState> {
             isLoading: false, errorMessage: "Failed to load projects"));
       },
       (projects) {
+        for (var project in projects) {
+          debugPrint('Fetched Project ID: ${project.projectId}');
+        }
         emit(state.copyWith(isLoading: false, projects: projects));
       },
     );
