@@ -12,10 +12,11 @@ class MyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 8,
+      margin: const EdgeInsets.symmetric(vertical: 8),
       color: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -43,7 +44,7 @@ class MyCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: _getStatusColor(project.status),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -78,7 +79,7 @@ class MyCard extends StatelessWidget {
                         project.companyName,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -86,7 +87,7 @@ class MyCard extends StatelessWidget {
                         project.title,
                         style: const TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
@@ -98,12 +99,13 @@ class MyCard extends StatelessWidget {
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
+              runSpacing: 8,
               children: project.category.map((skill) {
                 return Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Colors.blueGrey[700],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -113,7 +115,16 @@ class MyCard extends StatelessWidget {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
+            Text(
+              _trimDescription(project.description),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[800],
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 16),
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
@@ -124,14 +135,23 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 child: const Text(
                   "View Details",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -143,5 +163,24 @@ class MyCard extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
+
+  String _trimDescription(String description) {
+    const maxLength = 100;
+    if (description.length <= maxLength) return description;
+    return "${description.substring(0, maxLength)}...";
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'posted':
+        return Colors.green;
+      case 'in progress':
+        return Colors.orange;
+      case 'completed':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
   }
 }
