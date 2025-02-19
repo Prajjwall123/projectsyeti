@@ -16,6 +16,11 @@ import 'package:projectsyeti/features/company/data/data_source/remote_data_sourc
 import 'package:projectsyeti/features/company/data/repository/remote_repository/company_remote_repository.dart';
 import 'package:projectsyeti/features/company/domain/entity/repository/company_repository.dart';
 import 'package:projectsyeti/features/company/domain/use_case/get_company_by_id_usecase.dart';
+import 'package:projectsyeti/features/freelancer/data/data_source/remote_data_source/freelancer_remote_data_source.dart';
+import 'package:projectsyeti/features/freelancer/data/repository/remote_repository/freelancer_remote_repository.dart';
+import 'package:projectsyeti/features/freelancer/domain/repository/freelancer_repository.dart';
+import 'package:projectsyeti/features/freelancer/domain/usecase/get_freelancer_by_id_usecase.dart';
+import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/project/data/data_source/remote_data_source/project_remote_data_source.dart';
 import 'package:projectsyeti/features/project/data/repository/remote_repository/project_remote_repository.dart';
@@ -44,6 +49,7 @@ Future<void> initDependencies() async {
   _initHomeDependencies();
   _initCompanyDependencies();
   _initProjectDependencies();
+  _initFreelancerDependencies();
 }
 
 void _initHiveService() {
@@ -176,6 +182,27 @@ void _initProjectDependencies() {
     () => ProjectBloc(
       getAllProjectsUsecase: getIt<GetAllProjectsUsecase>(),
       getProjectByIdUsecase: getIt<GetProjectByIdUsecase>(),
+    ),
+  );
+}
+
+void _initFreelancerDependencies() {
+  getIt.registerLazySingleton<FreelancerRemoteDataSource>(
+    () => FreelancerRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<IFreelancerRepository>(
+    () => FreelancerRemoteRepository(getIt<FreelancerRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetFreelancerByIdUsecase>(
+    () => GetFreelancerByIdUsecase(
+        freelancerRepository: getIt<IFreelancerRepository>()),
+  );
+
+  getIt.registerFactory<FreelancerBloc>(
+    () => FreelancerBloc(
+      getFreelancerByIdUsecase: getIt<GetFreelancerByIdUsecase>(),
     ),
   );
 }

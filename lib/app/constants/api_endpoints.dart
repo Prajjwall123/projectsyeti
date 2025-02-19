@@ -24,4 +24,7 @@ class ApiEndpoints {
 
   // ====================== Company Routes ======================
   static const String getCompanyById = "companies/";
+
+  // ====================== Freelancer Routes ======================
+  static const String getFreelancerById = "freelancers/";
 }

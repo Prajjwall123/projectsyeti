@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/core/app_theme/app_theme.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
+import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view/login_view.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ProjectBloc>(
           create: (_) => getIt<ProjectBloc>(),
+        ),
+        BlocProvider<FreelancerBloc>(
+          create: (_) => getIt<FreelancerBloc>(),
         ),
       ],
       child: MaterialApp(

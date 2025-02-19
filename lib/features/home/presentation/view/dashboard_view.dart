@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
@@ -99,7 +100,7 @@ class _DashboardViewState extends State<DashboardView> {
     const WalletView(),
     const CompanyView(companyId: "679e52a2570ca2c950216916"),
     const ProjectView(projectId: "67a7124f2930204713f5da92"),
-    const AccountView(),
+    const FreelancerView(freelancerId: "67b203b6d12d74942a90d631"),
   ];
 
   @override
