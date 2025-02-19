@@ -13,6 +13,7 @@ class ProjectEntity extends Equatable {
   final String duration;
   final DateTime postedDate;
   final String status;
+  final int bidCount;
 
   const ProjectEntity({
     this.projectId,
@@ -27,6 +28,7 @@ class ProjectEntity extends Equatable {
     required this.duration,
     required this.postedDate,
     required this.status,
+    required this.bidCount,
   });
 
   ProjectEntity copyWith({
@@ -42,6 +44,7 @@ class ProjectEntity extends Equatable {
     String? duration,
     DateTime? postedDate,
     String? status,
+    int? bidCount,
   }) {
     return ProjectEntity(
       projectId: projectId ?? this.projectId,
@@ -56,6 +59,7 @@ class ProjectEntity extends Equatable {
       duration: duration ?? this.duration,
       postedDate: postedDate ?? this.postedDate,
       status: status ?? this.status,
+      bidCount: bidCount ?? this.bidCount,
     );
   }
 
@@ -73,5 +77,6 @@ class ProjectEntity extends Equatable {
         duration,
         postedDate,
         status,
+        bidCount,
       ];
 }

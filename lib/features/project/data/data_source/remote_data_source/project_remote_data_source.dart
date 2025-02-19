@@ -67,6 +67,7 @@ class ProjectRemoteDataSource implements IProjectDataSource {
           postedDate: projectDTO.postedDate,
           status: projectDTO.status,
           headquarters: projectDTO.headquarters,
+          bidCount: projectDTO.bidCount,
         );
       } else {
         throw Exception(response.statusMessage);

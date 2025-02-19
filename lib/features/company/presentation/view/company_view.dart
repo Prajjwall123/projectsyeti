@@ -59,49 +59,76 @@ class _CompanyViewState extends State<CompanyView> {
 
   Widget _buildCompanyDetails(CompanyEntity company) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (company.logo != null)
-            Center(
-              child: Image.network(
-                _getFullLogoUrl(company.logo!),
-                height: 120,
-                width: 120,
-                fit: BoxFit.cover,
-              ),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 8,
+              spreadRadius: 2,
+              offset: const Offset(0, 3),
             ),
-          const SizedBox(height: 20),
-          _buildDetailRow("Company Name", company.companyName),
-          _buildDetailRow("Bio", company.companyBio ?? "N/A"),
-          _buildDetailRow("Employees", company.employees.toString()),
-          _buildDetailRow("Projects Posted", company.projectsPosted.toString()),
-          _buildDetailRow(
-              "Projects Awarded", company.projectsAwarded.toString()),
-          _buildDetailRow(
-              "Projects Completed", company.projectsCompleted.toString()),
-          _buildDetailRow("Founded", company.founded?.toString() ?? "N/A"),
-          _buildDetailRow("CEO", company.ceo ?? "N/A"),
-          _buildDetailRow("Headquarters", company.headquarters ?? "N/A"),
-          _buildDetailRow("Industry", company.industry ?? "N/A"),
-          _buildDetailRow("Website", company.website ?? "N/A"),
-        ],
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (company.logo != null)
+              Center(
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(_getFullLogoUrl(company.logo!)),
+                  radius: 60,
+                ),
+              ),
+            const SizedBox(height: 20),
+            _buildStyledDetail("Company Name", company.companyName),
+            _buildStyledDetail("Bio", company.companyBio ?? "N/A"),
+            _buildStyledDetail("Employees", company.employees.toString()),
+            _buildStyledDetail(
+                "Projects Posted", company.projectsPosted.toString()),
+            _buildStyledDetail(
+                "Projects Awarded", company.projectsAwarded.toString()),
+            _buildStyledDetail(
+                "Projects Completed", company.projectsCompleted.toString()),
+            _buildStyledDetail("Founded", company.founded?.toString() ?? "N/A"),
+            _buildStyledDetail("CEO", company.ceo ?? "N/A"),
+            _buildStyledDetail("Headquarters", company.headquarters ?? "N/A"),
+            _buildStyledDetail("Industry", company.industry ?? "N/A"),
+            _buildStyledDetail("Website", company.website ?? "N/A"),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+  Widget _buildStyledDetail(String label, String value) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.withOpacity(0.3)),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "$label: ",
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Colors.blue,
+            ),
           ),
           Expanded(
-            child: Text(value, style: const TextStyle(fontSize: 16)),
+            child: Text(
+              value,
+              style: const TextStyle(fontSize: 14, color: Colors.black87),
+            ),
           ),
         ],
       ),

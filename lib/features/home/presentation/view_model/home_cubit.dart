@@ -14,20 +14,26 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(selectedIndex: index));
   }
 
-  Future<void> fetchProjects() async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
-    final result = await _getAllProjectsUsecase(const NoParams());
-    result.fold(
-      (failure) {
-        emit(state.copyWith(
-            isLoading: false, errorMessage: "Failed to load projects"));
-      },
-      (projects) {
-        for (var project in projects) {
-          debugPrint('Fetched Project ID: ${project.projectId}');
-        }
-        emit(state.copyWith(isLoading: false, projects: projects));
-      },
-    );
-  }
+Future<void> fetchProjects() async {
+  emit(state.copyWith(isLoading: true, errorMessage: null));
+
+  final result = await _getAllProjectsUsecase(const NoParams());
+
+  result.fold(
+    (failure) {
+      debugPrint("Error fetching projects: ${failure.toString()}");
+      emit(state.copyWith(
+        isLoading: false,
+        errorMessage: failure.toString(), 
+      ));
+    },
+    (projects) {
+      for (var project in projects) {
+        debugPrint('✅ Fetched Project ID: ${project.projectId}');
+      }
+      emit(state.copyWith(isLoading: false, projects: projects));
+    },
+  );
+}
+
 }

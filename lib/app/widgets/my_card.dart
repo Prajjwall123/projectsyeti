@@ -100,6 +100,24 @@ class MyCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: 12),
+                // Bids Count Display
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[50],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    "${project.bidCount} Bids",
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
               ],
             ),
 

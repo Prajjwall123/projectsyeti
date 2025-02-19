@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 
@@ -105,39 +106,50 @@ class _ProjectViewState extends State<ProjectView> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: project.companyLogo.isNotEmpty
-                      ? NetworkImage(
-                          "http://10.0.2.2:3000/${project.companyLogo}")
-                      : const AssetImage("assets/images/default_company.png")
-                          as ImageProvider,
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        project.companyName,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        project.headquarters,
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                    ],
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CompanyView(companyId: project.companyId),
                   ),
-                ),
-              ],
+                );
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: project.companyLogo.isNotEmpty
+                        ? NetworkImage(
+                            "http://10.0.2.2:3000/${project.companyLogo}")
+                        : const AssetImage("assets/images/default_company.png")
+                            as ImageProvider,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          project.companyName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          project.headquarters,
+                          style:
+                              const TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 

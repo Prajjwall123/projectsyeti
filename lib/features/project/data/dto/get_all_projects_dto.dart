@@ -40,6 +40,9 @@ class GetAllProjectsDTO {
   @JsonKey(name: 'status')
   final String status;
 
+  @JsonKey(name: 'bidCount')
+  final int bidCount;
+
   GetAllProjectsDTO({
     required this.projectId,
     required this.title,
@@ -53,6 +56,7 @@ class GetAllProjectsDTO {
     required this.duration,
     required this.postedDate,
     required this.status,
+    required this.bidCount,
   });
 
   factory GetAllProjectsDTO.fromJson(Map<String, dynamic> json) =>
