@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 
 class MyTag extends StatelessWidget {
-  final String text;
+  final SkillEntity skill;
   final Color backgroundColor;
   final Color textColor;
   final Color borderColor;
 
   const MyTag({
     super.key,
-    required this.text,
+    required this.skill,
     required this.backgroundColor,
     required this.textColor,
     required this.borderColor,
@@ -25,7 +26,7 @@ class MyTag extends StatelessWidget {
         border: Border.all(color: borderColor),
       ),
       child: Text(
-        text,
+        skill.name,
         style: TextStyle(
           color: textColor,
           fontWeight: FontWeight.bold,

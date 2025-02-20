@@ -18,6 +18,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     context.read<HomeCubit>().fetchProjects();
+    context.read<HomeCubit>().fetchSkills();
   }
 
   @override
@@ -134,56 +135,14 @@ class _HomeViewState extends State<HomeView> {
                               height: 40,
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
-                                children: const [
-                                  MyTag(
-                                    text: 'Mobile Application',
+                                children: state.skills.map((skill) {
+                                  return MyTag(
+                                    skill: skill,
                                     backgroundColor: Colors.blue,
                                     textColor: Colors.white,
                                     borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Web Development',
-                                    backgroundColor: Colors.white,
-                                    textColor: Colors.blue,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'UI Design',
-                                    backgroundColor: Colors.blue,
-                                    textColor: Colors.white,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Graphics Design',
-                                    backgroundColor: Colors.white,
-                                    textColor: Colors.blue,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Data Science',
-                                    backgroundColor: Colors.blue,
-                                    textColor: Colors.white,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Cloud Computing',
-                                    backgroundColor: Colors.white,
-                                    textColor: Colors.blue,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Machine Learning',
-                                    backgroundColor: Colors.blue,
-                                    textColor: Colors.white,
-                                    borderColor: Colors.blue,
-                                  ),
-                                  MyTag(
-                                    text: 'Photography',
-                                    backgroundColor: Colors.white,
-                                    textColor: Colors.blue,
-                                    borderColor: Colors.blue,
-                                  ),
-                                ],
+                                  );
+                                }).toList(),
                               ),
                             ),
                             const SizedBox(

@@ -138,7 +138,10 @@ void _initLoginDependencies() {
 
 void _initHomeDependencies() {
   getIt.registerLazySingleton<HomeCubit>(
-    () => HomeCubit(getIt<GetAllProjectsUsecase>()),
+    () => HomeCubit(
+      getIt<GetAllProjectsUsecase>(),
+      getIt<GetAllSkillsUsecase>(),
+    ),
   );
 }
 
