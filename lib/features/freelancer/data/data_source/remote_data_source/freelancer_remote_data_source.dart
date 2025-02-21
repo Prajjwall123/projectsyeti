@@ -38,10 +38,10 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
           createdAt: freelancerDTO.createdAt,
           updatedAt: freelancerDTO.updatedAt,
           certifications: freelancerDTO.certifications
-              .map((cert) => cert.toEntity())
+              ?.map((cert) => cert.toEntity())
               .toList(),
           experience:
-              freelancerDTO.experience.map((exp) => exp.toEntity()).toList(),
+              freelancerDTO.experience?.map((exp) => exp.toEntity()).toList(),
           languages: freelancerDTO.languages,
           profession: freelancerDTO.profession,
           location: freelancerDTO.location,
@@ -84,10 +84,10 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
         profileImage: freelancer.profileImage,
         projectsCompleted: freelancer.projectsCompleted,
         certifications: freelancer.certifications
-            .map((cert) => CertificationApiModel.fromEntity(cert))
+            ?.map((cert) => CertificationApiModel.fromEntity(cert))
             .toList(),
         experience: freelancer.experience
-            .map((exp) => ExperienceApiModel.fromEntity(exp))
+            ?.map((exp) => ExperienceApiModel.fromEntity(exp))
             .toList(),
         languages: freelancer.languages,
         profession: freelancer.profession,
@@ -127,10 +127,10 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
           createdAt: freelancerDTO.createdAt,
           updatedAt: freelancerDTO.updatedAt,
           certifications: freelancerDTO.certifications
-              .map((cert) => cert.toEntity())
+              ?.map((cert) => cert.toEntity())
               .toList(),
           experience:
-              freelancerDTO.experience.map((exp) => exp.toEntity()).toList(),
+              freelancerDTO.experience?.map((exp) => exp.toEntity()).toList(),
           languages: freelancerDTO.languages,
           profession: freelancerDTO.profession,
           location: freelancerDTO.location,

@@ -25,7 +25,7 @@ class _FreelancerViewState extends State<FreelancerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212), // Dark background
+      backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         title: const Text("Freelancer Profile"),
         backgroundColor: Colors.black,
@@ -85,7 +85,7 @@ class _FreelancerViewState extends State<FreelancerView> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Profession: ${freelancer.profession}",
+                  "Profession: ${freelancer.profession ?? 'Not specified'}",
                   style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 Text(
@@ -102,7 +102,8 @@ class _FreelancerViewState extends State<FreelancerView> {
                     // Navigate to the update profile screen
                     _onUpdateFreelancer(freelancer);
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text("Update Profile"),
                 ),
               ],
@@ -110,36 +111,65 @@ class _FreelancerViewState extends State<FreelancerView> {
           ),
           const SizedBox(height: 20),
 
-          // ABOUT ME SECTION
           _buildSectionHeader("About Me"),
-          _buildCard([ 
-            _buildDetailRow("I work at", freelancer.workAt),
-            _buildDetailRow("Languages", freelancer.languages.join(", ")),
-            _buildDetailRow("Joined Date",
-                freelancer.createdAt.toLocal().toString().split(" ")[0]),
-            _buildDetailRow("Availability", freelancer.availability),
+          _buildCard([
+            _buildDetailRow("I work at", freelancer.workAt ?? "Not specified"),
+            _buildDetailRow(
+                "Languages",
+                (freelancer.languages?.isEmpty ?? true)
+                    ? "Not specified"
+                    : freelancer.languages!.join(", ")),
+            _buildDetailRow(
+                "Joined Date",
+                freelancer.createdAt?.toLocal().toString().split(" ")[0] ??
+                    "Not specified"),
+            _buildDetailRow(
+                "Availability", freelancer.availability ?? "Not specified"),
           ]),
           const SizedBox(height: 20),
 
           // EXPERIENCE SECTION
           _buildSectionHeader("Experience"),
-          ...freelancer.experience.map((exp) => _buildExperienceCard(exp)),
-          const SizedBox(height: 20),
+          ...(freelancer.experience?.isEmpty ?? true
+              ? [_buildDetailRow("Experience", "Not specified")]
+              : freelancer.experience!
+                  .map((exp) => _buildExperienceCard(exp))
+                  .toList()),
 
+          const SizedBox(height: 20),
           // SKILLS SECTION
           _buildSectionHeader("Skills"),
-          _buildSkillChips(
-              freelancer.skills.map((skill) => skill.name).toList()),
-
+          ...((freelancer.skills.isEmpty ?? true)
+              ? [_buildDetailRow("Skills", "Not specified")]
+              : [
+                  _buildSkillChips(
+                      freelancer.skills.map((skill) => skill.name).toList())
+                ]), // Using _buildSkillChips
           const SizedBox(height: 20),
 
           // CERTIFICATIONS SECTION
           _buildSectionHeader("Certifications"),
-          ...freelancer.certifications
-              .map((cert) => _buildCertificationRow(cert)),
+          ...(freelancer.certifications?.isEmpty ?? true
+              ? [_buildDetailRow("Certifications", "Not specified")]
+              : freelancer.certifications!
+                  .map((cert) => _buildCertificationRow(cert))
+                  .toList()),
           const SizedBox(height: 20),
         ],
       ),
+    );
+  }
+
+  // Skills Chips
+  Widget _buildSkillChips(List<String> skills) {
+    return Wrap(
+      spacing: 8,
+      children: skills.map((skill) {
+        return Chip(
+          label: Text(skill, style: const TextStyle(color: Colors.white)),
+          backgroundColor: Colors.blue,
+        );
+      }).toList(),
     );
   }
 
@@ -214,19 +244,6 @@ class _FreelancerViewState extends State<FreelancerView> {
           ),
         ],
       ),
-    );
-  }
-
-  // Skills Chips
-  Widget _buildSkillChips(List<String> skills) {
-    return Wrap(
-      spacing: 8,
-      children: skills.map((skill) {
-        return Chip(
-          label: Text(skill, style: const TextStyle(color: Colors.white)),
-          backgroundColor: Colors.blue,
-        );
-      }).toList(),
     );
   }
 

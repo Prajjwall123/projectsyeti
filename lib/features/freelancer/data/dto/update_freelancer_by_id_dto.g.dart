@@ -19,18 +19,22 @@ UpdateFreelancerByIdDTO _$UpdateFreelancerByIdDTOFromJson(
       portfolio: json['portfolio'] as String,
       profileImage: json['profileImage'] as String,
       projectsCompleted: (json['projectsCompleted'] as num).toInt(),
-      certifications: (json['certifications'] as List<dynamic>)
-          .map((e) => CertificationApiModel.fromJson(e as Map<String, dynamic>))
+      certifications: (json['certifications'] as List<dynamic>?)
+          ?.map(
+              (e) => CertificationApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      experience: (json['experience'] as List<dynamic>)
-          .map((e) => ExperienceApiModel.fromJson(e as Map<String, dynamic>))
+      experience: (json['experience'] as List<dynamic>?)
+          ?.map((e) => ExperienceApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      languages:
-          (json['languages'] as List<dynamic>).map((e) => e as String).toList(),
-      profession: json['profession'] as String,
-      location: json['location'] as String,
-      aboutMe: json['aboutMe'] as String,
-      workAt: json['workAt'] as String,
+      languages: (json['languages'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      profession: json['profession'] as String?,
+      location: json['location'] as String?,
+      aboutMe: json['aboutMe'] as String?,
+      workAt: json['workAt'] as String?,
+      createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
     );
 
 Map<String, dynamic> _$UpdateFreelancerByIdDTOToJson(
@@ -51,4 +55,6 @@ Map<String, dynamic> _$UpdateFreelancerByIdDTOToJson(
       'location': instance.location,
       'aboutMe': instance.aboutMe,
       'workAt': instance.workAt,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
     };

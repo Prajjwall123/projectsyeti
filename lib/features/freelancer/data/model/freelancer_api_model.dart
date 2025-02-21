@@ -18,15 +18,15 @@ class FreelancerApiModel extends Equatable {
   final String portfolio;
   final String? profileImage;
   final int projectsCompleted;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<CertificationApiModel> certifications;
-  final List<ExperienceApiModel> experience;
-  final List<String> languages;
-  final String profession;
-  final String location;
-  final String aboutMe;
-  final String workAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final List<CertificationApiModel>? certifications;
+  final List<ExperienceApiModel>? experience;
+  final List<String>? languages;
+  final String? profession;
+  final String? location;
+  final String? aboutMe;
+  final String? workAt;
   @JsonKey(name: 'userId')
   final String userId;
 
@@ -39,15 +39,15 @@ class FreelancerApiModel extends Equatable {
     required this.portfolio,
     this.profileImage,
     required this.projectsCompleted,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.certifications,
-    required this.experience,
-    required this.languages,
-    required this.profession,
-    required this.location,
-    required this.aboutMe,
-    required this.workAt,
+    this.createdAt,
+    this.updatedAt,
+    this.certifications,
+    this.experience,
+    this.languages,
+    this.profession,
+    this.location,
+    this.aboutMe,
+    this.workAt,
     required this.userId,
   });
 
@@ -69,8 +69,8 @@ class FreelancerApiModel extends Equatable {
       projectsCompleted: projectsCompleted,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      certifications: certifications.map((cert) => cert.toEntity()).toList(),
-      experience: experience.map((exp) => exp.toEntity()).toList(),
+      certifications: certifications?.map((cert) => cert.toEntity()).toList(),
+      experience: experience?.map((exp) => exp.toEntity()).toList(),
       languages: languages,
       profession: profession,
       location: location,
@@ -95,10 +95,10 @@ class FreelancerApiModel extends Equatable {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       certifications: entity.certifications
-          .map((cert) => CertificationApiModel.fromEntity(cert))
+          ?.map((cert) => CertificationApiModel.fromEntity(cert))
           .toList(),
       experience: entity.experience
-          .map((exp) => ExperienceApiModel.fromEntity(exp))
+          ?.map((exp) => ExperienceApiModel.fromEntity(exp))
           .toList(),
       languages: entity.languages,
       profession: entity.profession,

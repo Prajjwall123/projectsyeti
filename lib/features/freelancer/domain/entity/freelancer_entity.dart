@@ -12,15 +12,15 @@ class FreelancerEntity extends Equatable {
   final String portfolio;
   final String profileImage;
   final int projectsCompleted;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<CertificationEntity> certifications;
-  final List<ExperienceEntity> experience;
-  final List<String> languages;
-  final String profession;
-  final String location;
-  final String aboutMe;
-  final String workAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final List<CertificationEntity>? certifications;
+  final List<ExperienceEntity>? experience;
+  final List<String>? languages;
+  final String? profession;
+  final String? location;
+  final String? aboutMe;
+  final String? workAt;
   final String userId;
 
   const FreelancerEntity({
@@ -32,15 +32,15 @@ class FreelancerEntity extends Equatable {
     required this.portfolio,
     required this.profileImage,
     required this.projectsCompleted,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.certifications,
-    required this.experience,
-    required this.languages,
-    required this.profession,
-    required this.location,
-    required this.aboutMe,
-    required this.workAt,
+    this.createdAt,
+    this.updatedAt,
+    this.certifications,
+    this.experience,
+    this.languages,
+    this.profession,
+    this.location,
+    this.aboutMe,
+    this.workAt,
     required this.userId,
   });
 

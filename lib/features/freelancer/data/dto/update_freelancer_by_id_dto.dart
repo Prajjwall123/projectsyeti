@@ -32,25 +32,31 @@ class UpdateFreelancerByIdDTO {
   final int projectsCompleted;
 
   @JsonKey(name: 'certifications')
-  final List<CertificationApiModel> certifications;
+  final List<CertificationApiModel>? certifications;
 
   @JsonKey(name: 'experience')
-  final List<ExperienceApiModel> experience;
+  final List<ExperienceApiModel>? experience;
 
   @JsonKey(name: 'languages')
-  final List<String> languages;
+  final List<String>? languages;
 
   @JsonKey(name: 'profession')
-  final String profession;
+  final String? profession;
 
   @JsonKey(name: 'location')
-  final String location;
+  final String? location;
 
   @JsonKey(name: 'aboutMe')
-  final String aboutMe;
+  final String? aboutMe;
 
   @JsonKey(name: 'workAt')
-  final String workAt;
+  final String? workAt;
+
+  @JsonKey(name: 'createdAt')
+  final String? createdAt;
+
+  @JsonKey(name: 'updatedAt')
+  final String? updatedAt;
 
   UpdateFreelancerByIdDTO({
     required this.id,
@@ -61,13 +67,15 @@ class UpdateFreelancerByIdDTO {
     required this.portfolio,
     required this.profileImage,
     required this.projectsCompleted,
-    required this.certifications,
-    required this.experience,
-    required this.languages,
-    required this.profession,
-    required this.location,
-    required this.aboutMe,
-    required this.workAt,
+    this.certifications,
+    this.experience,
+    this.languages,
+    this.profession,
+    this.location,
+    this.aboutMe,
+    this.workAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   // Factory method to create DTO from JSON
