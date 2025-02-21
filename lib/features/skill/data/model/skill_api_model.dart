@@ -20,9 +20,6 @@ class SkillApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$SkillApiModelToJson(this);
 
-  // To entity
-
-// From Entity
   factory SkillApiModel.fromEntity(SkillEntity entity) {
     return SkillApiModel(
       skillId: entity.skillId,
@@ -30,7 +27,6 @@ class SkillApiModel extends Equatable {
     );
   }
 
-  // To Entity
   SkillEntity toEntity() {
     return SkillEntity(
       skillId: skillId,
@@ -38,12 +34,10 @@ class SkillApiModel extends Equatable {
     );
   }
 
-  // To Entity List
   static List<SkillEntity> toEntityList(List<SkillApiModel> entityList) {
     return entityList.map((data) => data.toEntity()).toList();
   }
 
-  // From entity list
   static List<SkillApiModel> fromEntityList(List<SkillEntity> entityList) {
     return entityList
         .map((entity) => SkillApiModel.fromEntity(entity))
@@ -51,5 +45,5 @@ class SkillApiModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [skillId, name];
 }

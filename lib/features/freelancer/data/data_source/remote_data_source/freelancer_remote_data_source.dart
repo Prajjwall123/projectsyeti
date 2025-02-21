@@ -95,7 +95,7 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
         aboutMe: freelancer.aboutMe,
         workAt: freelancer.workAt,
       );
-      // debugPrint(updateDTO.toJson() as String?);
+      debugPrint(updateDTO.toJson().toString());
 
       // Send the PUT request with the token in headers
       var response = await _dio.put(
