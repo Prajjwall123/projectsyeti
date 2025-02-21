@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
+import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
 import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
 import 'package:projectsyeti/features/project/presentation/view/project_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationMenu extends StatelessWidget {
   final int currentIndex;
@@ -92,6 +95,7 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   int _currentIndex = 0;
+  late TokenSharedPrefs tokenSharedPrefs;
 
   final List<Widget> _screens = [
     const HomeView(),
@@ -99,8 +103,53 @@ class _DashboardViewState extends State<DashboardView> {
     const WalletView(),
     const CompanyView(companyId: "679e52a2570ca2c950216916"),
     const ProjectView(projectId: "67a7124f2930204713f5da92"),
-    const FreelancerView(freelancerId: "67b203b6d12d74942a90d631"),
+    const FreelancerView(freelancerId: ""), // Placeholder for now
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTokenSharedPrefs();
+  }
+
+  // Initialize the TokenSharedPrefs with the SharedPreferences instance
+  void _initializeTokenSharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    tokenSharedPrefs = TokenSharedPrefs(prefs);
+
+    _getUserIdAndUpdateFreelancerView();
+  }
+
+  // Fetch userId from TokenSharedPrefs and update the freelancer view
+  void _getUserIdAndUpdateFreelancerView() async {
+    final userIdResult = await tokenSharedPrefs.getUserId();
+
+    userIdResult.fold(
+      (failure) {
+        // Handle failure
+        showMySnackBar(
+          context: context,
+          message: "Failed to retrieve userId",
+          color: Colors.red,
+        );
+      },
+      (userId) {
+        if (userId.isNotEmpty) {
+          setState(() {
+            _screens[5] = FreelancerView(
+                freelancerId:
+                    userId); // Update the freelancer view with the userId
+          });
+        } else {
+          showMySnackBar(
+            context: context,
+            message: "User ID not found in SharedPreferences",
+            color: Colors.red,
+          );
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
