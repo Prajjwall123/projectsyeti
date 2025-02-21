@@ -43,6 +43,9 @@ class GetProjectByIdDTO {
   @JsonKey(name: 'bidCount')
   final int bidCount;
 
+  @JsonKey(name: 'awardedTo')
+  final String? awardedTo;
+
   GetProjectByIdDTO({
     required this.projectId,
     required this.title,
@@ -57,6 +60,7 @@ class GetProjectByIdDTO {
     required this.postedDate,
     required this.status,
     required this.bidCount,
+    this.awardedTo,
   });
 
   factory GetProjectByIdDTO.fromJson(Map<String, dynamic> json) =>

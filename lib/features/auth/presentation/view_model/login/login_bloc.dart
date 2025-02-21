@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projectsyeti/app/di/di.dart';
 import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/login_usecase.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';

@@ -22,4 +22,17 @@ class FreelancerRemoteRepository implements IFreelancerRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, FreelancerEntity>> updateFreelancerById(
+      String id, FreelancerEntity freelancerEntity) async {
+    try {
+      debugPrint("updating freelancer with Id:$id");
+      final freelancer = await _freelancerRemoteDataSource.updateFreelancerById(
+          id, freelancerEntity);
+      return Right(freelancer);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

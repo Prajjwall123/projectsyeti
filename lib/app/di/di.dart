@@ -20,6 +20,7 @@ import 'package:projectsyeti/features/freelancer/data/data_source/remote_data_so
 import 'package:projectsyeti/features/freelancer/data/repository/remote_repository/freelancer_remote_repository.dart';
 import 'package:projectsyeti/features/freelancer/domain/repository/freelancer_repository.dart';
 import 'package:projectsyeti/features/freelancer/domain/usecase/get_freelancer_by_id_usecase.dart';
+import 'package:projectsyeti/features/freelancer/domain/usecase/update_freelancer_by_id_usecase.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/project/data/data_source/remote_data_source/project_remote_data_source.dart';
@@ -91,8 +92,12 @@ void _initSkillDependencies() {
 }
 
 void _initAuthDependencies() {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
   getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSource(getIt<Dio>()),
+    () => AuthRemoteDataSource(getIt<Dio>(), getIt<TokenSharedPrefs>()),
   );
   getIt.registerLazySingleton<AuthRemoteRepository>(
     () => AuthRemoteRepository(getIt<AuthRemoteDataSource>()),
@@ -120,9 +125,6 @@ void _initAuthDependencies() {
 }
 
 void _initLoginDependencies() {
-  getIt.registerLazySingleton<TokenSharedPrefs>(
-    () => TokenSharedPrefs(getIt<SharedPreferences>()),
-  );
   getIt.registerLazySingleton<LoginUseCase>(
     () =>
         LoginUseCase(getIt<AuthRemoteRepository>(), getIt<TokenSharedPrefs>()),
@@ -203,9 +205,15 @@ void _initFreelancerDependencies() {
         freelancerRepository: getIt<IFreelancerRepository>()),
   );
 
+  getIt.registerLazySingleton<UpdateFreelancerByIdUsecase>(
+    () => UpdateFreelancerByIdUsecase(
+        freelancerRepository: getIt<IFreelancerRepository>()),
+  );
+
   getIt.registerFactory<FreelancerBloc>(
     () => FreelancerBloc(
       getFreelancerByIdUsecase: getIt<GetFreelancerByIdUsecase>(),
+      updateFreelancerByIdUsecase: getIt<UpdateFreelancerByIdUsecase>(),
     ),
   );
 }

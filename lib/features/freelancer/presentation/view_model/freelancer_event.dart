@@ -16,5 +16,12 @@ class GetFreelancerByIdEvent extends FreelancerEvent {
   List<Object?> get props => [freelancerId];
 }
 
-// New event for fetching skills
-class FetchSkills extends FreelancerEvent {}
+class UpdateFreelancerEvent extends FreelancerEvent {
+  final FreelancerEntity freelancer;
+
+  const UpdateFreelancerEvent(this.freelancer);
+
+  @override
+  List<Object?> get props => [freelancer];
+}
+

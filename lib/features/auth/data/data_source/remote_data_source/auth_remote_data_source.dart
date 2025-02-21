@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/constants/api_endpoints.dart';
+import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
 import 'package:projectsyeti/features/auth/data/data_source/auth_data_source.dart';
 import 'package:projectsyeti/features/auth/domain/entity/auth_entity.dart';
 
 class AuthRemoteDataSource implements IAuthDataSource {
+  final TokenSharedPrefs tokenSharedPrefs;
+
   final Dio _dio;
 
-  AuthRemoteDataSource(this._dio);
+  AuthRemoteDataSource(this._dio, this.tokenSharedPrefs);
 
   @override
   Future<AuthEntity> getCurrentUser() {
@@ -20,6 +23,7 @@ class AuthRemoteDataSource implements IAuthDataSource {
   @override
   Future<String> loginUser(String email, String password) async {
     try {
+      // Send the login request
       Response response = await _dio.post(
         ApiEndpoints.login,
         data: {
@@ -27,10 +31,18 @@ class AuthRemoteDataSource implements IAuthDataSource {
           "password": password,
         },
       );
-      debugPrint("sent the post request");
+
+      debugPrint("Sent the post request");
 
       if (response.statusCode == 200) {
-        return response.data['token'];
+        String token = response.data['token'];
+        String userId = response.data['userId'];
+
+        await tokenSharedPrefs.saveTokenAndUserId(token, userId);
+
+        debugPrint("Token: $token, User ID: $userId");
+
+        return token;
       } else {
         throw Exception(response.data['message'] ?? 'Login failed');
       }

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_usecase.dart';
 import 'package:projectsyeti/features/skill/domain/use_case/get_skill_by_id_usecase.dart';

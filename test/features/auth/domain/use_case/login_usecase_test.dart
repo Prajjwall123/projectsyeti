@@ -16,8 +16,6 @@ void main() {
     repository = MockAuthRepository();
     tokenSharedPrefs = MockTokenSharedPrefs();
     usecase = LoginUseCase(repository, tokenSharedPrefs);
-
-    registerFallbackValue('mock_token');
   });
 
   const email = "testing@gmai.com";
@@ -55,7 +53,7 @@ void main() {
     // Arrange
     when(() => repository.loginUser(any(), any())).thenAnswer(
       (_) async =>
-          const Left(ApiFailure(message: 'Incorrect login creadentials')),
+          const Left(ApiFailure(message: 'Incorrect login credentials')),
     );
 
     // Act
@@ -64,7 +62,7 @@ void main() {
     // Assert
     expect(
       result,
-      const Left(ApiFailure(message: 'Incorrect login creadentials')),
+      const Left(ApiFailure(message: 'Incorrect login credentials')),
     );
 
     verify(() => repository.loginUser(email, password)).called(1);

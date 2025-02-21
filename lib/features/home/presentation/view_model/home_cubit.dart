@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_usecase.dart';
-import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
-import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {

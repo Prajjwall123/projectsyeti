@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/freelancer/domain/entity/freelancer_entity.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
+import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_update_view.dart';
 
 class FreelancerView extends StatefulWidget {
   final String freelancerId;
@@ -97,10 +98,12 @@ class _FreelancerViewState extends State<FreelancerView> {
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton(
-                  onPressed: () {},
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                  child: const Text("View Portfolio"),
+                  onPressed: () {
+                    // Navigate to the update profile screen
+                    _onUpdateFreelancer(freelancer);
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: const Text("Update Profile"),
                 ),
               ],
             ),
@@ -109,7 +112,7 @@ class _FreelancerViewState extends State<FreelancerView> {
 
           // ABOUT ME SECTION
           _buildSectionHeader("About Me"),
-          _buildCard([
+          _buildCard([ 
             _buildDetailRow("I work at", freelancer.workAt),
             _buildDetailRow("Languages", freelancer.languages.join(", ")),
             _buildDetailRow("Joined Date",
@@ -123,7 +126,7 @@ class _FreelancerViewState extends State<FreelancerView> {
           ...freelancer.experience.map((exp) => _buildExperienceCard(exp)),
           const SizedBox(height: 20),
 
-// SKILLS SECTION
+          // SKILLS SECTION
           _buildSectionHeader("Skills"),
           _buildSkillChips(
               freelancer.skills.map((skill) => skill.name).toList()),
@@ -240,6 +243,18 @@ class _FreelancerViewState extends State<FreelancerView> {
             style: const TextStyle(fontSize: 16, color: Colors.white),
           ),
         ],
+      ),
+    );
+  }
+
+  void _onUpdateFreelancer(FreelancerEntity freelancer) {
+    // Navigate to the FreelancerUpdateView
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FreelancerUpdateView(
+          freelancer: freelancer, // Pass the freelancer data
+        ),
       ),
     );
   }

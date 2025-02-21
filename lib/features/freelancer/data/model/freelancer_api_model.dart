@@ -4,7 +4,6 @@ import 'package:projectsyeti/features/freelancer/domain/entity/freelancer_entity
 import 'package:projectsyeti/features/certification/data/model/certification_api_model.dart';
 import 'package:projectsyeti/features/experience/data/model/experience_api_model.dart';
 import 'package:projectsyeti/features/skill/data/model/skill_api_model.dart';
-import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 
 part 'freelancer_api_model.g.dart';
 

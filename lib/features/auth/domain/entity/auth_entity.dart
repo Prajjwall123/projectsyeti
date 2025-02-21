@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthEntity extends Equatable {
   final String? userId;

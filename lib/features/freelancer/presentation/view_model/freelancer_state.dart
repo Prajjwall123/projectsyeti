@@ -38,3 +38,21 @@ final class FreelancerSkillsLoaded extends FreelancerState {
   @override
   List<Object?> get props => [skills];
 }
+
+final class FreelancerUpdateSuccess extends FreelancerState {
+  final FreelancerEntity freelancer;
+
+  const FreelancerUpdateSuccess(this.freelancer);
+
+  @override
+  List<Object?> get props => [freelancer];
+}
+
+final class FreelancerUpdateError extends FreelancerState {
+  final String message;
+
+  const FreelancerUpdateError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

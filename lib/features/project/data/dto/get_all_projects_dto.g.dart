@@ -22,6 +22,7 @@ GetAllProjectsDTO _$GetAllProjectsDTOFromJson(Map<String, dynamic> json) =>
       postedDate: DateTime.parse(json['postedDate'] as String),
       status: json['status'] as String,
       bidCount: (json['bidCount'] as num).toInt(),
+      awardedTo: json['awardedTo'] as String?,
     );
 
 Map<String, dynamic> _$GetAllProjectsDTOToJson(GetAllProjectsDTO instance) =>
@@ -39,4 +40,5 @@ Map<String, dynamic> _$GetAllProjectsDTOToJson(GetAllProjectsDTO instance) =>
       'postedDate': instance.postedDate.toIso8601String(),
       'status': instance.status,
       'bidCount': instance.bidCount,
+      'awardedTo': instance.awardedTo,
     };

@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/constants/api_endpoints.dart';
 import 'package:projectsyeti/features/skill/data/data_source/skill_data_source.dart';
 import 'package:projectsyeti/features/skill/data/dto/get_all_skill_dto.dart';
 import 'package:projectsyeti/features/skill/data/dto/get_skill_by_id_dto.dart';
-import 'package:projectsyeti/features/skill/data/model/skill_api_model.dart';
 import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 
 class SkillRemoteDataSource implements ISkillDataSource {

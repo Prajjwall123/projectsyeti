@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
 
 import '../../../../app/usecase/usecase.dart';

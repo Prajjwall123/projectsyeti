@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:projectsyeti/app/usecase/usecase.dart';
 import 'package:projectsyeti/core/error/failure.dart';
-import 'package:projectsyeti/features/auth/data/repository/remote_repository/auth_remote_repository.dart';
 import 'package:projectsyeti/features/auth/domain/repository/auth_repository.dart';
 
 class VerifyOtpParams extends Equatable {

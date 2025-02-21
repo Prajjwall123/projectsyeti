@@ -20,6 +20,7 @@ class ProjectApiModel extends Equatable {
   final DateTime postedDate;
   final String status;
   final int bidCount;
+  final String? awardedTo;
 
   const ProjectApiModel({
     this.projectId,
@@ -35,6 +36,7 @@ class ProjectApiModel extends Equatable {
     required this.postedDate,
     required this.status,
     required this.bidCount,
+    this.awardedTo,
   });
 
   factory ProjectApiModel.fromJson(Map<String, dynamic> json) =>
@@ -57,6 +59,7 @@ class ProjectApiModel extends Equatable {
       postedDate: postedDate,
       status: status,
       bidCount: bidCount,
+      awardedTo: awardedTo,
     );
   }
 

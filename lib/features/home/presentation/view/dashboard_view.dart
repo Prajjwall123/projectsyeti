@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/account_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
