@@ -120,7 +120,6 @@ class _DashboardViewState extends State<DashboardView> {
     _getUserIdAndUpdateFreelancerView();
   }
 
-  // Fetch userId from TokenSharedPrefs and update the freelancer view
   void _getUserIdAndUpdateFreelancerView() async {
     final userIdResult = await tokenSharedPrefs.getUserId();
 
@@ -138,7 +137,7 @@ class _DashboardViewState extends State<DashboardView> {
           setState(() {
             _screens[5] = FreelancerView(
                 freelancerId:
-                    userId); // Update the freelancer view with the userId
+                    userId); 
           });
         } else {
           showMySnackBar(

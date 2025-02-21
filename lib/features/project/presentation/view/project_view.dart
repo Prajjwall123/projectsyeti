@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
+import 'package:projectsyeti/features/bidding/presentation/view/bid_submission_view.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 
 class ProjectView extends StatefulWidget {
@@ -205,8 +206,12 @@ class _ProjectViewState extends State<ProjectView> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Bid Submitted!")),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  BidSubmissionView(projectId: widget.projectId),
+            ),
           );
         },
         style: ElevatedButton.styleFrom(

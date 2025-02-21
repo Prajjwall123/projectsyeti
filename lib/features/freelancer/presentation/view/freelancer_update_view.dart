@@ -72,7 +72,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     _profileImageController =
         TextEditingController(text: widget.freelancer.profileImage ?? '');
 
-    // Initialize certification controllers with existing data
     _certificationsControllers = List.generate(
       widget.freelancer.certifications?.length ?? 0,
       (index) => TextEditingController(
@@ -84,7 +83,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
           text: widget.freelancer.certifications?[index].organization),
     );
 
-    // Initialize experience controllers with existing data
     _experienceControllers = List.generate(
       widget.freelancer.experience?.length ?? 0,
       (index) => TextEditingController(
@@ -112,22 +110,20 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     );
   }
 
-  // Function to handle picking an image
   Future<void> _pickImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _selectedImage = File(pickedFile.path); // Store the selected image
+        _selectedImage = File(pickedFile.path);
       });
     }
   }
 
-  // Function to upload the image using the use case
   Future<void> _uploadImage() async {
     if (_selectedImage != null) {
       setState(() {
-        _isUploading = true; // Start uploading
+        _isUploading = true;
       });
 
       final uploadImageUsecase = context.read<UploadImageUsecase>();
@@ -135,18 +131,16 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
           .call(UploadImageParams(file: _selectedImage!));
 
       setState(() {
-        _isUploading = false; // End uploading
+        _isUploading = false;
       });
 
       result.fold(
         (failure) {
-          // Handle failure (e.g., show an error message)
           print('Error uploading image: $failure');
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Image upload failed: $failure')));
         },
         (imageUrl) {
-          // On success, update the profile image URL
           _profileImageController.text = imageUrl;
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Image uploaded successfully')));
@@ -155,9 +149,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     }
   }
 
-  // Function to save the freelancer details after updating the image
   void _saveFreelancerDetails() {
-    // Upload image before saving the updated freelancer details
     _uploadImage().then((_) {
       final updatedFreelancer = FreelancerEntity(
         id: widget.freelancer.id,
@@ -181,20 +173,16 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
             List.generate(_certificationsControllers.length, (index) {
           return CertificationEntity(
             name: _certificationsControllers[index].text,
-            organization: _organizationControllers[index]
-                .text, // Dynamic organization field
+            organization: _organizationControllers[index].text,
           );
         }).toList(),
         experience: List.generate(_experienceControllers.length, (index) {
           return ExperienceEntity(
             title: _experienceControllers[index].text,
-            company: _companyControllers[index].text, // Dynamic company field
-            from: int.tryParse(_fromControllers[index].text) ??
-                0, // Dynamic 'from' field
-            to: int.tryParse(_toControllers[index].text) ??
-                0, // Dynamic 'to' field
-            description: _descriptionControllers[index]
-                .text, // Dynamic description field
+            company: _companyControllers[index].text,
+            from: int.tryParse(_fromControllers[index].text) ?? 0,
+            to: int.tryParse(_toControllers[index].text) ?? 0,
+            description: _descriptionControllers[index].text,
           );
         }).toList(),
       );
@@ -218,9 +206,8 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Image Picker and Display
               GestureDetector(
-                onTap: _pickImage, // Pick image when tapped
+                onTap: _pickImage,
                 child: CircleAvatar(
                   radius: 50,
                   backgroundImage: _selectedImage != null
@@ -236,8 +223,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Upload button with loading state
               if (_isUploading) ...[
                 const CircularProgressIndicator(),
                 const SizedBox(height: 8),
@@ -281,8 +266,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 decoration:
                     const InputDecoration(labelText: 'Experience Years'),
               ),
-
-              // Certification Form
               CertificationForm(
                 certificationsControllers: _certificationsControllers,
                 organizationControllers: _organizationControllers,
@@ -300,8 +283,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 },
               ),
               const SizedBox(height: 16),
-
-              // Experience Form
               ExperienceForm(
                 experienceControllers: _experienceControllers,
                 companyControllers: _companyControllers,
@@ -328,7 +309,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 },
               ),
               const SizedBox(height: 16),
-
               ElevatedButton(
                 onPressed: _saveFreelancerDetails,
                 child: const Text(

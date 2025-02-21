@@ -28,4 +28,7 @@ class ApiEndpoints {
   // ====================== Freelancer Routes ======================
   static const String getFreelancerById = "freelancers/";
   static const String updateFreelancerById = "freelancers/";
+
+  // ====================== Bidding Routes ======================
+  static const String createBid = "biddings/create";
 }
