@@ -30,15 +30,6 @@ final class FreelancerError extends FreelancerState {
   List<Object?> get props => [message];
 }
 
-final class FreelancerSkillsLoaded extends FreelancerState {
-  final List<SkillEntity> skills;
-
-  const FreelancerSkillsLoaded(this.skills);
-
-  @override
-  List<Object?> get props => [skills];
-}
-
 final class FreelancerUpdateSuccess extends FreelancerState {
   final FreelancerEntity freelancer;
 
@@ -55,4 +46,13 @@ final class FreelancerUpdateError extends FreelancerState {
 
   @override
   List<Object?> get props => [message];
+}
+
+final class FreelancerImageUploaded extends FreelancerState {
+  final String imageUrl;
+
+  const FreelancerImageUploaded(this.imageUrl);
+
+  @override
+  List<Object?> get props => [imageUrl];
 }

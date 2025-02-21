@@ -214,6 +214,7 @@ void _initFreelancerDependencies() {
     () => FreelancerBloc(
       getFreelancerByIdUsecase: getIt<GetFreelancerByIdUsecase>(),
       updateFreelancerByIdUsecase: getIt<UpdateFreelancerByIdUsecase>(),
+      uploadImageUsecase: getIt<UploadImageUsecase>(),
     ),
   );
 }

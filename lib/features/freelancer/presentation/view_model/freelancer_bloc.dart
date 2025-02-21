@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:dartz/dartz.dart';
 import 'package:projectsyeti/core/error/failure.dart';
+import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:projectsyeti/features/freelancer/domain/entity/freelancer_entity.dart';
 import 'package:projectsyeti/features/freelancer/domain/usecase/get_freelancer_by_id_usecase.dart';
 import 'package:projectsyeti/features/freelancer/domain/usecase/update_freelancer_by_id_usecase.dart';
@@ -13,15 +15,19 @@ part 'freelancer_state.dart';
 class FreelancerBloc extends Bloc<FreelancerEvent, FreelancerState> {
   final GetFreelancerByIdUsecase _getFreelancerByIdUsecase;
   final UpdateFreelancerByIdUsecase _updateFreelancerByIdUsecase;
+  final UploadImageUsecase _uploadImageUsecase;
 
   FreelancerBloc({
     required GetFreelancerByIdUsecase getFreelancerByIdUsecase,
     required UpdateFreelancerByIdUsecase updateFreelancerByIdUsecase,
+    required UploadImageUsecase uploadImageUsecase,
   })  : _getFreelancerByIdUsecase = getFreelancerByIdUsecase,
         _updateFreelancerByIdUsecase = updateFreelancerByIdUsecase,
+        _uploadImageUsecase = uploadImageUsecase,
         super(FreelancerInitial()) {
     on<GetFreelancerByIdEvent>(_onGetFreelancerById);
     on<UpdateFreelancerEvent>(_onUpdateFreelancer);
+    on<UploadFreelancerImageEvent>(_onUploadFreelancerImage);
   }
 
   Future<void> _onGetFreelancerById(
@@ -39,7 +45,7 @@ class FreelancerBloc extends Bloc<FreelancerEvent, FreelancerState> {
       (failure) =>
           emit(FreelancerError(failure.message ?? "Error fetching freelancer")),
       (freelancer) {
-        emit(FreelancerLoaded(freelancer)); // Passing loaded freelancer data
+        emit(FreelancerLoaded(freelancer));
       },
     );
   }
@@ -50,12 +56,26 @@ class FreelancerBloc extends Bloc<FreelancerEvent, FreelancerState> {
   ) async {
     emit(FreelancerLoading());
 
+    String? imageUrl;
+    final file = File(event.freelancer.profileImage);
+    final imageResult = await _uploadImageUsecase(
+      UploadImageParams(file: file),
+    );
+    imageResult.fold(
+      (failure) {
+        emit(FreelancerUpdateError(failure.message ?? "Error uploading image"));
+        return;
+      },
+      (url) {
+        imageUrl = url;
+      },
+    );
+
     final Either<Failure, FreelancerEntity> result =
         await _updateFreelancerByIdUsecase(
       UpdateFreelancerByIdParams(
-        freelancerId: event.freelancer.id, // Ensure this is correctly passed
-        freelancer:
-            event.freelancer, // Ensure this is the updated FreelancerEntity
+        freelancerId: event.freelancer.id,
+        freelancer: event.freelancer.copyWith(profileImage: imageUrl),
       ),
     );
 
@@ -64,8 +84,27 @@ class FreelancerBloc extends Bloc<FreelancerEvent, FreelancerState> {
           FreelancerUpdateError(failure.message ?? "Error updating profile")),
       (freelancer) {
         emit(FreelancerUpdateSuccess(freelancer));
-        emit(FreelancerLoaded(
-            freelancer)); // Ensure the updated freelancer is displayed
+        emit(FreelancerLoaded(freelancer));
+      },
+    );
+  }
+
+  Future<void> _onUploadFreelancerImage(
+    UploadFreelancerImageEvent event,
+    Emitter<FreelancerState> emit,
+  ) async {
+    emit(FreelancerLoading());
+
+    final result = await _uploadImageUsecase(
+      UploadImageParams(file: event.file),
+    );
+
+    result.fold(
+      (failure) {
+        emit(FreelancerError(failure.message ?? "Error uploading image"));
+      },
+      (imageUrl) {
+        emit(FreelancerImageUploaded(imageUrl));
       },
     );
   }

@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:projectsyeti/features/certification/domain/entity/certification_entity.dart';
 import 'package:projectsyeti/features/experience/domain/entity/experience_entity.dart';
 import 'package:projectsyeti/features/freelancer/domain/entity/freelancer_entity.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/certification_form.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/experience_form.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FreelancerUpdateView extends StatefulWidget {
   final FreelancerEntity freelancer;
@@ -17,6 +21,8 @@ class FreelancerUpdateView extends StatefulWidget {
 }
 
 class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
+  bool _isUploading = false;
+
   late TextEditingController _nameController;
   late TextEditingController _portfolioController;
   late TextEditingController _availabilityController;
@@ -37,10 +43,13 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
   late List<TextEditingController> _toControllers;
   late List<TextEditingController> _descriptionControllers;
 
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with existing freelancer data
+
     _nameController =
         TextEditingController(text: widget.freelancer.freelancerName);
     _portfolioController =
@@ -103,50 +112,99 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     );
   }
 
-  // Function to handle saving/updating freelancer details
-  void _saveFreelancerDetails() {
-    final updatedFreelancer = FreelancerEntity(
-      id: widget.freelancer.id,
-      freelancerName: _nameController.text,
-      portfolio: _portfolioController.text,
-      availability: _availabilityController.text,
-      aboutMe: _aboutMeController.text,
-      profession: _professionController.text,
-      location: _locationController.text,
-      workAt: _workAtController.text,
-      languages: _languagesController.text
-          .split(',')
-          .map((lang) => lang.trim())
-          .toList(),
-      experienceYears: int.tryParse(_experienceYearsController.text) ?? 0,
-      profileImage: _profileImageController.text,
-      skills: widget.freelancer.skills,
-      projectsCompleted: widget.freelancer.projectsCompleted,
-      userId: widget.freelancer.userId,
-      certifications: List.generate(_certificationsControllers.length, (index) {
-        return CertificationEntity(
-          name: _certificationsControllers[index].text,
-          organization: _organizationControllers[index]
-              .text, // Dynamic organization field
-        );
-      }).toList(),
-      experience: List.generate(_experienceControllers.length, (index) {
-        return ExperienceEntity(
-          title: _experienceControllers[index].text,
-          company: _companyControllers[index].text, // Dynamic company field
-          from: int.tryParse(_fromControllers[index].text) ??
-              0, // Dynamic 'from' field
-          to: int.tryParse(_toControllers[index].text) ??
-              0, // Dynamic 'to' field
-          description:
-              _descriptionControllers[index].text, // Dynamic description field
-        );
-      }).toList(),
-    );
+  // Function to handle picking an image
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImage = File(pickedFile.path); // Store the selected image
+      });
+    }
+  }
 
-    context
-        .read<FreelancerBloc>()
-        .add(UpdateFreelancerEvent(updatedFreelancer));
+  // Function to upload the image using the use case
+  Future<void> _uploadImage() async {
+    if (_selectedImage != null) {
+      setState(() {
+        _isUploading = true; // Start uploading
+      });
+
+      final uploadImageUsecase = context.read<UploadImageUsecase>();
+      final result = await uploadImageUsecase
+          .call(UploadImageParams(file: _selectedImage!));
+
+      setState(() {
+        _isUploading = false; // End uploading
+      });
+
+      result.fold(
+        (failure) {
+          // Handle failure (e.g., show an error message)
+          print('Error uploading image: $failure');
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Image upload failed: $failure')));
+        },
+        (imageUrl) {
+          // On success, update the profile image URL
+          _profileImageController.text = imageUrl;
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Image uploaded successfully')));
+        },
+      );
+    }
+  }
+
+  // Function to save the freelancer details after updating the image
+  void _saveFreelancerDetails() {
+    // Upload image before saving the updated freelancer details
+    _uploadImage().then((_) {
+      final updatedFreelancer = FreelancerEntity(
+        id: widget.freelancer.id,
+        freelancerName: _nameController.text,
+        portfolio: _portfolioController.text,
+        availability: _availabilityController.text,
+        aboutMe: _aboutMeController.text,
+        profession: _professionController.text,
+        location: _locationController.text,
+        workAt: _workAtController.text,
+        languages: _languagesController.text
+            .split(',')
+            .map((lang) => lang.trim())
+            .toList(),
+        experienceYears: int.tryParse(_experienceYearsController.text) ?? 0,
+        profileImage: _profileImageController.text,
+        skills: widget.freelancer.skills,
+        projectsCompleted: widget.freelancer.projectsCompleted,
+        userId: widget.freelancer.userId,
+        certifications:
+            List.generate(_certificationsControllers.length, (index) {
+          return CertificationEntity(
+            name: _certificationsControllers[index].text,
+            organization: _organizationControllers[index]
+                .text, // Dynamic organization field
+          );
+        }).toList(),
+        experience: List.generate(_experienceControllers.length, (index) {
+          return ExperienceEntity(
+            title: _experienceControllers[index].text,
+            company: _companyControllers[index].text, // Dynamic company field
+            from: int.tryParse(_fromControllers[index].text) ??
+                0, // Dynamic 'from' field
+            to: int.tryParse(_toControllers[index].text) ??
+                0, // Dynamic 'to' field
+            description: _descriptionControllers[index]
+                .text, // Dynamic description field
+          );
+        }).toList(),
+      );
+
+      context
+          .read<FreelancerBloc>()
+          .add(UpdateFreelancerEvent(updatedFreelancer));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully')));
+    });
   }
 
   @override
@@ -160,6 +218,32 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // Image Picker and Display
+              GestureDetector(
+                onTap: _pickImage, // Pick image when tapped
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: _selectedImage != null
+                      ? FileImage(_selectedImage!)
+                      : widget.freelancer.profileImage != null
+                          ? NetworkImage(
+                              'http://10.0.2.2:3000/${widget.freelancer.profileImage}')
+                          : null,
+                  child: _selectedImage == null &&
+                          widget.freelancer.profileImage == null
+                      ? const Icon(Icons.add_a_photo)
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Upload button with loading state
+              if (_isUploading) ...[
+                const CircularProgressIndicator(),
+                const SizedBox(height: 8),
+                const Text('Uploading image...'),
+              ],
+              const SizedBox(height: 16),
               TextField(
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name'),
@@ -196,10 +280,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 controller: _experienceYearsController,
                 decoration:
                     const InputDecoration(labelText: 'Experience Years'),
-              ),
-              TextField(
-                controller: _profileImageController,
-                decoration: const InputDecoration(labelText: 'Profile Image'),
               ),
 
               // Certification Form

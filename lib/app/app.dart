@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
+import 'package:provider/provider.dart';
 import 'package:projectsyeti/core/app_theme/app_theme.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
@@ -44,17 +46,24 @@ class MyApp extends StatelessWidget {
           create: (_) => getIt<FreelancerBloc>(),
         ),
       ],
-      child: MaterialApp(
-        initialRoute: "/",
-        debugShowCheckedModeBanner: false,
-        theme: getApplicationTheme(),
-        routes: {
-          "/": (context) => const SplashScreen(),
-          "/login": (context) => LoginView(),
-          "/onboarding": (context) => const OnboardingView(),
-          "/register": (context) => const RegisterView(),
-          "/dashboard": (context) => const DashboardView(),
-        },
+      child: MultiProvider(
+        providers: [
+          Provider<UploadImageUsecase>(
+            create: (_) => getIt<UploadImageUsecase>(),
+          ),
+        ],
+        child: MaterialApp(
+          initialRoute: "/",
+          debugShowCheckedModeBanner: false,
+          theme: getApplicationTheme(),
+          routes: {
+            "/": (context) => const SplashScreen(),
+            "/login": (context) => LoginView(),
+            "/onboarding": (context) => const OnboardingView(),
+            "/register": (context) => const RegisterView(),
+            "/dashboard": (context) => const DashboardView(),
+          },
+        ),
       ),
     );
   }

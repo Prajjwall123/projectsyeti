@@ -119,13 +119,15 @@ class _FreelancerViewState extends State<FreelancerView> {
                 (freelancer.languages?.isEmpty ?? true)
                     ? "Not specified"
                     : freelancer.languages!.join(", ")),
-            _buildDetailRow(
-                "Joined Date",
-                freelancer.createdAt?.toLocal().toString().split(" ")[0] ??
-                    "Not specified"),
+            // _buildDetailRow(
+            //     "Joined Date",
+            //     freelancer.createdAt?.toLocal().toString().split(" ")[0] ?? "Not specified"),
             _buildDetailRow(
                 "Availability", freelancer.availability ?? "Not specified"),
+            // Add the bio row here
+            _buildDetailRow("Bio", freelancer.aboutMe ?? "Not specified"),
           ]),
+
           const SizedBox(height: 20),
 
           // EXPERIENCE SECTION

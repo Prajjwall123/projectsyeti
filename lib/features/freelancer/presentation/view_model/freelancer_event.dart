@@ -25,3 +25,11 @@ class UpdateFreelancerEvent extends FreelancerEvent {
   List<Object?> get props => [freelancer];
 }
 
+class UploadFreelancerImageEvent extends FreelancerEvent {
+  final File file;
+
+  const UploadFreelancerImageEvent(this.file);
+
+  @override
+  List<Object?> get props => [file];
+}
