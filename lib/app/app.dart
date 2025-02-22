@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:projectsyeti/features/bidding/presentation/viewmodel/bidding_bloc.dart';
+import 'package:projectsyeti/features/notification/presentation/view_model/notification_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:projectsyeti/core/app_theme/app_theme.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
@@ -48,6 +49,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BiddingBloc>(
           create: (_) => getIt<BiddingBloc>(),
+        ),
+        BlocProvider<NotificationBloc>(
+          create: (_) => getIt<NotificationBloc>(),
         ),
       ],
       child: MultiProvider(

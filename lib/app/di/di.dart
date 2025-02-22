@@ -28,6 +28,12 @@ import 'package:projectsyeti/features/freelancer/domain/usecase/get_freelancer_b
 import 'package:projectsyeti/features/freelancer/domain/usecase/update_freelancer_by_id_usecase.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view_model/freelancer_bloc.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
+import 'package:projectsyeti/features/notification/data/data_source/remote_data_source/notification_remote_data_source.dart';
+import 'package:projectsyeti/features/notification/data/repository/remote_repository/notification_remote_repository.dart';
+import 'package:projectsyeti/features/notification/domain/repository/notification_repository.dart';
+import 'package:projectsyeti/features/notification/domain/usecase/get_notification_by_freelancer_id_usecase.dart';
+import 'package:projectsyeti/features/notification/domain/usecase/seen_notification_by_freelancer_id_usecase.dart';
+import 'package:projectsyeti/features/notification/presentation/view_model/notification_bloc.dart';
 import 'package:projectsyeti/features/project/data/data_source/remote_data_source/project_remote_data_source.dart';
 import 'package:projectsyeti/features/project/data/repository/remote_repository/project_remote_repository.dart';
 import 'package:projectsyeti/features/project/domain/repository/project_repository.dart';
@@ -57,6 +63,7 @@ Future<void> initDependencies() async {
   _initProjectDependencies();
   _initFreelancerDependencies();
   _initBiddingDependencies();
+  _initNotificationDependencies();
 }
 
 void _initHiveService() {
@@ -226,23 +233,48 @@ void _initFreelancerDependencies() {
 }
 
 void _initBiddingDependencies() {
-  // Register the BiddingRemoteDataSource with Dio
   getIt.registerLazySingleton<BiddingRemoteDataSource>(
     () => BiddingRemoteDataSource(getIt<Dio>()),
   );
 
-  // Register the IBiddingRepository that uses the BiddingRemoteDataSource
   getIt.registerLazySingleton<IBiddingRepository>(
     () => BiddingRemoteRepository(getIt<BiddingRemoteDataSource>()),
   );
 
-  // Register the CreateBidUseCase that depends on the IBiddingRepository
   getIt.registerLazySingleton<CreateBidUseCase>(
     () => CreateBidUseCase(getIt<IBiddingRepository>()),
   );
 
-  // Register the BiddingBloc that depends on the CreateBidUseCase
   getIt.registerFactory<BiddingBloc>(
     () => BiddingBloc(createBidUsecase: getIt<CreateBidUseCase>()),
+  );
+}
+
+void _initNotificationDependencies() {
+  getIt.registerLazySingleton<NotificationRemoteDataSource>(
+    () => NotificationRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<INotificationRepository>(
+    () => NotificationRemoteRepository(getIt<NotificationRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetNotificationByFreelancerIdUsecase>(
+    () => GetNotificationByFreelancerIdUsecase(
+      notificationRepository: getIt<INotificationRepository>(),
+    ),
+  );
+
+  getIt.registerLazySingleton<SeenNotificationByFreelancerIdUsecase>(
+    () => SeenNotificationByFreelancerIdUsecase(
+      notificationRepository: getIt<INotificationRepository>(),
+    ),
+  );
+
+  getIt.registerFactory<NotificationBloc>(
+    () => NotificationBloc(
+      getNotificationsUsecase: getIt<GetNotificationByFreelancerIdUsecase>(),
+      seenNotificationUsecase: getIt<SeenNotificationByFreelancerIdUsecase>(),
+    ),
   );
 }

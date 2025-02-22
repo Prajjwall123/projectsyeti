@@ -4,10 +4,8 @@ import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/notification_view.dart';
+import 'package:projectsyeti/features/notification/presentation/view/notification_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:flutter/material.dart';
 
 class NavigationMenu extends StatelessWidget {
   final int currentIndex;
@@ -73,10 +71,11 @@ class _DashboardViewState extends State<DashboardView> {
   int _currentIndex = 0;
   late TokenSharedPrefs tokenSharedPrefs;
 
+  // Initialize screens with empty freelancerId; they'll be updated once the ID is fetched.
   final List<Widget> _screens = [
     const HomeView(),
     const ChatView(),
-    const NotificationView(),
+    const NotificationView(freelancerId: ""),
     const FreelancerView(freelancerId: ""),
   ];
 
@@ -107,6 +106,7 @@ class _DashboardViewState extends State<DashboardView> {
       (userId) {
         if (userId.isNotEmpty) {
           setState(() {
+            _screens[2] = NotificationView(freelancerId: userId);
             _screens[3] = FreelancerView(freelancerId: userId);
           });
         } else {

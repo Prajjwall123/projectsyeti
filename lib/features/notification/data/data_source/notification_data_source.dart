@@ -1,0 +1,8 @@
+import 'package:projectsyeti/features/notification/domain/entity/notification_entity.dart';
+
+abstract interface class INotificationDataSource {
+  Future<List<NotificationEntity>> getNotificationByFreelancerId(
+      String freelancerId);
+  Future<NotificationEntity> seenNotificationByFreelancerId(
+      String notificationId);
+}
