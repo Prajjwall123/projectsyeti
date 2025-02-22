@@ -12,6 +12,11 @@ import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.
 import 'package:projectsyeti/features/auth/domain/use_case/verify_otp_usecase.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/bloc/register_bloc.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:projectsyeti/features/bidding/data/data_source/remote_data_source/bidding_remote_data_source.dart';
+import 'package:projectsyeti/features/bidding/data/repository/remote_repository/bidding_remote_repository.dart';
+import 'package:projectsyeti/features/bidding/domain/repository/bidding_repository.dart';
+import 'package:projectsyeti/features/bidding/domain/usecase/create_bid_usecase.dart';
+import 'package:projectsyeti/features/bidding/presentation/viewmodel/bidding_bloc.dart';
 import 'package:projectsyeti/features/company/data/data_source/remote_data_source/company_remote_data_source.dart';
 import 'package:projectsyeti/features/company/data/repository/remote_repository/company_remote_repository.dart';
 import 'package:projectsyeti/features/company/domain/entity/repository/company_repository.dart';
@@ -51,6 +56,7 @@ Future<void> initDependencies() async {
   _initCompanyDependencies();
   _initProjectDependencies();
   _initFreelancerDependencies();
+  _initBiddingDependencies();
 }
 
 void _initHiveService() {
@@ -216,5 +222,27 @@ void _initFreelancerDependencies() {
       updateFreelancerByIdUsecase: getIt<UpdateFreelancerByIdUsecase>(),
       uploadImageUsecase: getIt<UploadImageUsecase>(),
     ),
+  );
+}
+
+void _initBiddingDependencies() {
+  // Register the BiddingRemoteDataSource with Dio
+  getIt.registerLazySingleton<BiddingRemoteDataSource>(
+    () => BiddingRemoteDataSource(getIt<Dio>()),
+  );
+
+  // Register the IBiddingRepository that uses the BiddingRemoteDataSource
+  getIt.registerLazySingleton<IBiddingRepository>(
+    () => BiddingRemoteRepository(getIt<BiddingRemoteDataSource>()),
+  );
+
+  // Register the CreateBidUseCase that depends on the IBiddingRepository
+  getIt.registerLazySingleton<CreateBidUseCase>(
+    () => CreateBidUseCase(getIt<IBiddingRepository>()),
+  );
+
+  // Register the BiddingBloc that depends on the CreateBidUseCase
+  getIt.registerFactory<BiddingBloc>(
+    () => BiddingBloc(createBidUsecase: getIt<CreateBidUseCase>()),
   );
 }

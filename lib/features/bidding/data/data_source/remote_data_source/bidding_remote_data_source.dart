@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/constants/api_endpoints.dart';
 import 'package:projectsyeti/features/bidding/data/data_source/bidding_data_source.dart';
 import 'package:projectsyeti/features/bidding/domain/entity/bidding_entity.dart';
+import 'package:http_parser/http_parser.dart';
 
 class BiddingRemoteDataSource implements IBiddingDataSource {
   final Dio _dio;
@@ -19,7 +20,11 @@ class BiddingRemoteDataSource implements IBiddingDataSource {
         "project": bid.projectId,
         "amount": bid.amount,
         "message": bid.message,
-        "file": await MultipartFile.fromFile(file.path, filename: file.uri.pathSegments.last), // File upload
+        "file": await MultipartFile.fromFile(
+          file.path,
+          filename: file.uri.pathSegments.last,
+          contentType: MediaType("application", "pdf"),
+        ),
       });
 
       // Send the request

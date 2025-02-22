@@ -24,7 +24,7 @@ ThemeData getApplicationTheme() {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF1976D2),
+        backgroundColor: const Color(0xFF001F3F),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

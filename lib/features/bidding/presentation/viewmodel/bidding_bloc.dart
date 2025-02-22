@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:projectsyeti/features/bidding/domain/usecase/create_bid_usecase.dart';
-import 'dart:io'; // Import File
+import 'dart:io';
 
 part 'bidding_event.dart';
 part 'bidding_state.dart';
@@ -19,13 +19,12 @@ class BiddingBloc extends Bloc<BiddingEvent, BiddingState> {
       CreateBidEvent event, Emitter<BiddingState> emit) async {
     emit(state.copyWith(isLoading: true));
 
-    // Pass the file along with other parameters
     final result = await _createBidUsecase.call(CreateBidParams(
       freelancer: event.freelancer,
       project: event.project,
       amount: event.amount,
       message: event.message,
-      file: event.file, // Pass the file here
+      file: event.file,
     ));
 
     result.fold(

@@ -4,82 +4,58 @@ import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/wallet_view.dart';
-import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
-import 'package:projectsyeti/features/project/presentation/view/project_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/notification_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter/material.dart';
 
 class NavigationMenu extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTabSelected;
 
-  const NavigationMenu({
-    super.key,
-    required this.currentIndex,
-    required this.onTabSelected,
-  });
+  const NavigationMenu(
+      {super.key, required this.currentIndex, required this.onTabSelected});
+
+  Widget _navItem(BuildContext context, IconData icon, int index) {
+    bool active = currentIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          onTabSelected(index);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: active ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Icon(
+            icon,
+            size: 28,
+            color:
+                active ? Theme.of(context).colorScheme.primary : Colors.white70,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 2, 44, 78),
-        borderRadius: BorderRadius.circular(10.0),
+        color: const Color(0xFF001F3F),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          GestureDetector(
-            onTap: () => onTabSelected(0),
-            child: Icon(
-              Icons.home,
-              size: 30,
-              color: currentIndex == 0 ? Colors.white : Colors.grey,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => onTabSelected(1),
-            child: Icon(
-              Icons.message,
-              size: 30,
-              color: currentIndex == 1 ? Colors.white : Colors.grey,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => onTabSelected(2),
-            child: Icon(
-              Icons.wallet,
-              size: 30,
-              color: currentIndex == 2 ? Colors.white : Colors.grey,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => onTabSelected(3),
-            child: Icon(
-              Icons.business,
-              size: 30,
-              color: currentIndex == 3 ? Colors.white : Colors.grey,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => onTabSelected(4),
-            child: Icon(
-              Icons.folder,
-              size: 30,
-              color: currentIndex == 4 ? Colors.white : Colors.grey,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => onTabSelected(5),
-            child: Icon(
-              Icons.person,
-              size: 30,
-              color: currentIndex == 5 ? Colors.white : Colors.grey,
-            ),
-          ),
+          _navItem(context, Icons.home, 0),
+          _navItem(context, Icons.message, 1),
+          _navItem(context, Icons.notifications, 2),
+          _navItem(context, Icons.person, 3),
         ],
       ),
     );
@@ -100,10 +76,8 @@ class _DashboardViewState extends State<DashboardView> {
   final List<Widget> _screens = [
     const HomeView(),
     const ChatView(),
-    const WalletView(),
-    const CompanyView(companyId: "679e52a2570ca2c950216916"),
-    const ProjectView(projectId: "67a7124f2930204713f5da92"),
-    const FreelancerView(freelancerId: ""), // Placeholder for now
+    const NotificationView(),
+    const FreelancerView(freelancerId: ""),
   ];
 
   @override
@@ -112,11 +86,9 @@ class _DashboardViewState extends State<DashboardView> {
     _initializeTokenSharedPrefs();
   }
 
-  // Initialize the TokenSharedPrefs with the SharedPreferences instance
   void _initializeTokenSharedPrefs() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     tokenSharedPrefs = TokenSharedPrefs(prefs);
-
     _getUserIdAndUpdateFreelancerView();
   }
 
@@ -135,9 +107,7 @@ class _DashboardViewState extends State<DashboardView> {
       (userId) {
         if (userId.isNotEmpty) {
           setState(() {
-            _screens[5] = FreelancerView(
-                freelancerId:
-                    userId); 
+            _screens[3] = FreelancerView(freelancerId: userId);
           });
         } else {
           showMySnackBar(
@@ -153,6 +123,7 @@ class _DashboardViewState extends State<DashboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: const Color(0xFFEFEFEF),
       body: _screens[_currentIndex],
       bottomNavigationBar: Padding(

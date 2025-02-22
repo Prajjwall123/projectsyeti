@@ -138,9 +138,9 @@ class _HomeViewState extends State<HomeView> {
                                 children: state.skills.map((skill) {
                                   return MyTag(
                                     skill: skill,
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: const Color(0xFF001F3F),
                                     textColor: Colors.white,
-                                    borderColor: Colors.blue,
+                                    borderColor: Colors.white,
                                   );
                                 }).toList(),
                               ),

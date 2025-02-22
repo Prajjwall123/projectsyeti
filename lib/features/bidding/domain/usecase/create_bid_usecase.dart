@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:projectsyeti/app/usecase/usecase.dart';
 import 'package:projectsyeti/core/error/failure.dart';
+import 'package:projectsyeti/features/freelancer/domain/repository/freelancer_repository.dart';
 import '../entity/bidding_entity.dart';
 import '../repository/bidding_repository.dart';
 
