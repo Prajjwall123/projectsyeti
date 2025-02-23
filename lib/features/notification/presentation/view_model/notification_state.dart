@@ -21,12 +21,12 @@ final class NotificationLoaded extends NotificationState {
 }
 
 final class NotificationSeenSuccess extends NotificationState {
-  final NotificationEntity notification;
+  final String message; 
 
-  const NotificationSeenSuccess(this.notification);
+  const NotificationSeenSuccess(this.message);
 
   @override
-  List<Object?> get props => [notification];
+  List<Object?> get props => [message];
 }
 
 final class NotificationError extends NotificationState {

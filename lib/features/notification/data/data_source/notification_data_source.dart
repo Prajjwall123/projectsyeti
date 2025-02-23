@@ -3,6 +3,6 @@ import 'package:projectsyeti/features/notification/domain/entity/notification_en
 abstract interface class INotificationDataSource {
   Future<List<NotificationEntity>> getNotificationByFreelancerId(
       String freelancerId);
-  Future<NotificationEntity> seenNotificationByFreelancerId(
+  Future<String> seenNotificationByFreelancerId(
       String notificationId);
 }

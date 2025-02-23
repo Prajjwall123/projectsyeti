@@ -5,6 +5,6 @@ import 'package:projectsyeti/features/notification/domain/entity/notification_en
 abstract interface class INotificationRepository {
   Future<Either<Failure, List<NotificationEntity>>>
       getNotificationByFreelancerId(String freelancerId);
-  Future<Either<Failure, NotificationEntity>> seenNotificationByFreelancerId(
+  Future<Either<Failure, String>> seenNotificationByFreelancerId(
       String notificationId);
 }

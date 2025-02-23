@@ -15,15 +15,13 @@ class SeenNotificationByFreelancerIdParams extends Equatable {
 }
 
 class SeenNotificationByFreelancerIdUsecase
-    implements
-        UsecaseWithParams<NotificationEntity,
-            SeenNotificationByFreelancerIdParams> {
+    implements UsecaseWithParams<String, SeenNotificationByFreelancerIdParams> {
   final INotificationRepository notificationRepository;
 
   SeenNotificationByFreelancerIdUsecase({required this.notificationRepository});
 
   @override
-  Future<Either<Failure, NotificationEntity>> call(
+  Future<Either<Failure, String>> call(
       SeenNotificationByFreelancerIdParams params) async {
     return await notificationRepository
         .seenNotificationByFreelancerId(params.notificationId);

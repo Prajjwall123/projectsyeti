@@ -25,7 +25,7 @@ class NotificationRemoteRepository implements INotificationRepository {
   }
 
   @override
-  Future<Either<Failure, NotificationEntity>> seenNotificationByFreelancerId(
+  Future<Either<Failure, String>> seenNotificationByFreelancerId(
       String notificationId) async {
     try {
       debugPrint(

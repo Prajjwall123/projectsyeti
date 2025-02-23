@@ -35,8 +35,7 @@ class NotificationRemoteDataSource implements INotificationDataSource {
   }
 
   @override
-  Future<NotificationEntity> seenNotificationByFreelancerId(
-      String notificationId) async {
+  Future<String> seenNotificationByFreelancerId(String notificationId) async {
     try {
       // Retrieve the token from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
@@ -59,8 +58,7 @@ class NotificationRemoteDataSource implements INotificationDataSource {
           "Response from seenNotificationByFreelancerId: ${response.data}");
 
       if (response.statusCode == 200) {
-        // The response returns a single notification JSON object.
-        return NotificationApiModel.fromJson(response.data).toEntity();
+        return "Marked as read";
       } else {
         throw Exception(response.statusMessage);
       }
