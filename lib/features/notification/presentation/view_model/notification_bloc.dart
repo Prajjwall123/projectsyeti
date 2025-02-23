@@ -28,6 +28,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     emit(NotificationLoading());
+
     final Either<Failure, List<NotificationEntity>> result =
         await _getNotificationsUsecase(
       GetNotificationByFreelancerIdParams(freelancerId: event.freelancerId),
@@ -45,16 +46,17 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     emit(NotificationLoading());
-    final Either<Failure, NotificationEntity> result =
-        await _seenNotificationUsecase(
+
+    final Either<Failure, String> result = await _seenNotificationUsecase(
       SeenNotificationByFreelancerIdParams(
           notificationId: event.notificationId),
     );
 
     result.fold(
-      (failure) => emit(
-          NotificationError(failure.message ?? "Error updating notification")),
-      (notification) => emit(NotificationSeenSuccess(notification)),
+      (failure) =>
+          emit(NotificationError(failure.message ?? "Failed to mark as read")),
+      (message) => emit(NotificationSeenSuccess(
+          message)), // Now holds a success message string
     );
   }
 }
