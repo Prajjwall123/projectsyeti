@@ -19,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     context.read<HomeCubit>().fetchProjects();
     context.read<HomeCubit>().fetchSkills();
+    context.read<HomeCubit>().fetchFreelancerProfile();
   }
 
   @override
@@ -84,10 +85,16 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                   ),
                                 ),
-                                const Icon(
-                                  Icons.notifications,
-                                  color: Colors.black,
-                                  size: 30,
+                                CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: state
+                                              .freelancer?.profileImage !=
+                                          null
+                                      ? NetworkImage(
+                                          'http://10.0.2.2:3000/${state.freelancer!.profileImage}')
+                                      : const AssetImage(
+                                              'assets/images/default_avatar.png')
+                                          as ImageProvider,
                                 ),
                               ],
                             ),
@@ -107,14 +114,14 @@ class _HomeViewState extends State<HomeView> {
                                   VoucherCard(
                                     title: 'Referral Awards',
                                     description:
-                                        'Invite a collegue and get Rs. 500 in credit',
+                                        'Invite a colleague and get Rs. 500 in credit',
                                     backgroundColor:
                                         Color.fromARGB(255, 92, 103, 178),
                                   ),
                                   VoucherCard(
                                     title: 'Optimize Your Profile',
                                     description:
-                                        'Become more attractive to potential',
+                                        'Become more attractive to potential clients',
                                     backgroundColor: Colors.purpleAccent,
                                   ),
                                 ],
@@ -145,21 +152,21 @@ class _HomeViewState extends State<HomeView> {
                                 }).toList(),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       ),
                       const SizedBox(height: 10),
                       Column(
                         children: state.projects
-                            .map((project) => Column(
-                                  children: [
-                                    MyCard(project: project),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ))
+                            .map(
+                              (project) => Column(
+                                children: [
+                                  MyCard(project: project),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                            )
                             .toList(),
                       ),
                     ],

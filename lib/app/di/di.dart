@@ -156,6 +156,8 @@ void _initHomeDependencies() {
     () => HomeCubit(
       getIt<GetAllProjectsUsecase>(),
       getIt<GetAllSkillsUsecase>(),
+      getIt<GetFreelancerByIdUsecase>(),
+      getIt<TokenSharedPrefs>(),
     ),
   );
 }
