@@ -113,7 +113,8 @@ class _ProjectViewState extends State<ProjectView> {
             CircleAvatar(
               radius: 30,
               backgroundImage: project.companyLogo.isNotEmpty
-                  ? NetworkImage("http://10.0.2.2:3000/${project.companyLogo}")
+                  ? NetworkImage(
+                      "http://192.168.1.70:3000/${project.companyLogo}")
                   : const AssetImage("assets/images/default_company.png")
                       as ImageProvider,
             ),

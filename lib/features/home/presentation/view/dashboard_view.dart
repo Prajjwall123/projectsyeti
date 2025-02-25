@@ -4,6 +4,7 @@ import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
+import 'package:projectsyeti/features/home/presentation/view/sensors_view.dart';
 import 'package:projectsyeti/features/notification/presentation/view/notification_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,6 +55,7 @@ class NavigationMenu extends StatelessWidget {
           _navItem(context, Icons.message, 1),
           _navItem(context, Icons.notifications, 2),
           _navItem(context, Icons.person, 3),
+          _navItem(context, Icons.sensor_door, 4),
         ],
       ),
     );
@@ -77,6 +79,7 @@ class _DashboardViewState extends State<DashboardView> {
     const ChatView(),
     const NotificationView(freelancerId: ""),
     const FreelancerView(freelancerId: ""),
+    const SensorsView(),
   ];
 
   @override

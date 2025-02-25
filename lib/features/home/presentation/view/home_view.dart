@@ -91,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                                               .freelancer?.profileImage !=
                                           null
                                       ? NetworkImage(
-                                          'http://10.0.2.2:3000/${state.freelancer!.profileImage}')
+                                          'http://192.168.1.70:3000/${state.freelancer!.profileImage}')
                                       : const AssetImage(
                                               'assets/images/default_avatar.png')
                                           as ImageProvider,

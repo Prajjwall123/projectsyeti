@@ -61,7 +61,7 @@ class BidProjectCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: project.companyLogo.isNotEmpty
                         ? Image.network(
-                            "http://10.0.2.2:3000/${project.companyLogo}",
+                            "http://192.168.1.70:3000/${project.companyLogo}",
                             fit: BoxFit.cover,
                           )
                         : Image.asset("assets/images/default_company.png"),

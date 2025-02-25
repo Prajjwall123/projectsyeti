@@ -214,7 +214,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                       ? FileImage(_selectedImage!)
                       : widget.freelancer.profileImage != null
                           ? NetworkImage(
-                              'http://10.0.2.2:3000/${widget.freelancer.profileImage}')
+                              'http://192.168.1.70:3000/${widget.freelancer.profileImage}')
                           : null,
                   child: _selectedImage == null &&
                           widget.freelancer.profileImage == null

@@ -71,7 +71,7 @@ class _FreelancerViewState extends State<FreelancerView> {
                   radius: 50,
                   backgroundImage: freelancer.profileImage.isNotEmpty
                       ? NetworkImage(
-                          "http://10.0.2.2:3000/${freelancer.profileImage}")
+                          "http://192.168.1.70:3000/${freelancer.profileImage}")
                       : const AssetImage("assets/images/default_avatar.png")
                           as ImageProvider,
                 ),

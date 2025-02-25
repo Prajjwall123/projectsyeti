@@ -23,7 +23,7 @@ class _CompanyViewState extends State<CompanyView> {
     if (logoPath.startsWith('http://') || logoPath.startsWith('https://')) {
       return logoPath;
     }
-    return 'http://10.0.2.2:3000/$logoPath';
+    return 'http://192.168.1.70:3000/$logoPath';
   }
 
   @override
