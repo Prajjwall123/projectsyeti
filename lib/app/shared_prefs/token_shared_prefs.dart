@@ -44,4 +44,14 @@ class TokenSharedPrefs {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }
+
+  Future<Either<Failure, void>> clearTokenAndUserId() async {
+    try {
+      await _sharedPreferences.remove('token');
+      await _sharedPreferences.remove('userId');
+      return const Right(null);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
+  }
 }

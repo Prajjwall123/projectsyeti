@@ -10,6 +10,7 @@ class HomeState extends Equatable {
   final FreelancerEntity? freelancer;
   final bool isLoading;
   final bool isSkillsLoading;
+  final bool isLoggingOut;
   final String? errorMessage;
   final String? skillsErrorMessage;
 
@@ -20,11 +21,11 @@ class HomeState extends Equatable {
     this.freelancer,
     required this.isLoading,
     required this.isSkillsLoading,
+    required this.isLoggingOut,
     this.errorMessage,
     this.skillsErrorMessage,
   });
 
-  /// **Initial state**
   static HomeState initial() {
     return const HomeState(
       selectedIndex: 0,
@@ -33,12 +34,12 @@ class HomeState extends Equatable {
       freelancer: null,
       isLoading: false,
       isSkillsLoading: false,
+      isLoggingOut: false,
       errorMessage: null,
       skillsErrorMessage: null,
     );
   }
 
-  /// **Copy with method to update state**
   HomeState copyWith({
     int? selectedIndex,
     List<ProjectEntity>? projects,
@@ -46,6 +47,7 @@ class HomeState extends Equatable {
     FreelancerEntity? freelancer,
     bool? isLoading,
     bool? isSkillsLoading,
+    bool? isLoggingOut,
     String? errorMessage,
     String? skillsErrorMessage,
   }) {
@@ -56,6 +58,7 @@ class HomeState extends Equatable {
       freelancer: freelancer ?? this.freelancer,
       isLoading: isLoading ?? this.isLoading,
       isSkillsLoading: isSkillsLoading ?? this.isSkillsLoading,
+      isLoggingOut: isLoggingOut ?? this.isLoggingOut,
       errorMessage: errorMessage,
       skillsErrorMessage: skillsErrorMessage,
     );
@@ -69,6 +72,7 @@ class HomeState extends Equatable {
         freelancer,
         isLoading,
         isSkillsLoading,
+        isLoggingOut,
         errorMessage,
         skillsErrorMessage,
       ];

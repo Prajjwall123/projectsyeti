@@ -100,4 +100,15 @@ class HomeCubit extends Cubit<HomeState> {
       },
     );
   }
+
+  Future<void> logout(BuildContext context) async {
+    emit(state.copyWith(isLoggingOut: true));
+
+    await _tokenSharedPrefs.clearTokenAndUserId();
+
+    emit(HomeState.initial()); // Reset to initial state
+
+    // Navigate to Login Screen
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 }

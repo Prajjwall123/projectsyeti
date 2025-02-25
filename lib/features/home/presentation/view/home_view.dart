@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/app/widgets/my_card.dart';
@@ -5,6 +7,7 @@ import 'package:projectsyeti/app/widgets/my_tag.dart';
 import 'package:projectsyeti/app/widgets/my_voucher.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_state.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -14,12 +17,46 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final List<StreamSubscription<dynamic>> _streamSubscriptions = [];
+  bool _isLoggingOut = false;
+
   @override
   void initState() {
     super.initState();
     context.read<HomeCubit>().fetchProjects();
     context.read<HomeCubit>().fetchSkills();
     context.read<HomeCubit>().fetchFreelancerProfile();
+
+    _listenToAccelerometer();
+  }
+
+  void _listenToAccelerometer() {
+    const double shakeThreshold = 15.0;
+    _streamSubscriptions.add(
+      accelerometerEventStream().listen((event) {
+        double acceleration =
+            sqrt(event.x * event.x + event.y * event.y + event.z * event.z);
+
+        if (acceleration > shakeThreshold) {
+          _handleShakeLogout();
+        }
+      }),
+    );
+  }
+
+  void _handleShakeLogout() {
+    if (!_isLoggingOut) {
+      _isLoggingOut = true;
+      context.read<HomeCubit>().logout(context);
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
+    super.dispose();
   }
 
   @override
@@ -85,16 +122,35 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                   ),
                                 ),
-                                CircleAvatar(
-                                  radius: 20,
-                                  backgroundImage: state
-                                              .freelancer?.profileImage !=
-                                          null
-                                      ? NetworkImage(
-                                          'http://192.168.1.70:3000/${state.freelancer!.profileImage}')
-                                      : const AssetImage(
-                                              'assets/images/default_avatar.png')
-                                          as ImageProvider,
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'logout') {
+                                      context.read<HomeCubit>().logout(context);
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext context) => [
+                                    const PopupMenuItem<String>(
+                                      value: 'logout',
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.logout, color: Colors.red),
+                                          SizedBox(width: 10),
+                                          Text('Logout'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundImage: state
+                                                .freelancer?.profileImage !=
+                                            null
+                                        ? NetworkImage(
+                                            'http://192.168.1.70:3000/${state.freelancer!.profileImage}')
+                                        : const AssetImage(
+                                            'assets/images/default_avatar.png',
+                                          ) as ImageProvider,
+                                  ),
                                 ),
                               ],
                             ),
