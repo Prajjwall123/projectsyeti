@@ -64,6 +64,8 @@ class MyApp extends StatelessWidget {
           initialRoute: "/",
           debugShowCheckedModeBanner: false,
           theme: getApplicationTheme(),
+          darkTheme: getDarkTheme(),
+          themeMode: ThemeMode.dark,
           routes: {
             "/": (context) => const SplashScreen(),
             "/login": (context) => LoginView(),

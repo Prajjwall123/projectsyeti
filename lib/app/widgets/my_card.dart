@@ -5,18 +5,17 @@ import 'package:projectsyeti/features/project/presentation/view/project_view.dar
 class MyCard extends StatelessWidget {
   final ProjectEntity project;
 
-  const MyCard({
-    super.key,
-    required this.project,
-  });
+  const MyCard({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Project ID: ${project.projectId}");
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Card(
       elevation: 8,
       margin: const EdgeInsets.symmetric(vertical: 8),
-      color: Colors.white,
+      color: theme.cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -25,7 +24,6 @@ class MyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Date and Status Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -36,9 +34,8 @@ class MyCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       _formatDate(project.postedDate),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[700],
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: isDarkMode ? Colors.white : Colors.grey[700],
                       ),
                     ),
                   ],
@@ -57,10 +54,7 @@ class MyCard extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 12),
-
-            // Company Logo and Title Row
             Row(
               children: [
                 SizedBox(
@@ -83,25 +77,18 @@ class MyCard extends StatelessWidget {
                     children: [
                       Text(
                         project.companyName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         project.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        style: theme.textTheme.titleLarge,
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Bids Count Display
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -112,18 +99,14 @@ class MyCard extends StatelessWidget {
                   child: Text(
                     "${project.bidCount} Bids",
                     style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
                   ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
-            // Categories
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -142,36 +125,28 @@ class MyCard extends StatelessWidget {
                 );
               }).toList(),
             ),
-
             const SizedBox(height: 16),
-
-            // Description (Trimmed)
             Text(
               _trimDescription(project.description),
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[800],
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: isDarkMode ? Colors.white : Colors.grey[800],
                 height: 1.5,
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Duration
             Row(
               children: [
                 const Icon(Icons.access_time, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
                   "${project.duration} months",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: isDarkMode ? Colors.white : Colors.grey[700],
+                  ),
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
-            // View Details Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -190,19 +165,10 @@ class MyCard extends StatelessWidget {
                     );
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
+                style: theme.elevatedButtonTheme.style,
                 child: const Text(
-                  "View Details ",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  "View Details",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -212,16 +178,20 @@ class MyCard extends StatelessWidget {
     );
   }
 
+  /// **Formats Date**
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 
+  /// **Trims Description to 100 Characters**
   String _trimDescription(String description) {
     const maxLength = 100;
-    if (description.length <= maxLength) return description;
-    return "${description.substring(0, maxLength)}...";
+    return description.length <= maxLength
+        ? description
+        : "${description.substring(0, maxLength)}...";
   }
 
+  /// **Status Color Based on Project Status**
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'posted':

@@ -38,7 +38,7 @@ ThemeData getApplicationTheme() {
 
     /// **Text Theme for Light Mode**
     textTheme: const TextTheme(
-      bodyMedium: TextStyle(color: Colors.black87),
+      bodyMedium: TextStyle(color: Colors.black),
       titleLarge: TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.bold,
@@ -52,52 +52,52 @@ ThemeData getApplicationTheme() {
   );
 }
 
-/// **Dark Theme**
 ThemeData getDarkTheme() {
-  return ThemeData.dark().copyWith(
-    brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
-      primary: Color(0xFF1976D2),
-      secondary: Color(0xFF001F3F),
-      surface: Colors.black87, // Dark mode background
-    ),
+  // Start with a base dark theme
+  final base = ThemeData.dark();
 
-    /// **Dark Scaffold Background**
+  return base.copyWith(
+    brightness: Brightness.dark,
+    primaryColor: const Color.fromARGB(255, 0, 94, 255),
+
+    // Dark scaffold background
     scaffoldBackgroundColor: Colors.black87,
 
-    /// **Dark AppBar Theme**
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF1976D2),
+    // Card color in dark mode
+    cardColor: Colors.black26,
+
+    // Divider color for dark mode
+    dividerColor: Colors.grey.shade700,
+
+    // AppBar styling
+    appBarTheme: base.appBarTheme.copyWith(
+      backgroundColor: const Color.fromARGB(255, 0, 94, 255),
       elevation: 4,
-      foregroundColor: Colors.white,
-      titleTextStyle: TextStyle(
+      iconTheme: const IconThemeData(color: Colors.white),
+      titleTextStyle: const TextStyle(
+        fontFamily: 'Montserrat Bold',
         fontSize: 20,
-        fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
       centerTitle: true,
-      iconTheme: IconThemeData(color: Colors.white),
     ),
 
-    /// **Dark Button Styling**
+    // Text styling in dark mode
+    textTheme: base.textTheme.apply(
+      fontFamily: 'Montserrat Regular',
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    ),
+
+    // Elevated button styling in dark mode
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF1976D2),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(40),
         ),
+        backgroundColor: const Color.fromARGB(255, 0, 94, 255),
         foregroundColor: Colors.white,
       ),
     ),
-
-    /// **Text Theme for Dark Mode**
-    textTheme: ThemeData.dark().textTheme.apply(
-          fontFamily: 'Montserrat Regular',
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
-
-    /// **Dark Divider**
-    dividerColor: Colors.grey.shade700,
   );
 }
