@@ -29,6 +29,15 @@ final class ProjectLoaded extends ProjectState {
   List<Object?> get props => [project];
 }
 
+final class ProjectUpdated extends ProjectState {
+  final ProjectEntity updatedProject;
+
+  const ProjectUpdated(this.updatedProject);
+
+  @override
+  List<Object?> get props => [updatedProject];
+}
+
 final class ProjectError extends ProjectState {
   final String message;
 

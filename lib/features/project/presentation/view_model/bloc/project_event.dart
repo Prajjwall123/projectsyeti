@@ -26,3 +26,13 @@ final class GetProjectByIdEvent extends ProjectEvent {
   @override
   List<Object?> get props => [projectId];
 }
+
+final class UpdateProjectByIdEvent extends ProjectEvent {
+  final String projectId;
+  final ProjectEntity updatedProject;
+
+  const UpdateProjectByIdEvent(this.projectId, this.updatedProject);
+
+  @override
+  List<Object?> get props => [projectId, updatedProject];
+}

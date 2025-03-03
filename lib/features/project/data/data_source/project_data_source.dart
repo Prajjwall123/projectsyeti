@@ -6,4 +6,7 @@ abstract interface class IProjectDataSource {
   Future<ProjectEntity> getProjectById(String projectId);
 
   Future<List<ProjectEntity>> getProjectsByFreelancerId(String freelancerId);
+
+  Future<ProjectEntity> updateProjectById(
+      String projectId, ProjectEntity updatedProject);
 }

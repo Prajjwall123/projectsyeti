@@ -40,6 +40,7 @@ import 'package:projectsyeti/features/project/domain/repository/project_reposito
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_project_by_id_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_projects_by_freelancer_usecase.dart';
+import 'package:projectsyeti/features/project/domain/use_case/update_project_by_id_usecase.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 import 'package:projectsyeti/features/skill/data/data_source/remote_data_source/skill_remote_data_source.dart';
 import 'package:projectsyeti/features/skill/data/repository/skill_remote_repository.dart';
@@ -184,7 +185,9 @@ void _initCompanyDependencies() {
 void _initProjectDependencies() {
   getIt.registerLazySingleton<ProjectRemoteDataSource>(
     () => ProjectRemoteDataSource(
-        dio: getIt<Dio>(), skillRepository: getIt<ISkillRepository>()),
+        dio: getIt<Dio>(),
+        skillRepository: getIt<ISkillRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<IProjectRepository>(
@@ -204,12 +207,18 @@ void _initProjectDependencies() {
         projectRepository: getIt<IProjectRepository>()),
   );
 
-  getIt.registerFactory<ProjectBloc>(
-    () => ProjectBloc(
+  getIt.registerLazySingleton<UpdateProjectByIdUsecase>(
+    () => UpdateProjectByIdUsecase(
+        projectRepository: getIt<IProjectRepository>()),
+  );
+
+  getIt.registerSingleton<ProjectBloc>(
+    ProjectBloc(
       getAllProjectsUsecase: getIt<GetAllProjectsUsecase>(),
       getProjectByIdUsecase: getIt<GetProjectByIdUsecase>(),
       getProjectByFreelancerIdUsecase:
           getIt<GetProjectsByFreelancerIdUsecase>(),
+      updateProjectByIdUsecase: getIt<UpdateProjectByIdUsecase>(),
     ),
   );
 }

@@ -45,4 +45,17 @@ class ProjectRemoteRepository implements IProjectRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, ProjectEntity>> updateProjectById(
+      String projectId, ProjectEntity updatedProject) async {
+    try {
+      debugPrint("Updating project with ID: $projectId");
+      final updatedProjectEntity = await _projectRemoteDataSource
+          .updateProjectById(projectId, updatedProject);
+      return Right(updatedProjectEntity);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

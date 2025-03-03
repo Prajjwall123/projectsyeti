@@ -13,6 +13,7 @@ import 'package:projectsyeti/features/home/presentation/view/dashboard_view.dart
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/notification/presentation/view_model/notification_bloc.dart';
 import 'package:projectsyeti/features/onboarding/presentation/view/onboarding_view.dart';
+import 'package:projectsyeti/features/project/presentation/view/projects_by_freelancer_view.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
 import 'package:projectsyeti/features/splash/presentation/view/splash_screen_view.dart';

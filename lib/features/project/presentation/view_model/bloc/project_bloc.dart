@@ -6,6 +6,7 @@ import 'package:projectsyeti/features/project/domain/entity/project_entity.dart'
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_project_by_id_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_projects_by_freelancer_usecase.dart';
+import 'package:projectsyeti/features/project/domain/use_case/update_project_by_id_usecase.dart';
 
 part 'project_event.dart';
 part 'project_state.dart';
@@ -14,15 +15,18 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   final GetAllProjectsUsecase getAllProjectsUsecase;
   final GetProjectByIdUsecase getProjectByIdUsecase;
   final GetProjectsByFreelancerIdUsecase getProjectByFreelancerIdUsecase;
+  final UpdateProjectByIdUsecase updateProjectByIdUsecase;
 
   ProjectBloc({
     required this.getAllProjectsUsecase,
     required this.getProjectByIdUsecase,
     required this.getProjectByFreelancerIdUsecase,
+    required this.updateProjectByIdUsecase,
   }) : super(ProjectInitial()) {
     on<GetAllProjectsEvent>(_onGetAllProjects);
     on<GetProjectByIdEvent>(_onGetProjectById);
     on<GetProjectsByFreelancerIdEvent>(_onGetProjectsByFreelancer);
+    on<UpdateProjectByIdEvent>(_onUpdateProjectById);
   }
 
   Future<void> _onGetAllProjects(
@@ -65,6 +69,23 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     result.fold(
       (failure) => emit(ProjectError(_mapFailureToMessage(failure))),
       (project) => emit(ProjectLoaded(project)),
+    );
+  }
+
+  Future<void> _onUpdateProjectById(
+    UpdateProjectByIdEvent event,
+    Emitter<ProjectState> emit,
+  ) async {
+    emit(ProjectLoading());
+    final Either<Failure, ProjectEntity> result =
+        await updateProjectByIdUsecase(UpdateProjectByIdParams(
+      projectId: event.projectId,
+      updatedProject: event.updatedProject,
+    ));
+
+    result.fold(
+      (failure) => emit(ProjectError(_mapFailureToMessage(failure))),
+      (updatedProject) => emit(ProjectUpdated(updatedProject)),
     );
   }
 
