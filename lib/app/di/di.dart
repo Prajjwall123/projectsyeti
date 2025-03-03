@@ -39,6 +39,7 @@ import 'package:projectsyeti/features/project/data/repository/remote_repository/
 import 'package:projectsyeti/features/project/domain/repository/project_repository.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_project_by_id_usecase.dart';
+import 'package:projectsyeti/features/project/domain/use_case/get_projects_by_freelancer_usecase.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 import 'package:projectsyeti/features/skill/data/data_source/remote_data_source/skill_remote_data_source.dart';
 import 'package:projectsyeti/features/skill/data/repository/skill_remote_repository.dart';
@@ -198,10 +199,17 @@ void _initProjectDependencies() {
     () => GetProjectByIdUsecase(projectRepository: getIt<IProjectRepository>()),
   );
 
+  getIt.registerLazySingleton<GetProjectsByFreelancerIdUsecase>(
+    () => GetProjectsByFreelancerIdUsecase(
+        projectRepository: getIt<IProjectRepository>()),
+  );
+
   getIt.registerFactory<ProjectBloc>(
     () => ProjectBloc(
       getAllProjectsUsecase: getIt<GetAllProjectsUsecase>(),
       getProjectByIdUsecase: getIt<GetProjectByIdUsecase>(),
+      getProjectByFreelancerIdUsecase:
+          getIt<GetProjectsByFreelancerIdUsecase>(),
     ),
   );
 }

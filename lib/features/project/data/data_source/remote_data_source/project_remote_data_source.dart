@@ -69,7 +69,37 @@ class ProjectRemoteDataSource implements IProjectDataSource {
           headquarters: projectDTO.headquarters,
           bidCount: projectDTO.bidCount,
           awardedTo: projectDTO.awardedTo,
+          feedbackRequestedMessage: projectDTO.feedbackRequestedMessage,
+          link: projectDTO.link,
+          feedbackRespondMessage: projectDTO.feedbackRespondMessage,
         );
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['message'] ?? e.message);
+    } catch (e) {
+      throw Exception('An error occurred: $e');
+    }
+  }
+
+  @override
+  Future<List<ProjectEntity>> getProjectsByFreelancerId(
+      String freelancerId) async {
+    try {
+      var response = await _dio
+          .get('${ApiEndpoints.getProjectsByFreelancerId}/$freelancerId');
+      if (response.statusCode == 200) {
+        List<dynamic> projectsList = response.data;
+
+        List<ProjectEntity> projects = projectsList.map((projectJson) {
+          ProjectApiModel projectModel = ProjectApiModel.fromJson(projectJson);
+          debugPrint('Fetched Project ID: ${projectModel.projectId}');
+          return projectModel.toEntity();
+        }).toList();
+
+        debugPrint('Total Projects Fetched: ${projects.length}');
+        return projects;
       } else {
         throw Exception(response.statusMessage);
       }

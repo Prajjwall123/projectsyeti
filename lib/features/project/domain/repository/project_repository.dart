@@ -6,4 +6,6 @@ abstract interface class IProjectRepository {
   Future<Either<Failure, List<ProjectEntity>>> getAllProjects();
 
   Future<Either<Failure, ProjectEntity>> getProjectById(String projectId);
+
+  Future<Either<Failure, List<ProjectEntity>>> getProjectsByFreelancerId(String freelancerId);
 }

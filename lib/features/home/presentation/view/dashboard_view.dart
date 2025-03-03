@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
 import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/freelancer/presentation/view/freelancer_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:projectsyeti/features/home/presentation/view/home_view.dart';
-import 'package:projectsyeti/features/home/presentation/view/sensors_view.dart';
 import 'package:projectsyeti/features/notification/presentation/view/notification_view.dart';
+import 'package:projectsyeti/features/project/presentation/view/projects_by_freelancer_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationMenu extends StatelessWidget {
@@ -52,10 +51,9 @@ class NavigationMenu extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _navItem(context, Icons.home, 0),
-          _navItem(context, Icons.message, 1),
+          _navItem(context, Icons.pending_outlined, 1),
           _navItem(context, Icons.notifications, 2),
           _navItem(context, Icons.person, 3),
-          _navItem(context, Icons.sensor_door, 4),
         ],
       ),
     );
@@ -73,13 +71,11 @@ class _DashboardViewState extends State<DashboardView> {
   int _currentIndex = 0;
   late TokenSharedPrefs tokenSharedPrefs;
 
-  // Initialize screens with empty freelancerId; they'll be updated once the ID is fetched.
   final List<Widget> _screens = [
     const HomeView(),
-    const ChatView(),
+    const ProjectsByFreelancerView(freelancerId: ""),
     const NotificationView(freelancerId: ""),
     const FreelancerView(freelancerId: ""),
-    const SensorsView(),
   ];
 
   @override
@@ -109,6 +105,7 @@ class _DashboardViewState extends State<DashboardView> {
       (userId) {
         if (userId.isNotEmpty) {
           setState(() {
+            _screens[1] = ProjectsByFreelancerView(freelancerId: userId);
             _screens[2] = NotificationView(freelancerId: userId);
             _screens[3] = FreelancerView(freelancerId: userId);
           });

@@ -16,13 +16,16 @@ GetProjectByIdDTO _$GetProjectByIdDTOFromJson(Map<String, dynamic> json) =>
       category:
           (json['category'] as List<dynamic>).map((e) => e as String).toList(),
       requirements: json['requirements'] as String,
-      headquarters: json['headquarters'] as String,
+      headquarters: json['headquarters'] as String?,
       description: json['description'] as String,
       duration: json['duration'] as String,
       postedDate: DateTime.parse(json['postedDate'] as String),
       status: json['status'] as String,
       bidCount: (json['bidCount'] as num).toInt(),
       awardedTo: json['awardedTo'] as String?,
+      feedbackRequestedMessage: json['feedbackRequestedMessage'] as String?,
+      link: json['link'] as String?,
+      feedbackRespondMessage: json['feedbackRespondMessage'] as String?,
     );
 
 Map<String, dynamic> _$GetProjectByIdDTOToJson(GetProjectByIdDTO instance) =>
@@ -41,4 +44,7 @@ Map<String, dynamic> _$GetProjectByIdDTOToJson(GetProjectByIdDTO instance) =>
       'status': instance.status,
       'bidCount': instance.bidCount,
       'awardedTo': instance.awardedTo,
+      'feedbackRequestedMessage': instance.feedbackRequestedMessage,
+      'link': instance.link,
+      'feedbackRespondMessage': instance.feedbackRespondMessage,
     };

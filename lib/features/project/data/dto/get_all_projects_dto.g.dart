@@ -12,7 +12,7 @@ GetAllProjectsDTO _$GetAllProjectsDTOFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       companyId: json['companyId'] as String,
       companyName: json['companyName'] as String,
-      headquarters: json['headquarters'] as String,
+      headquarters: json['headquarters'] as String?,
       companyLogo: json['companyLogo'] as String,
       category:
           (json['category'] as List<dynamic>).map((e) => e as String).toList(),
@@ -23,6 +23,9 @@ GetAllProjectsDTO _$GetAllProjectsDTOFromJson(Map<String, dynamic> json) =>
       status: json['status'] as String,
       bidCount: (json['bidCount'] as num).toInt(),
       awardedTo: json['awardedTo'] as String?,
+      feedbackRequestedMessage: json['feedbackRequestedMessage'] as String?,
+      link: json['link'] as String?,
+      feedbackRespondMessage: json['feedbackRespondMessage'] as String?,
     );
 
 Map<String, dynamic> _$GetAllProjectsDTOToJson(GetAllProjectsDTO instance) =>
@@ -41,4 +44,7 @@ Map<String, dynamic> _$GetAllProjectsDTOToJson(GetAllProjectsDTO instance) =>
       'status': instance.status,
       'bidCount': instance.bidCount,
       'awardedTo': instance.awardedTo,
+      'feedbackRequestedMessage': instance.feedbackRequestedMessage,
+      'link': instance.link,
+      'feedbackRespondMessage': instance.feedbackRespondMessage,
     };

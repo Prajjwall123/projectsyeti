@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
 import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
-import 'package:projectsyeti/features/home/presentation/view/chat_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectsyeti/features/company/presentation/view/company_view.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
@@ -126,8 +125,10 @@ class _ProjectViewState extends State<ProjectView> {
                   Text(project.companyName,
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(project.headquarters,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey)),
+                  Text(
+                    project.headquarters ?? "Headquarters not available",
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                 ],
               ),
             ),
@@ -340,7 +341,7 @@ class _ProjectViewState extends State<ProjectView> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
-        width: double.infinity, // Makes the button take full width
+        width: double.infinity,
         child: ElevatedButton(
           onPressed: freelancerId.isNotEmpty
               ? () => Navigator.push(

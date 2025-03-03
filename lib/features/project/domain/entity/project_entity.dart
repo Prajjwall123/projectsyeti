@@ -5,7 +5,7 @@ class ProjectEntity extends Equatable {
   final String companyId;
   final String companyName;
   final String companyLogo;
-  final String headquarters;
+  final String? headquarters;
   final String title;
   final List<String> category;
   final String requirements;
@@ -15,13 +15,16 @@ class ProjectEntity extends Equatable {
   final String status;
   final int bidCount;
   final String? awardedTo;
+  final String? feedbackRequestedMessage;
+  final String? link;
+  final String? feedbackRespondMessage;
 
   const ProjectEntity({
     this.projectId,
     required this.companyId,
     required this.companyName,
     required this.companyLogo,
-    required this.headquarters,
+     this.headquarters,
     required this.title,
     required this.category,
     required this.requirements,
@@ -31,6 +34,9 @@ class ProjectEntity extends Equatable {
     required this.status,
     required this.bidCount,
     this.awardedTo,
+    this.feedbackRequestedMessage,
+    this.link,
+    this.feedbackRespondMessage,
   });
 
   ProjectEntity copyWith({
@@ -48,6 +54,9 @@ class ProjectEntity extends Equatable {
     String? status,
     int? bidCount,
     String? awardedTo,
+    String? feedbackRequestedMessage,
+    String? link,
+    String? feedbackRespondMessage,
   }) {
     return ProjectEntity(
       projectId: projectId ?? this.projectId,
@@ -64,6 +73,11 @@ class ProjectEntity extends Equatable {
       status: status ?? this.status,
       bidCount: bidCount ?? this.bidCount,
       awardedTo: awardedTo ?? this.awardedTo,
+      feedbackRequestedMessage:
+          feedbackRequestedMessage ?? this.feedbackRequestedMessage,
+      link: link ?? this.link,
+      feedbackRespondMessage:
+          feedbackRespondMessage ?? this.feedbackRespondMessage,
     );
   }
 
@@ -83,5 +97,8 @@ class ProjectEntity extends Equatable {
         status,
         bidCount,
         awardedTo,
+        feedbackRequestedMessage,
+        link,
+        feedbackRespondMessage
       ];
 }

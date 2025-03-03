@@ -32,4 +32,17 @@ class ProjectRemoteRepository implements IProjectRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<ProjectEntity>>> getProjectsByFreelancerId(
+      String freelancerId) async {
+    try {
+      debugPrint("Fetching all projects by Freelancer Id...");
+      final projects = await _projectRemoteDataSource
+          .getProjectsByFreelancerId(freelancerId);
+      return Right(projects);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

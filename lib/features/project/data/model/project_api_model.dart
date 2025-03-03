@@ -11,7 +11,7 @@ class ProjectApiModel extends Equatable {
   final String companyId;
   final String companyName;
   final String companyLogo;
-  final String headquarters;
+  final String? headquarters;
   final String title;
   final List<String> category;
   final String requirements;
@@ -21,6 +21,9 @@ class ProjectApiModel extends Equatable {
   final String status;
   final int bidCount;
   final String? awardedTo;
+  final String? feedbackRequestedMessage;
+  final String? link;
+  final String? feedbackRespondMessage;
 
   const ProjectApiModel({
     this.projectId,
@@ -28,7 +31,7 @@ class ProjectApiModel extends Equatable {
     required this.companyName,
     required this.companyLogo,
     required this.title,
-    required this.headquarters,
+     this.headquarters,
     required this.category,
     required this.requirements,
     required this.description,
@@ -37,6 +40,9 @@ class ProjectApiModel extends Equatable {
     required this.status,
     required this.bidCount,
     this.awardedTo,
+    this.feedbackRequestedMessage,
+    this.link,
+    this.feedbackRespondMessage,
   });
 
   factory ProjectApiModel.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +66,9 @@ class ProjectApiModel extends Equatable {
       status: status,
       bidCount: bidCount,
       awardedTo: awardedTo,
+      feedbackRequestedMessage: feedbackRequestedMessage,
+      link: link,
+      feedbackRespondMessage: feedbackRespondMessage,
     );
   }
 
@@ -78,5 +87,8 @@ class ProjectApiModel extends Equatable {
         postedDate,
         status,
         bidCount,
+        feedbackRequestedMessage,
+        link,
+        feedbackRespondMessage,
       ];
 }

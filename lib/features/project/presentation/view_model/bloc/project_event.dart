@@ -9,6 +9,15 @@ sealed class ProjectEvent extends Equatable {
 
 final class GetAllProjectsEvent extends ProjectEvent {}
 
+final class GetProjectsByFreelancerIdEvent extends ProjectEvent {
+  final String freelancerId;
+
+  const GetProjectsByFreelancerIdEvent(this.freelancerId);
+
+  @override
+  List<Object?> get props => [freelancerId];
+}
+
 final class GetProjectByIdEvent extends ProjectEvent {
   final String projectId;
 

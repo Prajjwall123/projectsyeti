@@ -21,6 +21,7 @@ class ApiEndpoints {
   // ====================== Projects Routes ======================
   static const String getAllProjects = "projects/";
   static const String getProjectById = "projects/";
+  static const String getProjectsByFreelancerId = "projects/freelancer/";
 
   // ====================== Company Routes ======================
   static const String getCompanyById = "companies/";

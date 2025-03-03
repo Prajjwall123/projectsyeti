@@ -11,7 +11,7 @@ class GetProjectByIdDTO {
   final String title;
 
   @JsonKey(name: 'headquarters')
-  final String headquarters;
+  final String? headquarters;
 
   @JsonKey(name: 'companyId')
   final String companyId;
@@ -46,6 +46,15 @@ class GetProjectByIdDTO {
   @JsonKey(name: 'awardedTo')
   final String? awardedTo;
 
+  @JsonKey(name: 'feedbackRequestedMessage')
+  final String? feedbackRequestedMessage;
+
+  @JsonKey(name: 'link')
+  final String? link;
+
+  @JsonKey(name: 'feedbackRespondMessage')
+  final String? feedbackRespondMessage;
+
   GetProjectByIdDTO({
     required this.projectId,
     required this.title,
@@ -54,13 +63,16 @@ class GetProjectByIdDTO {
     required this.companyLogo,
     required this.category,
     required this.requirements,
-    required this.headquarters,
+    this.headquarters,
     required this.description,
     required this.duration,
     required this.postedDate,
     required this.status,
     required this.bidCount,
     this.awardedTo,
+    this.feedbackRequestedMessage,
+    this.link,
+    this.feedbackRespondMessage,
   });
 
   factory GetProjectByIdDTO.fromJson(Map<String, dynamic> json) =>

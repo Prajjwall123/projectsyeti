@@ -5,6 +5,7 @@ import 'package:projectsyeti/core/error/failure.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_project_by_id_usecase.dart';
+import 'package:projectsyeti/features/project/domain/use_case/get_projects_by_freelancer_usecase.dart';
 
 part 'project_event.dart';
 part 'project_state.dart';
@@ -12,13 +13,16 @@ part 'project_state.dart';
 class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   final GetAllProjectsUsecase getAllProjectsUsecase;
   final GetProjectByIdUsecase getProjectByIdUsecase;
+  final GetProjectsByFreelancerIdUsecase getProjectByFreelancerIdUsecase;
 
   ProjectBloc({
     required this.getAllProjectsUsecase,
     required this.getProjectByIdUsecase,
+    required this.getProjectByFreelancerIdUsecase,
   }) : super(ProjectInitial()) {
     on<GetAllProjectsEvent>(_onGetAllProjects);
     on<GetProjectByIdEvent>(_onGetProjectById);
+    on<GetProjectsByFreelancerIdEvent>(_onGetProjectsByFreelancer);
   }
 
   Future<void> _onGetAllProjects(
@@ -28,6 +32,21 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     emit(ProjectLoading());
     final Either<Failure, List<ProjectEntity>> result =
         await getAllProjectsUsecase(const NoParams());
+
+    result.fold(
+      (failure) => emit(ProjectError(_mapFailureToMessage(failure))),
+      (projects) => emit(ProjectsLoaded(projects)),
+    );
+  }
+
+  Future<void> _onGetProjectsByFreelancer(
+    GetProjectsByFreelancerIdEvent event,
+    Emitter<ProjectState> emit,
+  ) async {
+    emit(ProjectLoading());
+    final Either<Failure, List<ProjectEntity>> result =
+        await getProjectByFreelancerIdUsecase(
+            GetProjectsByFreelancerIdParams(freelancerId: event.freelancerId));
 
     result.fold(
       (failure) => emit(ProjectError(_mapFailureToMessage(failure))),
