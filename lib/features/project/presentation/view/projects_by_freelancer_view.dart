@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:projectsyeti/app/di/di.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
+import 'package:projectsyeti/features/project/presentation/view/provide_feedback_view.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 
 class ProjectsByFreelancerView extends StatefulWidget {
@@ -20,64 +20,61 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
   @override
   void initState() {
     super.initState();
-    context
-        .read<ProjectBloc>()
-        .add(GetProjectsByFreelancerIdEvent(widget.freelancerId));
+    final projectBloc = context.read<ProjectBloc>();
+    if (!projectBloc.isClosed) {
+      projectBloc.add(GetProjectsByFreelancerIdEvent(widget.freelancerId));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BlocProvider<ProjectBloc>(
-      create: (context) => getIt<ProjectBloc>(),
-      child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor,
-        appBar: AppBar(
-          title: const Text('Your Projects'),
-        ),
-        body: SafeArea(
-          child: BlocConsumer<ProjectBloc, ProjectState>(
-            listener: (context, state) {
-              if (state is ProjectUpdated) {
-                // Update the local projects list with the updated project
-                setState(() {
-                  projects = projects.map((project) {
-                    if (project.projectId == state.updatedProject.projectId) {
-                      return state.updatedProject;
-                    }
-                    return project;
-                  }).toList();
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Project updated successfully')),
-                );
-              } else if (state is ProjectError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is ProjectLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is ProjectsLoaded) {
-                projects = state.projects;
-                return _buildProjectList();
-              } else if (state is ProjectError) {
-                return Center(
-                  child: Text(
-                    "Error: ${state.message}",
-                    style: TextStyle(
-                      color: theme.colorScheme.error,
-                      fontSize: 18,
-                    ),
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: const Text('Your Projects'),
+      ),
+      body: SafeArea(
+        child: BlocConsumer<ProjectBloc, ProjectState>(
+          listener: (context, state) {
+            if (state is ProjectUpdated) {
+              setState(() {
+                projects = projects.map((project) {
+                  if (project.projectId == state.updatedProject.projectId) {
+                    return state.updatedProject;
+                  }
+                  return project;
+                }).toList();
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Project updated successfully')),
+              );
+            } else if (state is ProjectError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is ProjectLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ProjectsLoaded) {
+              projects = state.projects;
+              return _buildProjectList();
+            } else if (state is ProjectError) {
+              return Center(
+                child: Text(
+                  "Error: ${state.message}",
+                  style: TextStyle(
+                    color: theme.colorScheme.error,
+                    fontSize: 18,
                   ),
-                );
-              }
-              return const Center(child: Text("No Projects Available"));
-            },
-          ),
+                ),
+              );
+            }
+            return const Center(child: Text("No Projects Available"));
+          },
         ),
       ),
     );
@@ -135,7 +132,7 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  project.companyName,
+                  project.companyName ?? 'Unknown',
                   style: theme.textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 12),
@@ -152,7 +149,7 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                             isDarkTheme ? Colors.grey[400] : Colors.grey[600],
                       ),
                     ),
-                    _buildStatusDropdown(context, project),
+                    _buildStatusDropdown(project),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -182,12 +179,10 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
     );
   }
 
-  Widget _buildStatusDropdown(BuildContext context, ProjectEntity project) {
+  Widget _buildStatusDropdown(ProjectEntity project) {
     final theme = Theme.of(context);
-    final projectBloc = BlocProvider.of<ProjectBloc>(
-        context); // Capture the ProjectBloc instance
     final statuses = [
-      "awarded",
+      "To Do",
       "In Progress",
       "Feedback Requested",
       "Done",
@@ -209,17 +204,28 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
       onChanged: (newStatus) {
         if (newStatus != null && newStatus != project.status) {
           if (newStatus == "Feedback Requested") {
-            _showFeedbackModal(context, projectBloc, project, newStatus);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProvideFeedbackView(
+                  project: project,
+                  newStatus: newStatus,
+                ),
+              ),
+            );
           } else {
             // Update project status without feedback
             if (project.projectId != null) {
               final updatedProject = project.copyWith(
                 status: newStatus,
               );
-              projectBloc.add(UpdateProjectByIdEvent(
-                project.projectId!,
-                updatedProject,
-              ));
+              final projectBloc = context.read<ProjectBloc>();
+              if (!projectBloc.isClosed) {
+                projectBloc.add(UpdateProjectByIdEvent(
+                  project.projectId!,
+                  updatedProject,
+                ));
+              }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Project ID is missing")),
@@ -253,118 +259,9 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
     );
   }
 
-  void _showFeedbackModal(BuildContext context, ProjectBloc projectBloc,
-      ProjectEntity project, String newStatus) {
-    final theme = Theme.of(context);
-    final progressLinkController = TextEditingController();
-    final messageController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: Text(
-            "Provide Feedback - ${project.title}",
-            style: theme.textTheme.titleLarge,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Progress Link:",
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: progressLinkController,
-                decoration: InputDecoration(
-                  hintText: "Enter progress link...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.dividerColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.dividerColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.colorScheme.primary),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                "Message:",
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: messageController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  hintText: "Enter feedback message...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.dividerColor),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.dividerColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: theme.colorScheme.primary),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(
-                "Cancel",
-                style: TextStyle(color: theme.colorScheme.onSurface),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (project.projectId != null) {
-                  // Update project with feedback details
-                  final updatedProject = project.copyWith(
-                    status: newStatus,
-                    feedbackRequestedMessage: messageController.text,
-                    link: progressLinkController.text,
-                  );
-                  projectBloc.add(UpdateProjectByIdEvent(
-                    project.projectId!,
-                    updatedProject,
-                  ));
-                  Navigator.of(dialogContext).pop();
-                } else {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(content: Text("Project ID is missing")),
-                  );
-                }
-              },
-              style: theme.elevatedButtonTheme.style,
-              child: const Text("Save"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _showFeedback(ProjectEntity project) {
-    if (project.feedbackRequestedMessage != null &&
-        project.feedbackRequestedMessage!.isNotEmpty) {
+    if (project.feedbackRespondMessage != null &&
+        project.feedbackRespondMessage!.isNotEmpty) {
       showDialog(
         context: context,
         builder: (dialogContext) {
@@ -383,7 +280,7 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Message: ${project.feedbackRequestedMessage}",
+                  "Message: ${project.feedbackRespondMessage}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
@@ -404,7 +301,8 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No feedback available for this project")),
+        const SnackBar(
+            content: Text("No feedback response available for this project")),
       );
     }
   }

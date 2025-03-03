@@ -4,75 +4,71 @@ part 'update_project_by_id_dto.g.dart';
 
 @JsonSerializable()
 class UpdateProjectByIdDTO {
-  @JsonKey(name: 'projectId')
+  @JsonKey(name: '_id')
   final String projectId;
 
   @JsonKey(name: 'title')
-  final String title;
+  final String? title; // Allow null values safely
 
-  @JsonKey(name: 'companyId')
-  final String companyId;
-
-  @JsonKey(name: 'headquarters')
-  final String? headquarters;
+  @JsonKey(name: 'company')
+  final String? companyId; // Allow null values safely
 
   @JsonKey(name: 'companyName')
-  final String companyName;
-
-  @JsonKey(name: 'companyLogo')
-  final String companyLogo;
+  final String? companyName; // Allow null values safely
 
   @JsonKey(name: 'category')
-  final List<String> category;
+  final List<String>? category; // Ensure null safety for category
 
   @JsonKey(name: 'requirements')
-  final String requirements;
+  final String? requirements; // Allow null values safely
 
   @JsonKey(name: 'description')
-  final String description;
+  final String? description; // Allow null values safely
 
   @JsonKey(name: 'duration')
-  final String duration;
+  final String? duration; // Allow null values safely
 
   @JsonKey(name: 'postedDate')
-  final DateTime postedDate;
+  final DateTime? postedDate; // Allow null values safely
 
   @JsonKey(name: 'status')
-  final String status;
-
-  @JsonKey(name: 'bidCount')
-  final int bidCount;
+  final String? status; // Allow null values safely
 
   @JsonKey(name: 'awardedTo')
-  final String? awardedTo;
+  final String? awardedTo; // Keep nullable
 
   @JsonKey(name: 'feedbackRequestedMessage')
-  final String? feedbackRequestedMessage;
-
-  @JsonKey(name: 'link')
-  final String? link;
+  final String? feedbackRequestedMessage; // Keep nullable
 
   @JsonKey(name: 'feedbackRespondMessage')
-  final String? feedbackRespondMessage;
+  final String? feedbackRespondMessage; // Keep nullable
+
+  @JsonKey(name: 'link')
+  final String? link; // Keep nullable
+
+  @JsonKey(name: 'createdAt')
+  final DateTime? createdAt; // Allow null safety
+
+  @JsonKey(name: 'updatedAt')
+  final DateTime? updatedAt; // Allow null safety
 
   UpdateProjectByIdDTO({
     required this.projectId,
-    required this.title,
-    required this.companyId,
-    required this.companyName,
-    this.headquarters,
-    required this.companyLogo,
-    required this.category,
-    required this.requirements,
-    required this.description,
-    required this.duration,
-    required this.postedDate,
-    required this.status,
-    required this.bidCount,
+    this.title,
+    this.companyId,
+    this.companyName,
+    this.category,
+    this.requirements,
+    this.description,
+    this.duration,
+    this.postedDate,
+    this.status,
     this.awardedTo,
     this.feedbackRequestedMessage,
-    this.link,
     this.feedbackRespondMessage,
+    this.link,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory UpdateProjectByIdDTO.fromJson(Map<String, dynamic> json) =>

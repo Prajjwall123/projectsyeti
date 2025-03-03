@@ -54,6 +54,11 @@ class MyApp extends StatelessWidget {
               "/onboarding": (context) => const OnboardingView(),
               "/register": (context) => const RegisterView(),
               "/dashboard": (context) => const DashboardView(),
+              "/projects_by_freelancer": (context) {
+                final freelancerId =
+                    ModalRoute.of(context)!.settings.arguments as String;
+                return ProjectsByFreelancerView(freelancerId: freelancerId);
+              },
             },
           );
         }),

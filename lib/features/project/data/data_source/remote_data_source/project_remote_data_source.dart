@@ -210,6 +210,10 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         ProjectApiModel updatedProjectModel =
             ProjectApiModel.fromJson(response.data);
         debugPrint('Updated Project ID: ${updatedProjectModel.projectId}');
+
+        // Now fetch projects again by Freelancer ID to ensure updated data
+        final projectsResult = await getProjectsByFreelancerId(userId);
+
         return updatedProjectModel.toEntity();
       } else {
         throw Exception(response.statusMessage);

@@ -212,8 +212,8 @@ void _initProjectDependencies() {
         projectRepository: getIt<IProjectRepository>()),
   );
 
-  getIt.registerSingleton<ProjectBloc>(
-    ProjectBloc(
+  getIt.registerFactory<ProjectBloc>(
+    () => ProjectBloc(
       getAllProjectsUsecase: getIt<GetAllProjectsUsecase>(),
       getProjectByIdUsecase: getIt<GetProjectByIdUsecase>(),
       getProjectByFreelancerIdUsecase:
