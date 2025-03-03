@@ -13,75 +13,123 @@ class MockGetAllSkillsUsecase extends Mock implements GetAllSkillsUsecase {}
 class MockGetSkillByIdUsecase extends Mock implements GetSkillByIdUsecase {}
 
 void main() {
-  late GetAllSkillsUsecase getAllSkillsUsecase;
-  late GetSkillByIdUsecase getSkillByIdUsecase;
-  late SkillBloc skillBloc;
+  late MockGetAllSkillsUsecase mockGetAllSkillsUsecase;
+  late MockGetSkillByIdUsecase mockGetSkillByIdUsecase;
 
-  setUp(() {
-    getAllSkillsUsecase = MockGetAllSkillsUsecase();
-    getSkillByIdUsecase = MockGetSkillByIdUsecase();
-    skillBloc = SkillBloc(
-      getAllSkillsUsecase: getAllSkillsUsecase,
-      getSkillByIdUsecase: getSkillByIdUsecase,
-    );
-    registerFallbackValue(SkillState.initial());
+  // Test data
+  const tSkill = SkillEntity(skillId: '1', name: 'Test Skill');
+  const tSkill2 = SkillEntity(skillId: '2', name: 'Test Skill 2');
+  final tSkills = [tSkill, tSkill2];
+  const tFailure = ApiFailure(message: 'Something went wrong');
+
+  // Register fallback for GetSkillByIdParams
+  setUpAll(() {
+    registerFallbackValue(const GetSkillByIdParams(skillId: 'fake'));
   });
 
-  const skill1 = SkillEntity(skillId: '1', name: 'Flutter');
-  const skill2 = SkillEntity(skillId: '2', name: 'Dart');
-  final skillList = [skill1, skill2];
+  setUp(() {
+    mockGetAllSkillsUsecase = MockGetAllSkillsUsecase();
+    mockGetSkillByIdUsecase = MockGetSkillByIdUsecase();
+  });
 
-  blocTest<SkillBloc, SkillState>(
-    'emits [SkillState] with loaded skills when LoadSkills is added',
-    build: () {
-      when(() => getAllSkillsUsecase.call())
-          .thenAnswer((_) async => Right(skillList));
-      return skillBloc;
-    },
-    act: (bloc) => bloc.add(LoadSkills()),
-    expect: () => [
-      SkillState.initial().copyWith(isLoading: true, error: null),
-      SkillState.initial()
-          .copyWith(isLoading: false, skills: skillList, error: null),
-    ],
-    verify: (_) {
-      verify(() => getAllSkillsUsecase.call()).called(1);
-    },
-  );
+  group('SkillBloc with initial LoadSkills', () {
+    blocTest<SkillBloc, SkillState>(
+      'emits [loading, success] when initial LoadSkills succeeds',
+      build: () {
+        when(() => mockGetAllSkillsUsecase.call())
+            .thenAnswer((_) async => Right(tSkills));
+        return SkillBloc(
+          getAllSkillsUsecase: mockGetAllSkillsUsecase,
+          getSkillByIdUsecase: mockGetSkillByIdUsecase,
+        );
+      },
+      expect: () => [
+        SkillState.initial().copyWith(isLoading: true),
+        SkillState.initial().copyWith(skills: tSkills, isLoading: false),
+      ],
+      verify: (_) {
+        verify(() => mockGetAllSkillsUsecase.call()).called(1);
+      },
+    );
 
-  blocTest<SkillBloc, SkillState>(
-    'emits [SkillState] with loaded skills when LoadSkills is added with skip 1',
-    build: () {
-      when(() => getAllSkillsUsecase.call())
-          .thenAnswer((_) async => Right(skillList));
-      return skillBloc;
-    },
-    act: (bloc) => bloc.add(LoadSkills()),
-    skip: 1,
-    expect: () => [
-      SkillState.initial()
-          .copyWith(isLoading: false, skills: skillList, error: null),
-    ],
-    verify: (_) {
-      verify(() => getAllSkillsUsecase.call()).called(1);
-    },
-  );
+    blocTest<SkillBloc, SkillState>(
+      'emits [loading, error] when initial LoadSkills fails',
+      build: () {
+        when(() => mockGetAllSkillsUsecase.call())
+            .thenAnswer((_) async => const Left(tFailure));
+        return SkillBloc(
+          getAllSkillsUsecase: mockGetAllSkillsUsecase,
+          getSkillByIdUsecase: mockGetSkillByIdUsecase,
+        );
+      },
+      expect: () => [
+        SkillState.initial().copyWith(isLoading: true),
+        SkillState.initial()
+            .copyWith(isLoading: false, error: tFailure.message),
+      ],
+      verify: (_) {
+        verify(() => mockGetAllSkillsUsecase.call()).called(1);
+      },
+    );
 
-  blocTest<SkillBloc, SkillState>(
-    'emits [SkillState] with error when LoadSkills fails',
-    build: () {
-      when(() => getAllSkillsUsecase.call()).thenAnswer(
-          (_) async => const Left(ApiFailure(message: 'Error loading skills')));
-      return skillBloc;
-    },
-    act: (bloc) => bloc.add(LoadSkills()),
-    expect: () => [
-      SkillState.initial().copyWith(isLoading: true, error: null),
-      SkillState.initial()
-          .copyWith(isLoading: false, error: 'Error loading skills'),
-    ],
-    verify: (_) {
-      verify(() => getAllSkillsUsecase.call()).called(1);
-    },
-  );
+    blocTest<SkillBloc, SkillState>(
+      'handles GetSkillById after successful initial load',
+      build: () {
+        when(() => mockGetAllSkillsUsecase.call())
+            .thenAnswer((_) async => Right(tSkills));
+        when(() => mockGetSkillByIdUsecase.call(any()))
+            .thenAnswer((_) async => const Right(tSkill));
+        return SkillBloc(
+          getAllSkillsUsecase: mockGetAllSkillsUsecase,
+          getSkillByIdUsecase: mockGetSkillByIdUsecase,
+        );
+      },
+      act: (bloc) => bloc.add(const GetSkillByIdEvent('1')),
+      expect: () => [
+        SkillState.initial().copyWith(isLoading: true),
+        SkillState.initial().copyWith(skills: tSkills, isLoading: false),
+        SkillState.initial().copyWith(skills: tSkills, isLoading: true),
+        SkillState.initial().copyWith(
+          skills: tSkills,
+          selectedSkill: tSkill,
+          isLoading: false,
+        ), // GetSkillById success
+      ],
+      verify: (_) {
+        verify(() => mockGetAllSkillsUsecase.call()).called(1);
+        verify(() => mockGetSkillByIdUsecase
+            .call(const GetSkillByIdParams(skillId: '1'))).called(1);
+      },
+    );
+
+    blocTest<SkillBloc, SkillState>(
+      'handles GetSkillById failure after successful initial load',
+      build: () {
+        when(() => mockGetAllSkillsUsecase.call())
+            .thenAnswer((_) async => Right(tSkills));
+        when(() => mockGetSkillByIdUsecase.call(any()))
+            .thenAnswer((_) async => const Left(tFailure));
+        return SkillBloc(
+          getAllSkillsUsecase: mockGetAllSkillsUsecase,
+          getSkillByIdUsecase: mockGetSkillByIdUsecase,
+        );
+      },
+      act: (bloc) => bloc.add(const GetSkillByIdEvent('1')),
+      expect: () => [
+        SkillState.initial().copyWith(isLoading: true),
+        SkillState.initial().copyWith(skills: tSkills, isLoading: false),
+        SkillState.initial().copyWith(skills: tSkills, isLoading: true),
+        SkillState.initial().copyWith(
+          skills: tSkills,
+          isLoading: false,
+          error: tFailure.message,
+        ), // GetSkillById failure
+      ],
+      verify: (_) {
+        verify(() => mockGetAllSkillsUsecase.call()).called(1);
+        verify(() => mockGetSkillByIdUsecase
+            .call(const GetSkillByIdParams(skillId: '1'))).called(1);
+      },
+    );
+  });
 }

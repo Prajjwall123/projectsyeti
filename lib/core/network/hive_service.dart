@@ -1,4 +1,3 @@
-
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:projectsyeti/features/auth/data/model/auth_hive_model.dart';
@@ -8,14 +7,13 @@ class HiveService {
     var directory = await getApplicationDocumentsDirectory();
     var path = '${directory.path}/projectsyeti2.db';
 
-    Hive.init(path);//initializing database
+    Hive.init(path);
 
-    Hive.registerAdapter(UserHiveModelAdapter());//creates box(table) in the database
+    Hive.registerAdapter(UserHiveModelAdapter());
   }
 
-
   Future<void> addUser(UserHiveModel user) async {
-    var box = await Hive.openBox<UserHiveModel>('userBox');//openbox is responsible for reading row of the table
+    var box = await Hive.openBox<UserHiveModel>('userBox');
     await box.put(user.id, user);
   }
 
@@ -36,7 +34,7 @@ class HiveService {
         (user) => user.email == email && user.password == password,
       );
     } catch (e) {
-      return null; 
+      return null;
     }
   }
 
