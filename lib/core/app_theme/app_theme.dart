@@ -7,7 +7,7 @@ ThemeData getApplicationTheme() {
     colorScheme: const ColorScheme.light(
       primary: Color(0xFF1976D2),
       secondary: Color.fromARGB(255, 225, 232, 243),
-      surface: Color(0xFFF5F5F5), // Light background
+      // surface: Color(0xFFF5F5F5), // Light background
     ),
     fontFamily: 'Montserrat Regular',
 
