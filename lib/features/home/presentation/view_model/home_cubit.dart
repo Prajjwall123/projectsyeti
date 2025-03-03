@@ -111,4 +111,9 @@ class HomeCubit extends Cubit<HomeState> {
     // Navigate to Login Screen
     Navigator.pushReplacementNamed(context, '/login');
   }
+
+  // New method to set the selected skill for filtering
+  void setSelectedSkill(String? skill) {
+    emit(state.copyWith(selectedSkill: skill));
+  }
 }

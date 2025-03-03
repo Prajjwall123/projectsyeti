@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:projectsyeti/app/widgets/my_card.dart';
 import 'package:projectsyeti/app/widgets/my_tag.dart';
@@ -262,22 +263,63 @@ class _HomeViewState extends State<HomeView> {
       height: 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: state.skills.map((skill) {
-          return MyTag(
-            skill: skill,
-            backgroundColor: const Color(0xFF001F3F),
-            textColor: Colors.white,
-            borderColor: Colors.white,
-          );
-        }).toList(),
+        children: [
+          // Add an "All" tag to clear the filter
+          GestureDetector(
+            onTap: () {
+              context.read<HomeCubit>().setSelectedSkill(null); // Clear filter
+            },
+            child: MyTag(
+              skill: const SkillEntity(name: "All"),
+              backgroundColor: state.selectedSkill == null
+                  ? Colors.blue // Highlight if no filter is applied
+                  : const Color(0xFF001F3F),
+              textColor: Colors.white,
+              borderColor: Colors.white,
+            ),
+          ),
+          const SizedBox(width: 8),
+          ...state.skills.map((skill) {
+            return GestureDetector(
+              onTap: () {
+                context.read<HomeCubit>().setSelectedSkill(skill.name);
+              },
+              child: MyTag(
+                skill: skill,
+                backgroundColor: state.selectedSkill == skill.name
+                    ? Colors.blue // Highlight the selected tag
+                    : const Color(0xFF001F3F),
+                textColor: Colors.white,
+                borderColor: Colors.white,
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
 
   /// **🔹 Projects List**
   Widget _buildProjectList(HomeState state) {
+    // Filter projects based on the selected skill
+    final filteredProjects = state.selectedSkill == null
+        ? state.projects // Show all projects if no skill is selected
+        : state.projects
+            .where((project) => project.category.contains(state.selectedSkill))
+            .toList();
+
+    if (filteredProjects.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(20.0),
+        child: Text(
+          'No projects found for this category.',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
     return Column(
-      children: state.projects.map((project) {
+      children: filteredProjects.map((project) {
         return Column(
           children: [
             MyCard(project: project),

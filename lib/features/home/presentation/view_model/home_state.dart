@@ -13,6 +13,7 @@ class HomeState extends Equatable {
   final bool isLoggingOut;
   final String? errorMessage;
   final String? skillsErrorMessage;
+  final String? selectedSkill; // Add this field to track the selected skill
 
   const HomeState({
     required this.selectedIndex,
@@ -24,6 +25,7 @@ class HomeState extends Equatable {
     required this.isLoggingOut,
     this.errorMessage,
     this.skillsErrorMessage,
+    this.selectedSkill, // Initialize as null by default (no filter)
   });
 
   static HomeState initial() {
@@ -37,6 +39,7 @@ class HomeState extends Equatable {
       isLoggingOut: false,
       errorMessage: null,
       skillsErrorMessage: null,
+      selectedSkill: null,
     );
   }
 
@@ -50,6 +53,7 @@ class HomeState extends Equatable {
     bool? isLoggingOut,
     String? errorMessage,
     String? skillsErrorMessage,
+    String? selectedSkill,
   }) {
     return HomeState(
       selectedIndex: selectedIndex ?? this.selectedIndex,
@@ -61,6 +65,7 @@ class HomeState extends Equatable {
       isLoggingOut: isLoggingOut ?? this.isLoggingOut,
       errorMessage: errorMessage,
       skillsErrorMessage: skillsErrorMessage,
+      selectedSkill: selectedSkill,
     );
   }
 
@@ -75,5 +80,6 @@ class HomeState extends Equatable {
         isLoggingOut,
         errorMessage,
         skillsErrorMessage,
+        selectedSkill, // Add to props for Equatable
       ];
 }
