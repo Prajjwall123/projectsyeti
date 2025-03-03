@@ -10,7 +10,8 @@ import 'package:projectsyeti/features/bidding/presentation/viewmodel/bidding_blo
 class MockCreateBidUseCase extends Mock implements CreateBidUseCase {}
 
 void main() {
-  late MockCreateBidUseCase mockCreateBidUseCase;
+  late CreateBidUseCase mockCreateBidUseCase;
+  late BiddingBloc biddingBloc;
 
   // Test data
   const tFreelancer = 'f1';
@@ -20,8 +21,11 @@ void main() {
   final tFile = File('test.pdf');
   const tFailure = ApiFailure(message: 'Something went wrong');
 
-  // Register fallbacks
-  setUpAll(() {
+  setUp(() {
+    mockCreateBidUseCase = MockCreateBidUseCase();
+    biddingBloc = BiddingBloc(createBidUsecase: mockCreateBidUseCase);
+
+    // Register fallbacks
     registerFallbackValue(CreateBidParams(
       freelancer: 'fake',
       project: 'fake',
@@ -31,58 +35,75 @@ void main() {
     ));
   });
 
-  setUp(() {
-    mockCreateBidUseCase = MockCreateBidUseCase();
-  });
+  blocTest<BiddingBloc, BiddingState>(
+    'emits [BiddingState] with loading and success when CreateBid succeeds',
+    build: () {
+      when(() => mockCreateBidUseCase(any()))
+          .thenAnswer((_) async => const Right(null));
+      return biddingBloc;
+    },
+    act: (bloc) => bloc.add(CreateBidEvent(
+      freelancer: tFreelancer,
+      project: tProject,
+      amount: tAmount,
+      message: tMessage,
+      file: tFile,
+    )),
+    expect: () => [
+      BiddingState.initial().copyWith(isLoading: true),
+      BiddingState.initial().copyWith(isLoading: false),
+    ],
+    verify: (_) {
+      verify(() => mockCreateBidUseCase(any())).called(1);
+    },
+  );
 
-  group('BiddingBloc', () {
-    blocTest<BiddingBloc, BiddingState>(
-      'emits [loading, success] when CreateBid succeeds',
-      build: () {
-        when(() => mockCreateBidUseCase(any()))
-            .thenAnswer((_) async => const Right(null));
-        return BiddingBloc(createBidUsecase: mockCreateBidUseCase);
-      },
-      act: (bloc) => bloc.add(CreateBidEvent(
-        freelancer: tFreelancer,
-        project: tProject,
-        amount: tAmount,
-        message: tMessage,
-        file: tFile,
-      )),
-      expect: () => [
-        BiddingState.initial().copyWith(isLoading: true),
-        BiddingState.initial().copyWith(isLoading: false),
-      ],
-      verify: (_) {
-        verify(() => mockCreateBidUseCase(any())).called(1);
-      },
-    );
+  blocTest<BiddingBloc, BiddingState>(
+    'emits [BiddingState] with success when CreateBid succeeds with skip 1',
+    build: () {
+      when(() => mockCreateBidUseCase(any()))
+          .thenAnswer((_) async => const Right(null));
+      return biddingBloc;
+    },
+    act: (bloc) => bloc.add(CreateBidEvent(
+      freelancer: tFreelancer,
+      project: tProject,
+      amount: tAmount,
+      message: tMessage,
+      file: tFile,
+    )),
+    skip: 1,
+    expect: () => [
+      BiddingState.initial().copyWith(isLoading: false),
+    ],
+    verify: (_) {
+      verify(() => mockCreateBidUseCase(any())).called(1);
+    },
+  );
 
-    blocTest<BiddingBloc, BiddingState>(
-      'emits [loading, error] when CreateBid fails',
-      build: () {
-        when(() => mockCreateBidUseCase(any()))
-            .thenAnswer((_) async => const Left(tFailure));
-        return BiddingBloc(createBidUsecase: mockCreateBidUseCase);
-      },
-      act: (bloc) => bloc.add(CreateBidEvent(
-        freelancer: tFreelancer,
-        project: tProject,
-        amount: tAmount,
-        message: tMessage,
-        file: tFile,
-      )),
-      expect: () => [
-        BiddingState.initial().copyWith(isLoading: true),
-        BiddingState.initial().copyWith(
-          isLoading: false,
-          error: tFailure.message,
-        ),
-      ],
-      verify: (_) {
-        verify(() => mockCreateBidUseCase(any())).called(1);
-      },
-    );
-  });
+  blocTest<BiddingBloc, BiddingState>(
+    'emits [BiddingState] with error when CreateBid fails',
+    build: () {
+      when(() => mockCreateBidUseCase(any()))
+          .thenAnswer((_) async => const Left(tFailure));
+      return biddingBloc;
+    },
+    act: (bloc) => bloc.add(CreateBidEvent(
+      freelancer: tFreelancer,
+      project: tProject,
+      amount: tAmount,
+      message: tMessage,
+      file: tFile,
+    )),
+    expect: () => [
+      BiddingState.initial().copyWith(isLoading: true),
+      BiddingState.initial().copyWith(
+        isLoading: false,
+        error: tFailure.message,
+      ),
+    ],
+    verify: (_) {
+      verify(() => mockCreateBidUseCase(any())).called(1);
+    },
+  );
 }

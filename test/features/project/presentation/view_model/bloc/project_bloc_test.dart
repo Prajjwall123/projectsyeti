@@ -21,11 +21,11 @@ class MockUpdateProjectByIdUsecase extends Mock
     implements UpdateProjectByIdUsecase {}
 
 void main() {
-  late MockGetAllProjectsUsecase mockGetAllProjectsUsecase;
-  late MockGetProjectByIdUsecase mockGetProjectByIdUsecase;
-  late MockGetProjectsByFreelancerIdUsecase
-      mockGetProjectsByFreelancerIdUsecase;
-  late MockUpdateProjectByIdUsecase mockUpdateProjectByIdUsecase;
+  late GetAllProjectsUsecase mockGetAllProjectsUsecase;
+  late GetProjectByIdUsecase mockGetProjectByIdUsecase;
+  late GetProjectsByFreelancerIdUsecase mockGetProjectsByFreelancerIdUsecase;
+  late UpdateProjectByIdUsecase mockUpdateProjectByIdUsecase;
+  late ProjectBloc projectBloc;
 
   // Test data
   final DateTime testDate = DateTime(2025, 12, 31);
@@ -70,8 +70,21 @@ void main() {
   final tProjects = [tProject, tProject2];
   const tFailure = ApiFailure(message: 'Something went wrong');
 
-  // Register fallbacks
-  setUpAll(() {
+  setUp(() {
+    mockGetAllProjectsUsecase = MockGetAllProjectsUsecase();
+    mockGetProjectByIdUsecase = MockGetProjectByIdUsecase();
+    mockGetProjectsByFreelancerIdUsecase =
+        MockGetProjectsByFreelancerIdUsecase();
+    mockUpdateProjectByIdUsecase = MockUpdateProjectByIdUsecase();
+
+    projectBloc = ProjectBloc(
+      getAllProjectsUsecase: mockGetAllProjectsUsecase,
+      getProjectByIdUsecase: mockGetProjectByIdUsecase,
+      getProjectByFreelancerIdUsecase: mockGetProjectsByFreelancerIdUsecase,
+      updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
+    );
+
+    // Register fallbacks
     registerFallbackValue(const GetProjectByIdParams(projectId: 'fake'));
     registerFallbackValue(
         const GetProjectsByFreelancerIdParams(freelancerId: 'fake'));
@@ -80,105 +93,92 @@ void main() {
     registerFallbackValue(const NoParams());
   });
 
-  setUp(() {
-    mockGetAllProjectsUsecase = MockGetAllProjectsUsecase();
-    mockGetProjectByIdUsecase = MockGetProjectByIdUsecase();
-    mockGetProjectsByFreelancerIdUsecase =
-        MockGetProjectsByFreelancerIdUsecase();
-    mockUpdateProjectByIdUsecase = MockUpdateProjectByIdUsecase();
-  });
+  blocTest<ProjectBloc, ProjectState>(
+    'emits [ProjectLoading, ProjectsLoaded] when GetAllProjects succeeds',
+    build: () {
+      when(() => mockGetAllProjectsUsecase(any()))
+          .thenAnswer((_) async => Right(tProjects));
+      return projectBloc;
+    },
+    act: (bloc) => bloc.add(GetAllProjectsEvent()),
+    expect: () => [
+      ProjectLoading(),
+      ProjectsLoaded(tProjects),
+    ],
+    verify: (_) {
+      verify(() => mockGetAllProjectsUsecase(const NoParams())).called(1);
+    },
+  );
 
-  group('ProjectBloc', () {
-    blocTest<ProjectBloc, ProjectState>(
-      'emits [loading, success] when GetAllProjects succeeds',
-      build: () {
-        when(() => mockGetAllProjectsUsecase(any()))
-            .thenAnswer((_) async => Right(tProjects));
-        return ProjectBloc(
-          getAllProjectsUsecase: mockGetAllProjectsUsecase,
-          getProjectByIdUsecase: mockGetProjectByIdUsecase,
-          getProjectByFreelancerIdUsecase: mockGetProjectsByFreelancerIdUsecase,
-          updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
-        );
-      },
-      act: (bloc) => bloc.add(GetAllProjectsEvent()),
-      expect: () => [
-        ProjectLoading(),
-        ProjectsLoaded(tProjects),
-      ],
-      verify: (_) {
-        verify(() => mockGetAllProjectsUsecase(const NoParams())).called(1);
-      },
-    );
+  blocTest<ProjectBloc, ProjectState>(
+    'emits [ProjectsLoaded] when GetAllProjects succeeds with skip 1',
+    build: () {
+      when(() => mockGetAllProjectsUsecase(any()))
+          .thenAnswer((_) async => Right(tProjects));
+      return projectBloc;
+    },
+    act: (bloc) => bloc.add(GetAllProjectsEvent()),
+    skip: 1,
+    expect: () => [
+      ProjectsLoaded(tProjects),
+    ],
+    verify: (_) {
+      verify(() => mockGetAllProjectsUsecase(const NoParams())).called(1);
+    },
+  );
 
-    blocTest<ProjectBloc, ProjectState>(
-      'emits [loading, error] when GetAllProjects fails',
-      build: () {
-        when(() => mockGetAllProjectsUsecase(any()))
-            .thenAnswer((_) async => const Left(tFailure));
-        return ProjectBloc(
-          getAllProjectsUsecase: mockGetAllProjectsUsecase,
-          getProjectByIdUsecase: mockGetProjectByIdUsecase,
-          getProjectByFreelancerIdUsecase: mockGetProjectsByFreelancerIdUsecase,
-          updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
-        );
-      },
-      act: (bloc) => bloc.add(GetAllProjectsEvent()),
-      expect: () => [
-        ProjectLoading(),
-        const ProjectError('Something went wrong'),
-      ],
-      verify: (_) {
-        verify(() => mockGetAllProjectsUsecase(const NoParams())).called(1);
-      },
-    );
+  blocTest<ProjectBloc, ProjectState>(
+    'emits [ProjectLoading, ProjectError] when GetAllProjects fails',
+    build: () {
+      when(() => mockGetAllProjectsUsecase(any()))
+          .thenAnswer((_) async => const Left(tFailure));
+      return projectBloc;
+    },
+    act: (bloc) => bloc.add(GetAllProjectsEvent()),
+    expect: () => [
+      ProjectLoading(),
+      const ProjectError('Something went wrong'),
+    ],
+    verify: (_) {
+      verify(() => mockGetAllProjectsUsecase(const NoParams())).called(1);
+    },
+  );
 
-    blocTest<ProjectBloc, ProjectState>(
-      'emits [loading, success] when GetProjectsByFreelancerId succeeds',
-      build: () {
-        when(() => mockGetProjectsByFreelancerIdUsecase(any()))
-            .thenAnswer((_) async => Right(tProjects));
-        return ProjectBloc(
-          getAllProjectsUsecase: mockGetAllProjectsUsecase,
-          getProjectByIdUsecase: mockGetProjectByIdUsecase,
-          getProjectByFreelancerIdUsecase: mockGetProjectsByFreelancerIdUsecase,
-          updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
-        );
-      },
-      act: (bloc) => bloc.add(const GetProjectsByFreelancerIdEvent('f1')),
-      expect: () => [
-        ProjectLoading(),
-        ProjectsLoaded(tProjects),
-      ],
-      verify: (_) {
-        verify(() => mockGetProjectsByFreelancerIdUsecase(
-              const GetProjectsByFreelancerIdParams(freelancerId: 'f1'),
-            )).called(1);
-      },
-    );
+  blocTest<ProjectBloc, ProjectState>(
+    'emits [ProjectLoading, ProjectsLoaded] when GetProjectsByFreelancerId succeeds',
+    build: () {
+      when(() => mockGetProjectsByFreelancerIdUsecase(any()))
+          .thenAnswer((_) async => Right(tProjects));
+      return projectBloc;
+    },
+    act: (bloc) => bloc.add(const GetProjectsByFreelancerIdEvent('f1')),
+    expect: () => [
+      ProjectLoading(),
+      ProjectsLoaded(tProjects),
+    ],
+    verify: (_) {
+      verify(() => mockGetProjectsByFreelancerIdUsecase(
+            const GetProjectsByFreelancerIdParams(freelancerId: 'f1'),
+          )).called(1);
+    },
+  );
 
-    blocTest<ProjectBloc, ProjectState>(
-      'emits [loading, success] when GetProjectById succeeds',
-      build: () {
-        when(() => mockGetProjectByIdUsecase(any()))
-            .thenAnswer((_) async => Right(tProject));
-        return ProjectBloc(
-          getAllProjectsUsecase: mockGetAllProjectsUsecase,
-          getProjectByIdUsecase: mockGetProjectByIdUsecase,
-          getProjectByFreelancerIdUsecase: mockGetProjectsByFreelancerIdUsecase,
-          updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
-        );
-      },
-      act: (bloc) => bloc.add(const GetProjectByIdEvent('1')),
-      expect: () => [
-        ProjectLoading(),
-        ProjectLoaded(tProject),
-      ],
-      verify: (_) {
-        verify(() => mockGetProjectByIdUsecase(
-              const GetProjectByIdParams(projectId: '1'),
-            )).called(1);
-      },
-    );
-  });
+  blocTest<ProjectBloc, ProjectState>(
+    'emits [ProjectLoading, ProjectLoaded] when GetProjectById succeeds',
+    build: () {
+      when(() => mockGetProjectByIdUsecase(any()))
+          .thenAnswer((_) async => Right(tProject));
+      return projectBloc;
+    },
+    act: (bloc) => bloc.add(const GetProjectByIdEvent('1')),
+    expect: () => [
+      ProjectLoading(),
+      ProjectLoaded(tProject),
+    ],
+    verify: (_) {
+      verify(() => mockGetProjectByIdUsecase(
+            const GetProjectByIdParams(projectId: '1'),
+          )).called(1);
+    },
+  );
 }
