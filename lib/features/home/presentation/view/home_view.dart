@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:projectsyeti/app/widgets/my_card.dart';
@@ -24,6 +25,8 @@ class _HomeViewState extends State<HomeView> {
   final List<StreamSubscription<dynamic>> _streamSubscriptions = [];
   bool _isLoggingOut = false;
   bool _isNear = false;
+  final TextEditingController _searchController =
+      TextEditingController(); // Add this for search
 
   @override
   void initState() {
@@ -34,6 +37,11 @@ class _HomeViewState extends State<HomeView> {
 
     _listenToAccelerometer();
     _listenToProximitySensor();
+
+    // Listen to changes in the search bar to trigger rebuilds
+    _searchController.addListener(() {
+      setState(() {}); // Rebuild the UI when the search query changes
+    });
   }
 
   /// **🔹 Shake to Logout**
@@ -90,6 +98,7 @@ class _HomeViewState extends State<HomeView> {
     for (final subscription in _streamSubscriptions) {
       subscription.cancel();
     }
+    _searchController.dispose(); // Dispose of the controller
     super.dispose();
   }
 
@@ -167,18 +176,27 @@ class _HomeViewState extends State<HomeView> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey[300]!),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.search, color: Colors.grey),
-                SizedBox(width: 8),
+                const Icon(Icons.search, color: Colors.grey),
+                const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _searchController, // Attach the controller
+                    decoration: const InputDecoration(
                       hintText: 'Search Projects',
                       border: InputBorder.none,
                     ),
                   ),
                 ),
+                if (_searchController
+                    .text.isNotEmpty) // Show clear button if there's text
+                  IconButton(
+                    icon: const Icon(Icons.clear, color: Colors.grey),
+                    onPressed: () {
+                      _searchController.clear(); // Clear the search bar
+                    },
+                  ),
               ],
             ),
           ),
@@ -301,18 +319,33 @@ class _HomeViewState extends State<HomeView> {
 
   /// **🔹 Projects List**
   Widget _buildProjectList(HomeState state) {
-    // Filter projects based on the selected skill
-    final filteredProjects = state.selectedSkill == null
-        ? state.projects // Show all projects if no skill is selected
-        : state.projects
-            .where((project) => project.category.contains(state.selectedSkill))
-            .toList();
+    // Start with all projects
+    List<ProjectEntity> filteredProjects = state.projects;
+
+    // Apply skill filter if a skill is selected
+    if (state.selectedSkill != null) {
+      filteredProjects = filteredProjects
+          .where((project) => project.category
+              .map((cat) => cat.toLowerCase())
+              .contains(state.selectedSkill!.toLowerCase()))
+          .toList();
+    }
+
+    // Apply search filter if there's a search query
+    final String searchQuery = _searchController.text.trim().toLowerCase();
+    if (searchQuery.isNotEmpty) {
+      filteredProjects = filteredProjects.where((project) {
+        return project.title.toLowerCase().contains(searchQuery) ||
+            project.description.toLowerCase().contains(searchQuery) ||
+            project.companyName.toLowerCase().contains(searchQuery);
+      }).toList();
+    }
 
     if (filteredProjects.isEmpty) {
       return const Padding(
         padding: EdgeInsets.all(20.0),
         child: Text(
-          'No projects found for this category.',
+          'No projects found.',
           style: TextStyle(fontSize: 16, color: Colors.grey),
         ),
       );
