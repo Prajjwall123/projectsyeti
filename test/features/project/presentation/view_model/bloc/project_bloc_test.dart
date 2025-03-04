@@ -27,45 +27,44 @@ void main() {
   late UpdateProjectByIdUsecase mockUpdateProjectByIdUsecase;
   late ProjectBloc projectBloc;
 
-  // Test data
   final DateTime testDate = DateTime(2025, 12, 31);
   final tProject = ProjectEntity(
-    projectId: '1',
-    companyId: 'c1',
-    companyName: 'Test Company',
+    projectId: '67b381e3d7829584c1e3bb5',
+    companyId: '679e52a2570ca2c950216916',
+    companyName: 'Sanima bank',
     companyLogo: 'logo.png',
-    headquarters: 'Test HQ',
-    title: 'Test Project',
-    category: const ['cat1', 'cat2'],
-    requirements: 'Test Requirements',
-    description: 'Test Description',
-    duration: '3 months',
-    postedDate: testDate,
-    status: 'active',
-    bidCount: 5,
-    awardedTo: 'f1',
-    feedbackRequestedMessage: 'Please provide feedback',
-    link: 'http://example.com',
-    feedbackRespondMessage: 'Thanks for the feedback',
+    title: 'Mobile application for Sanima bank',
+    category: const ['679b4fe07deac15d47c7ce1', '67b6db3777717ee983c47339'],
+    requirements: 'Implement JWT authentication',
+    description:
+        'Sanima bank, one of Nepals leading commercial banks is looking for a ...',
+    duration: '12 months',
+    postedDate: DateTime.parse('2025-02-22'),
+    status: 'In Progress',
+    bidCount: 0,
+    awardedTo: '679e5d8f4e658cfacb72a07d',
+    feedbackRequestedMessage: 'Please give me feedback for this',
+    link: 'github.com',
+    feedbackRespondMessage: 'Please add this new feature',
   );
   final tProject2 = ProjectEntity(
-    projectId: '2',
-    companyId: 'c2',
-    companyName: 'Test Company 2',
-    companyLogo: 'logo2.png',
-    headquarters: 'Test HQ 2',
-    title: 'Test Project 2',
-    category: const ['cat3', 'cat4'],
-    requirements: 'Test Requirements 2',
-    description: 'Test Description 2',
-    duration: '6 months',
-    postedDate: testDate,
-    status: 'active',
-    bidCount: 3,
-    awardedTo: 'f2',
-    feedbackRequestedMessage: 'Please provide feedback 2',
-    link: 'http://example2.com',
-    feedbackRespondMessage: 'Thanks for the feedback 2',
+    projectId: '67c301e3e9a44af433df4de',
+    companyId: '679e52a2570ca2c950216916',
+    companyName: 'AI-Powered Resume Screening System',
+    companyLogo: 'logo.png',
+    title: 'AI-Powered Resume Screening System',
+    category: const ['679b4fe07deac15d47c7ce1', '67b6db3777717ee983c47339'],
+    requirements: 'Custom product filtering & search (...',
+    description:
+        'Looking for an AI system that can analyze resumes and shortlist candid...',
+    duration: '8',
+    postedDate: DateTime.parse('2025-03-01T12:47:31.952+00:00'),
+    status: 'Feedback Requested',
+    bidCount: 0,
+    awardedTo: '679e5d8f4e658cfacb72a07d',
+    feedbackRequestedMessage: 'Please give me some feedback',
+    link: 'link',
+    feedbackRespondMessage: 'it is good',
   );
   final tProjects = [tProject, tProject2];
   const tFailure = ApiFailure(message: 'Something went wrong');
@@ -84,12 +83,11 @@ void main() {
       updateProjectByIdUsecase: mockUpdateProjectByIdUsecase,
     );
 
-    // Register fallbacks
-    registerFallbackValue(const GetProjectByIdParams(projectId: 'fake'));
+    registerFallbackValue(const GetProjectByIdParams(projectId: 'test'));
     registerFallbackValue(
-        const GetProjectsByFreelancerIdParams(freelancerId: 'fake'));
+        const GetProjectsByFreelancerIdParams(freelancerId: 'test'));
     registerFallbackValue(
-        UpdateProjectByIdParams(projectId: 'fake', updatedProject: tProject));
+        UpdateProjectByIdParams(projectId: 'test', updatedProject: tProject));
     registerFallbackValue(const NoParams());
   });
 

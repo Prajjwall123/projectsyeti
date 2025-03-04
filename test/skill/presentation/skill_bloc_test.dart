@@ -16,13 +16,11 @@ void main() {
   late MockGetAllSkillsUsecase mockGetAllSkillsUsecase;
   late MockGetSkillByIdUsecase mockGetSkillByIdUsecase;
 
-  // Test data
   const tSkill = SkillEntity(skillId: '1', name: 'Test Skill');
   const tSkill2 = SkillEntity(skillId: '2', name: 'Test Skill 2');
   final tSkills = [tSkill, tSkill2];
   const tFailure = ApiFailure(message: 'Something went wrong');
 
-  // Register fallback for GetSkillByIdParams
   setUpAll(() {
     registerFallbackValue(const GetSkillByIdParams(skillId: 'fake'));
   });
@@ -93,7 +91,7 @@ void main() {
           skills: tSkills,
           selectedSkill: tSkill,
           isLoading: false,
-        ), // GetSkillById success
+        ),
       ],
       verify: (_) {
         verify(() => mockGetAllSkillsUsecase.call()).called(1);
@@ -123,7 +121,7 @@ void main() {
           skills: tSkills,
           isLoading: false,
           error: tFailure.message,
-        ), // GetSkillById failure
+        ),
       ],
       verify: (_) {
         verify(() => mockGetAllSkillsUsecase.call()).called(1);

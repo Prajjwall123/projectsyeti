@@ -13,9 +13,8 @@ void main() {
   late CreateBidUseCase mockCreateBidUseCase;
   late BiddingBloc biddingBloc;
 
-  // Test data
-  const tFreelancer = 'f1';
-  const tProject = 'p1';
+  const tFreelancer = 'freelancer 1';
+  const tProject = 'project 1';
   const tAmount = 1000.0;
   const tMessage = 'Test bid message';
   final tFile = File('test.pdf');
@@ -25,13 +24,12 @@ void main() {
     mockCreateBidUseCase = MockCreateBidUseCase();
     biddingBloc = BiddingBloc(createBidUsecase: mockCreateBidUseCase);
 
-    // Register fallbacks
     registerFallbackValue(CreateBidParams(
-      freelancer: 'fake',
-      project: 'fake',
+      freelancer: 'test',
+      project: 'test',
       amount: 0.0,
-      message: 'fake',
-      file: File('fake'),
+      message: 'test',
+      file: File('test'),
     ));
   });
 
