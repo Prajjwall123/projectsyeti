@@ -17,13 +17,66 @@ class ProjectView extends StatefulWidget {
   State<ProjectView> createState() => _ProjectViewState();
 }
 
-class _ProjectViewState extends State<ProjectView> {
+class _ProjectViewState extends State<ProjectView>
+    with SingleTickerProviderStateMixin {
   late TokenSharedPrefs tokenSharedPrefs;
   String freelancerId = "";
+  late AnimationController _fadeController;
+  late Animation<double> _titleFade;
+  late Animation<double> _companyFade;
+  late Animation<double> _detailsFade;
+  late Animation<double> _categoriesFade;
+  late Animation<double> _requirementsFade;
+  late Animation<double> _buttonFade;
 
   @override
   void initState() {
     super.initState();
+    // Initialize the AnimationController for fade-in animations
+    _fadeController = AnimationController(
+      duration: const Duration(
+          milliseconds: 2000), // Total duration for all animations
+      vsync: this,
+    )..forward(); // Start the animation
+
+    // Define staggered fade animations for each section
+    _titleFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.0, 0.2, curve: Curves.easeIn),
+      ),
+    );
+    _companyFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.2, 0.4, curve: Curves.easeIn),
+      ),
+    );
+    _detailsFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.4, 0.6, curve: Curves.easeIn),
+      ),
+    );
+    _categoriesFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.6, 0.8, curve: Curves.easeIn),
+      ),
+    );
+    _requirementsFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.6, 0.8, curve: Curves.easeIn),
+      ),
+    );
+    _buttonFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.8, 1.0, curve: Curves.easeIn),
+      ),
+    );
+
     context.read<ProjectBloc>().add(GetProjectByIdEvent(widget.projectId));
     _initializeTokenSharedPrefs();
   }
@@ -47,14 +100,18 @@ class _ProjectViewState extends State<ProjectView> {
   }
 
   @override
+  void dispose() {
+    _fadeController.dispose(); // Dispose of the fade controller
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Determine if the theme is dark
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Project Details'),
-        // Ensure the AppBar adapts to the theme (Flutter handles this automatically)
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -99,22 +156,42 @@ class _ProjectViewState extends State<ProjectView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            project.title,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: isDarkTheme ? Colors.white : Colors.black,
+          // Fade-in for the project title
+          FadeTransition(
+            opacity: _titleFade,
+            child: Text(
+              project.title,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: isDarkTheme ? Colors.white : Colors.black,
+              ),
             ),
           ),
           const SizedBox(height: 10),
-          _buildCompanyInfo(project, isDarkTheme),
+          // Fade-in for the company info
+          FadeTransition(
+            opacity: _companyFade,
+            child: _buildCompanyInfo(project, isDarkTheme),
+          ),
           const SizedBox(height: 16),
-          _buildDetails(project, isDarkTheme),
+          // Fade-in for the posted date and duration
+          FadeTransition(
+            opacity: _detailsFade,
+            child: _buildDetails(project, isDarkTheme),
+          ),
           const SizedBox(height: 16),
-          _buildCategories(project.category, isDarkTheme),
+          // Fade-in for the categories
+          FadeTransition(
+            opacity: _categoriesFade,
+            child: _buildCategories(project.category, isDarkTheme),
+          ),
           const SizedBox(height: 16),
-          _buildRequirements(project.requirements, isDarkTheme),
+          // Fade-in for the requirements
+          FadeTransition(
+            opacity: _requirementsFade,
+            child: _buildRequirements(project.requirements, isDarkTheme),
+          ),
         ],
       ),
     );
@@ -211,8 +288,7 @@ class _ProjectViewState extends State<ProjectView> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color:
-                    const Color(0xFF001F3F), // Keep this color for consistency
+                color: const Color(0xFF001F3F),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 18, color: Colors.white),
@@ -337,36 +413,39 @@ class _ProjectViewState extends State<ProjectView> {
   }
 
   Widget _buildBidButton(bool isDarkTheme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: freelancerId.isNotEmpty
-              ? () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BidSubmissionView(
-                        projectId: widget.projectId,
-                        freelancerId: freelancerId,
+    return FadeTransition(
+      opacity: _buttonFade,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: freelancerId.isNotEmpty
+                ? () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BidSubmissionView(
+                          projectId: widget.projectId,
+                          freelancerId: freelancerId,
+                        ),
                       ),
-                    ),
-                  )
-              : null,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            backgroundColor: freelancerId.isNotEmpty
-                ? const Color(0xFF001F3F)
-                : (isDarkTheme ? Colors.grey[700] : Colors.grey),
-          ),
-          child: const Text(
-            "Bid for Project",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+                    )
+                : null,
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              backgroundColor: freelancerId.isNotEmpty
+                  ? const Color(0xFF001F3F)
+                  : (isDarkTheme ? Colors.grey[700] : Colors.grey),
+            ),
+            child: const Text(
+              "Bid for Project",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ),

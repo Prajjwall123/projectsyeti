@@ -70,8 +70,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     _languagesController = TextEditingController(
         text: widget.freelancer.languages?.join(', ') ?? '');
     _experienceYearsController = TextEditingController(
-      text: widget.freelancer.experienceYears.toString() ?? '0',
-    );
+        text: widget.freelancer.experienceYears.toString() ?? '0');
     _profileImageController =
         TextEditingController(text: widget.freelancer.profileImage ?? '');
 
@@ -153,7 +152,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
   }
 
   void _saveFreelancerDetails() async {
-    // Show loading indicator if needed
     await _uploadImage().then((_) {
       final updatedFreelancer = FreelancerEntity(
         id: widget.freelancer.id,
@@ -209,370 +207,382 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     final bool isDarkTheme = themeProvider.themeMode == ThemeMode.dark;
 
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
-    const double navBarHeight = 56.0;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Update Your Profile'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: bottomPadding + navBarHeight + 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                // Profile Image
-                Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: _selectedImage != null
-                            ? FileImage(_selectedImage!)
-                            : widget.freelancer.profileImage.isNotEmpty
-                                ? NetworkImage(
-                                    'http://192.168.1.70:3000/${widget.freelancer.profileImage}')
-                                : null,
-                        child: _selectedImage == null &&
-                                (widget.freelancer.profileImage.isEmpty)
-                            ? const Icon(Icons.person, size: 50)
-                            : null,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile Image Section
+              _buildSectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Profile Image',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
+                    ),
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Stack(
+                        children: [
+                          Container(
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.primary,
                               shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isDarkTheme
+                                    ? Colors.grey[700]!
+                                    : Colors.grey[300]!,
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: isDarkTheme
+                                      ? Colors.black26
+                                      : Colors.grey.withOpacity(0.2),
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                ),
+                              ],
                             ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 20,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.grey[200],
+                              backgroundImage: _selectedImage != null
+                                  ? FileImage(_selectedImage!)
+                                  : widget.freelancer.profileImage.isNotEmpty
+                                      ? NetworkImage(
+                                          'http://192.168.1.70:3000/${widget.freelancer.profileImage}')
+                                      : null,
+                              child: _selectedImage == null &&
+                                      widget.freelancer.profileImage.isEmpty
+                                  ? const Icon(Icons.person,
+                                      size: 60, color: Colors.grey)
+                                  : null,
                             ),
                           ),
-                        ),
+                          Positioned(
+                            bottom: 5,
+                            right: 5,
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primary,
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    if (_isUploading) ...[
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Uploading image...',
+                        style: TextStyle(
+                            fontSize: 14, fontStyle: FontStyle.italic),
                       ),
                     ],
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                if (_isUploading) ...[
-                  const Center(child: CircularProgressIndicator()),
-                  const SizedBox(height: 8),
-                  const Center(child: Text('Uploading image...')),
-                ],
-                const SizedBox(height: 16),
+                isDarkTheme: isDarkTheme,
+              ),
 
-                // Name
-                Text(
-                  'Name',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+              const SizedBox(height: 24),
 
-                // Portfolio
-                Text(
-                  'Portfolio',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _portfolioController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Availability
-                Text(
-                  'Availability',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _availabilityController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // About Me
-                Text(
-                  'About Me',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _aboutMeController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Profession
-                Text(
-                  'Profession',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _professionController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Location
-                Text(
-                  'Location',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Work At
-                Text(
-                  'Work At',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _workAtController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Languages
-                Text(
-                  'Languages',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _languagesController,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Experience Years
-                Text(
-                  'Experience Years',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _experienceYearsController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.dividerColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.primary),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Certifications Section
-                Text(
-                  'Certifications:',
-                  style: theme.textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                CertificationForm(
-                  certificationsControllers: _certificationsControllers,
-                  organizationControllers: _organizationControllers,
-                  addCertification: () {
-                    setState(() {
-                      _certificationsControllers.add(TextEditingController());
-                      _organizationControllers.add(TextEditingController());
-                    });
-                  },
-                  removeCertification: (index) {
-                    setState(() {
-                      _certificationsControllers.removeAt(index);
-                      _organizationControllers.removeAt(index);
-                    });
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // Experience Section
-                Text(
-                  'Experience:',
-                  style: theme.textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                ExperienceForm(
-                  experienceControllers: _experienceControllers,
-                  companyControllers: _companyControllers,
-                  fromControllers: _fromControllers,
-                  toControllers: _toControllers,
-                  descriptionControllers: _descriptionControllers,
-                  addExperience: () {
-                    setState(() {
-                      _experienceControllers.add(TextEditingController());
-                      _companyControllers.add(TextEditingController());
-                      _fromControllers.add(TextEditingController());
-                      _toControllers.add(TextEditingController());
-                      _descriptionControllers.add(TextEditingController());
-                    });
-                  },
-                  removeExperience: (index) {
-                    setState(() {
-                      _experienceControllers.removeAt(index);
-                      _companyControllers.removeAt(index);
-                      _fromControllers.removeAt(index);
-                      _toControllers.removeAt(index);
-                      _descriptionControllers.removeAt(index);
-                    });
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // Save Button
-                Center(
-                  child: ElevatedButton(
-                    onPressed: _saveFreelancerDetails,
-                    style: theme.elevatedButtonTheme.style?.copyWith(
-                      minimumSize: WidgetStateProperty.all(
-                        const Size(200, 48),
+              // Personal Details Section
+              _buildSectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Personal Details',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: const Text('Save Changes'),
-                  ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Name',
+                      controller: _nameController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Portfolio',
+                      controller: _portfolioController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Availability',
+                      controller: _availabilityController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'About Me',
+                      controller: _aboutMeController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Profession',
+                      controller: _professionController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Location',
+                      controller: _locationController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Work At',
+                      controller: _workAtController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Languages (comma-separated)',
+                      controller: _languagesController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildTextField(
+                      label: 'Experience Years',
+                      controller: _experienceYearsController,
+                      theme: theme,
+                      isDarkTheme: isDarkTheme,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-              ],
+                isDarkTheme: isDarkTheme,
+              ),
+
+              const SizedBox(height: 24),
+
+              // Certifications Section
+              _buildSectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Certifications',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    CertificationForm(
+                      certificationsControllers: _certificationsControllers,
+                      organizationControllers: _organizationControllers,
+                      addCertification: () {
+                        setState(() {
+                          _certificationsControllers
+                              .add(TextEditingController());
+                          _organizationControllers.add(TextEditingController());
+                        });
+                      },
+                      removeCertification: (index) {
+                        setState(() {
+                          _certificationsControllers.removeAt(index);
+                          _organizationControllers.removeAt(index);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                isDarkTheme: isDarkTheme,
+              ),
+
+              const SizedBox(height: 24),
+
+              // Experience Section
+              _buildSectionCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Experience',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ExperienceForm(
+                      experienceControllers: _experienceControllers,
+                      companyControllers: _companyControllers,
+                      fromControllers: _fromControllers,
+                      toControllers: _toControllers,
+                      descriptionControllers: _descriptionControllers,
+                      addExperience: () {
+                        setState(() {
+                          _experienceControllers.add(TextEditingController());
+                          _companyControllers.add(TextEditingController());
+                          _fromControllers.add(TextEditingController());
+                          _toControllers.add(TextEditingController());
+                          _descriptionControllers.add(TextEditingController());
+                        });
+                      },
+                      removeExperience: (index) {
+                        setState(() {
+                          _experienceControllers.removeAt(index);
+                          _companyControllers.removeAt(index);
+                          _fromControllers.removeAt(index);
+                          _toControllers.removeAt(index);
+                          _descriptionControllers.removeAt(index);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                isDarkTheme: isDarkTheme,
+              ),
+
+              // Add extra padding at the bottom to ensure content is not obscured by the floating button
+              const SizedBox(height: 80),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 1),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _saveFreelancerDetails,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 5,
+            ),
+            child: const Text(
+              'Save Changes',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+
+  // Helper method to build a styled section card
+  Widget _buildSectionCard({required Widget child, required bool isDarkTheme}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDarkTheme ? Colors.grey[900] : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: isDarkTheme ? Colors.black26 : Colors.grey.withOpacity(0.15),
+            blurRadius: 8,
+            spreadRadius: 2,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
+  // Helper method to build a styled TextField
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    required ThemeData theme,
+    required bool isDarkTheme,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: isDarkTheme ? Colors.grey[400] : Colors.grey[600],
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          maxLines: maxLines,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: isDarkTheme ? Colors.grey[800] : Colors.grey[100],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: isDarkTheme ? Colors.grey[700]! : Colors.grey[300]!,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(
+                color: theme.colorScheme.primary,
+                width: 2,
+              ),
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          ),
+          style: TextStyle(
+            color: isDarkTheme ? Colors.white : Colors.black,
+          ),
+        ),
+      ],
     );
   }
 

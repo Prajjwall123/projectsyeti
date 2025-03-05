@@ -15,18 +15,70 @@ class FreelancerView extends StatefulWidget {
   State<FreelancerView> createState() => _FreelancerViewState();
 }
 
-class _FreelancerViewState extends State<FreelancerView> {
+class _FreelancerViewState extends State<FreelancerView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _profileFade;
+  late Animation<double> _aboutMeFade;
+  late Animation<double> _experienceFade;
+  late Animation<double> _skillsFade;
+  late Animation<double> _certificationsFade;
+
   @override
   void initState() {
     super.initState();
+    // Initialize the AnimationController for fade-in animations
+    _fadeController = AnimationController(
+      duration: const Duration(
+          milliseconds: 2000), // Total duration for all animations
+      vsync: this,
+    )..forward(); // Start the animation
+
+    // Define staggered fade animations for each section
+    _profileFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.0, 0.2, curve: Curves.easeIn),
+      ),
+    );
+    _aboutMeFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.2, 0.4, curve: Curves.easeIn),
+      ),
+    );
+    _experienceFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.4, 0.6, curve: Curves.easeIn),
+      ),
+    );
+    _skillsFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.6, 0.8, curve: Curves.easeIn),
+      ),
+    );
+    _certificationsFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.8, 1.0, curve: Curves.easeIn),
+      ),
+    );
+
     context
         .read<FreelancerBloc>()
         .add(GetFreelancerByIdEvent(widget.freelancerId));
   }
 
   @override
+  void dispose() {
+    _fadeController.dispose(); // Dispose of the fade controller
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Access the ThemeProvider to get the current theme mode
     final themeProvider = Provider.of<ThemeProvider>(context);
     final bool isDarkTheme = themeProvider.themeMode == ThemeMode.dark;
 
@@ -42,7 +94,7 @@ class _FreelancerViewState extends State<FreelancerView> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0), // Match HomeView padding
+        padding: const EdgeInsets.all(10.0),
         child: BlocBuilder<FreelancerBloc, FreelancerState>(
           builder: (context, state) {
             if (state is FreelancerLoading) {
@@ -65,157 +117,191 @@ class _FreelancerViewState extends State<FreelancerView> {
   }
 
   Widget _buildProfileContent(FreelancerEntity freelancer, bool isDarkTheme) {
-    // Get the bottom padding for the safe area (notch, system bars)
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
-    // Add extra padding to account for the BottomNavigationBar height (approx. 56 pixels)
     const double navBarHeight = 56.0;
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.only(
-            bottom: bottomPadding + navBarHeight + 20), // Add padding to bottom
+        padding: EdgeInsets.only(bottom: bottomPadding + navBarHeight + 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // PROFILE SECTION (Centered)
-            Center(
-              child: Container(
-                width: double.infinity, // Take full width but center content
-                margin: const EdgeInsets.symmetric(
-                    horizontal: 16), // Add some margin for better spacing
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isDarkTheme ? Colors.black87 : Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: Colors.grey[300]!), // Match HomeView card border
-                ),
-                child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // Ensure the column takes minimum space
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: freelancer.profileImage.isNotEmpty
-                          ? NetworkImage(
-                              "http://192.168.1.70:3000/${freelancer.profileImage}")
-                          : const AssetImage("assets/images/default_avatar.png")
-                              as ImageProvider,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      freelancer.freelancerName,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: isDarkTheme ? Colors.white : Colors.black,
+            // PROFILE SECTION with Fade-In
+            FadeTransition(
+              opacity: _profileFade,
+              child: Center(
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDarkTheme ? Colors.black87 : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey[300]!),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: freelancer.profileImage.isNotEmpty
+                            ? NetworkImage(
+                                "http://192.168.1.70:3000/${freelancer.profileImage}")
+                            : const AssetImage(
+                                    "assets/images/default_avatar.png")
+                                as ImageProvider,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Profession: ${freelancer.profession ?? 'Not specified'}",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDarkTheme ? Colors.grey : Colors.grey[600],
-                      ),
-                    ),
-                    Text(
-                      "Location: ${freelancer.location}",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDarkTheme ? Colors.grey : Colors.grey[600],
-                      ),
-                    ),
-                    Text(
-                      "Experience: ${freelancer.experienceYears} years",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDarkTheme ? Colors.grey : Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Navigate to the update profile screen
-                        _onUpdateFreelancer(freelancer);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Colors.blue, // Match HomeView highlight color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                      const SizedBox(height: 12),
+                      Text(
+                        freelancer.freelancerName,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkTheme ? Colors.white : Colors.black,
                         ),
                       ),
-                      child: const Text(
-                        "Update Profile",
-                        style: TextStyle(color: Colors.white),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Profession: ${freelancer.profession ?? 'Not specified'}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkTheme ? Colors.grey : Colors.grey[600],
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        "Location: ${freelancer.location}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkTheme ? Colors.grey : Colors.grey[600],
+                        ),
+                      ),
+                      Text(
+                        "Experience: ${freelancer.experienceYears} years",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkTheme ? Colors.grey : Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () {
+                          _onUpdateFreelancer(freelancer);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text(
+                          "Update Profile",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 20),
 
-            // ABOUT ME SECTION
-            _buildSectionHeader("About Me", isDarkTheme),
-            _buildCard([
-              _buildDetailRow("I work at", freelancer.workAt ?? "Not specified",
-                  isDarkTheme),
-              _buildDetailRow(
-                "Languages",
-                (freelancer.languages?.isEmpty ?? true)
-                    ? "Not specified"
-                    : freelancer.languages!.join(", "),
-                isDarkTheme,
-              ),
-              _buildDetailRow(
-                "Availability",
-                freelancer.availability ?? "Not specified",
-                isDarkTheme,
-              ),
-              _buildDetailRow(
-                  "Bio", freelancer.aboutMe ?? "Not specified", isDarkTheme),
-            ], isDarkTheme),
-
-            const SizedBox(height: 20),
-
-            // EXPERIENCE SECTION
-            _buildSectionHeader("Experience", isDarkTheme),
-            ...(freelancer.experience?.isEmpty ?? true
-                ? [_buildDetailRow("Experience", "Not specified", isDarkTheme)]
-                : freelancer.experience!
-                    .map((exp) => _buildExperienceCard(exp, isDarkTheme))
-                    .toList()),
-
-            const SizedBox(height: 20),
-
-            // SKILLS SECTION
-            _buildSectionHeader("Skills", isDarkTheme),
-            ...((freelancer.skills.isEmpty ?? true)
-                ? [_buildDetailRow("Skills", "Not specified", isDarkTheme)]
-                : [
-                    _buildSkillChips(
-                      freelancer.skills.map((skill) => skill.name).toList(),
-                      isDarkTheme,
-                    )
-                  ]),
-
-            const SizedBox(height: 20),
-
-            // CERTIFICATIONS SECTION
-            _buildSectionHeader("Certifications", isDarkTheme),
-            ...(freelancer.certifications?.isEmpty ?? true
-                ? [
+            // ABOUT ME SECTION with Fade-In
+            FadeTransition(
+              opacity: _aboutMeFade,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionHeader("About Me", isDarkTheme),
+                  _buildCard([
+                    _buildDetailRow("I work at",
+                        freelancer.workAt ?? "Not specified", isDarkTheme),
                     _buildDetailRow(
-                        "Certifications", "Not specified", isDarkTheme)
-                  ]
-                : freelancer.certifications!
-                    .map((cert) => _buildCertificationRow(cert, isDarkTheme))
-                    .toList()),
-            // const SizedBox(
-            //     height:
-            //         1), // Already included, but ensures spacing at the bottom
+                      "Languages",
+                      (freelancer.languages?.isEmpty ?? true)
+                          ? "Not specified"
+                          : freelancer.languages!.join(", "),
+                      isDarkTheme,
+                    ),
+                    _buildDetailRow(
+                      "Availability",
+                      freelancer.availability ?? "Not specified",
+                      isDarkTheme,
+                    ),
+                    _buildDetailRow("Bio",
+                        freelancer.aboutMe ?? "Not specified", isDarkTheme),
+                  ], isDarkTheme),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // EXPERIENCE SECTION with Fade-In
+            FadeTransition(
+              opacity: _experienceFade,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionHeader("Experience", isDarkTheme),
+                  ...(freelancer.experience?.isEmpty ?? true
+                      ? [
+                          _buildDetailRow(
+                              "Experience", "Not specified", isDarkTheme)
+                        ]
+                      : freelancer.experience!
+                          .map((exp) => _buildExperienceCard(exp, isDarkTheme))
+                          .toList()),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // SKILLS SECTION with Fade-In
+            FadeTransition(
+              opacity: _skillsFade,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionHeader("Skills", isDarkTheme),
+                  ...((freelancer.skills.isEmpty ?? true)
+                      ? [
+                          _buildDetailRow(
+                              "Skills", "Not specified", isDarkTheme)
+                        ]
+                      : [
+                          _buildSkillChips(
+                            freelancer.skills
+                                .map((skill) => skill.name)
+                                .toList(),
+                            isDarkTheme,
+                          )
+                        ]),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // CERTIFICATIONS SECTION with Fade-In
+            FadeTransition(
+              opacity: _certificationsFade,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionHeader("Certifications", isDarkTheme),
+                  ...(freelancer.certifications?.isEmpty ?? true
+                      ? [
+                          _buildDetailRow(
+                              "Certifications", "Not specified", isDarkTheme)
+                        ]
+                      : freelancer.certifications!
+                          .map((cert) =>
+                              _buildCertificationRow(cert, isDarkTheme))
+                          .toList()),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -232,7 +318,7 @@ class _FreelancerViewState extends State<FreelancerView> {
             skill,
             style: const TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.blue, // Match HomeView skill tag color
+          backgroundColor: Colors.blue,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
             side: const BorderSide(color: Colors.white),
@@ -245,12 +331,11 @@ class _FreelancerViewState extends State<FreelancerView> {
   // Section Header
   Widget _buildSectionHeader(String title, bool isDarkTheme) {
     return Padding(
-      padding:
-          const EdgeInsets.all(8.0), // Match HomeView section header padding
+      padding: const EdgeInsets.all(8.0),
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 22, // Match HomeView 'Explore Projects' section
+          fontSize: 22,
           fontWeight: FontWeight.bold,
           color: isDarkTheme ? Colors.white : Colors.black,
         ),
@@ -266,8 +351,7 @@ class _FreelancerViewState extends State<FreelancerView> {
       decoration: BoxDecoration(
         color: isDarkTheme ? Colors.black87 : Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border:
-            Border.all(color: Colors.grey[300]!), // Match HomeView card border
+        border: Border.all(color: Colors.grey[300]!),
       ),
       child: Column(children: children),
     );
@@ -311,8 +395,7 @@ class _FreelancerViewState extends State<FreelancerView> {
       decoration: BoxDecoration(
         color: isDarkTheme ? Colors.black87 : Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border:
-            Border.all(color: Colors.grey[300]!), // Match HomeView card border
+        border: Border.all(color: Colors.grey[300]!),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,12 +456,11 @@ class _FreelancerViewState extends State<FreelancerView> {
   }
 
   void _onUpdateFreelancer(FreelancerEntity freelancer) {
-    // Navigate to the FreelancerUpdateView
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FreelancerUpdateView(
-          freelancer: freelancer, // Pass the freelancer data
+          freelancer: freelancer,
         ),
       ),
     );
