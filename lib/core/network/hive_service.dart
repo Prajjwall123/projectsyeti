@@ -1,52 +1,67 @@
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:projectsyeti/features/auth/data/model/auth_hive_model.dart';
+import 'package:projectsyeti/app/constants/hive_table_constant.dart';
+import 'package:projectsyeti/features/project/data/model/project_hive_model.dart';
 
 class HiveService {
-  static Future<void> init() async {
-    var directory = await getApplicationDocumentsDirectory();
-    var path = '${directory.path}/projectsyeti2.db';
-
-    Hive.init(path);
-
-    Hive.registerAdapter(UserHiveModelAdapter());
+  Future<void> addProject(ProjectHiveModel project) async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    await box.put(project.id, project);
+    debugPrint("Added project with ID: ${project.id} to Hive");
   }
 
-  Future<void> addUser(UserHiveModel user) async {
-    var box = await Hive.openBox<UserHiveModel>('userBox');
-    await box.put(user.id, user);
+  Future<void> deleteProject(String projectId) async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    await box.delete(projectId);
+    debugPrint("Deleted project with ID: $projectId from Hive");
   }
 
-  Future<void> deleteUser(String id) async {
-    var box = await Hive.openBox<UserHiveModel>('userBox');
-    await box.delete(id);
-  }
-
-  Future<List<UserHiveModel>> getAllUsers() async {
-    var box = await Hive.openBox<UserHiveModel>('userBox');
+  Future<List<ProjectHiveModel>> getAllProjects() async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    debugPrint("Fetching all projects from Hive, total count: ${box.length}");
     return box.values.toList();
   }
 
-  Future<UserHiveModel?> login(String email, String password) async {
-    var box = await Hive.openBox<UserHiveModel>('userBox');
-    try {
-      return box.values.firstWhere(
-        (user) => user.email == email && user.password == password,
-      );
-    } catch (e) {
-      return null;
-    }
+  Future<ProjectHiveModel?> getProjectById(String projectId) async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    debugPrint("Fetching project with ID: $projectId from Hive");
+    return box.get(projectId);
+  }
+
+  Future<List<ProjectHiveModel>> getProjectsByFreelancerId(
+      String freelancerId) async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    debugPrint("Fetching projects for freelancer ID: $freelancerId from Hive");
+    return box.values
+        .where((project) => project.awardedTo == freelancerId)
+        .toList();
+  }
+
+  Future<void> updateProject(ProjectHiveModel project) async {
+    var box =
+        await Hive.openBox<ProjectHiveModel>(HiveTableConstant.projectBox);
+    debugPrint("Updating project with ID: ${project.id} in Hive");
+    await box.put(project.id!, project);
+    debugPrint("Successfully updated project with ID: ${project.id} in Hive");
   }
 
   Future<void> clearAll() async {
-    await Hive.deleteBoxFromDisk('userBox');
+    await Hive.deleteBoxFromDisk(HiveTableConstant.projectBox);
+    debugPrint("Cleared all projects from Hive");
   }
 
-  Future<void> clearUserBox() async {
-    await Hive.deleteBoxFromDisk('userBox');
+  Future<void> clearProjectBox() async {
+    await Hive.deleteBoxFromDisk(HiveTableConstant.projectBox);
+    debugPrint("Cleared project box from Hive");
   }
 
   Future<void> close() async {
     await Hive.close();
+    debugPrint("Hive closed");
   }
 }

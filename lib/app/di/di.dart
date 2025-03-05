@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projectsyeti/app/shared_prefs/token_shared_prefs.dart';
@@ -34,7 +35,9 @@ import 'package:projectsyeti/features/notification/domain/repository/notificatio
 import 'package:projectsyeti/features/notification/domain/usecase/get_notification_by_freelancer_id_usecase.dart';
 import 'package:projectsyeti/features/notification/domain/usecase/seen_notification_by_freelancer_id_usecase.dart';
 import 'package:projectsyeti/features/notification/presentation/view_model/notification_bloc.dart';
+import 'package:projectsyeti/features/project/data/data_source/local_data_source/project_local_data_source.dart';
 import 'package:projectsyeti/features/project/data/data_source/remote_data_source/project_remote_data_source.dart';
+import 'package:projectsyeti/features/project/data/repository/local_repository/project_local_repository.dart';
 import 'package:projectsyeti/features/project/data/repository/remote_repository/project_remote_repository.dart';
 import 'package:projectsyeti/features/project/domain/repository/project_repository.dart';
 import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_usecase.dart';
@@ -62,6 +65,7 @@ Future<void> initDependencies() async {
   _initHiveService();
   _initApiService();
   await _initSharedPreferences();
+  await _initConnectivity();
   _initSkillDependencies();
   _initAuthDependencies();
   _initLoginDependencies();
@@ -85,6 +89,10 @@ void _initApiService() {
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+Future<void> _initConnectivity() async {
+  getIt.registerLazySingleton<Connectivity>(() => Connectivity());
 }
 
 void _initSkillDependencies() {
@@ -211,26 +219,45 @@ void _initProjectDependencies() {
         tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
+  getIt.registerLazySingleton<ProjectLocalDataSource>(
+    () => ProjectLocalDataSource(getIt<HiveService>()),
+  );
+
   getIt.registerLazySingleton<IProjectRepository>(
     () => ProjectRemoteRepository(getIt<ProjectRemoteDataSource>()),
+    instanceName: 'remote',
+  );
+
+  getIt.registerLazySingleton<IProjectRepository>(
+    () => ProjectLocalRepository(getIt<ProjectLocalDataSource>()),
+    instanceName: 'local',
   );
 
   getIt.registerLazySingleton<GetAllProjectsUsecase>(
-    () => GetAllProjectsUsecase(projectRepository: getIt<IProjectRepository>()),
+    () => GetAllProjectsUsecase(
+      remoteRepository: getIt<IProjectRepository>(instanceName: 'remote'),
+      localRepository: getIt<IProjectRepository>(instanceName: 'local'),
+      connectivity: getIt<Connectivity>(),
+    ),
   );
 
   getIt.registerLazySingleton<GetProjectByIdUsecase>(
-    () => GetProjectByIdUsecase(projectRepository: getIt<IProjectRepository>()),
+    () => GetProjectByIdUsecase(
+      remoteRepository: getIt<IProjectRepository>(instanceName: 'remote'),
+      localRepository: getIt<IProjectRepository>(instanceName: 'local'),
+      connectivity: getIt<Connectivity>(),
+    ),
   );
 
   getIt.registerLazySingleton<GetProjectsByFreelancerIdUsecase>(
     () => GetProjectsByFreelancerIdUsecase(
-        projectRepository: getIt<IProjectRepository>()),
+      projectRepository: getIt<IProjectRepository>(instanceName: 'remote'),
+    ),
   );
 
   getIt.registerLazySingleton<UpdateProjectByIdUsecase>(
     () => UpdateProjectByIdUsecase(
-        projectRepository: getIt<IProjectRepository>()),
+        projectRepository: getIt<IProjectRepository>(instanceName: 'remote')),
   );
 
   getIt.registerFactory<ProjectBloc>(
@@ -301,14 +328,12 @@ void _initNotificationDependencies() {
 
   getIt.registerLazySingleton<GetNotificationByFreelancerIdUsecase>(
     () => GetNotificationByFreelancerIdUsecase(
-      notificationRepository: getIt<INotificationRepository>(),
-    ),
+        notificationRepository: getIt<INotificationRepository>()),
   );
 
   getIt.registerLazySingleton<SeenNotificationByFreelancerIdUsecase>(
     () => SeenNotificationByFreelancerIdUsecase(
-      notificationRepository: getIt<INotificationRepository>(),
-    ),
+        notificationRepository: getIt<INotificationRepository>()),
   );
 
   getIt.registerFactory<NotificationBloc>(
