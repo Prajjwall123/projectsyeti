@@ -37,13 +37,11 @@ class _HomeViewState extends State<HomeView> {
     _listenToAccelerometer();
     _listenToProximitySensor();
 
-    // Listen to changes in the search bar to trigger rebuilds
     _searchController.addListener(() {
-      setState(() {}); // Rebuild the UI when the search query changes
+      setState(() {});
     });
   }
 
-  /// **🔹 Shake to Logout**
   void _listenToAccelerometer() {
     const double shakeThreshold = 15.0;
     _streamSubscriptions.add(
@@ -92,6 +90,120 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void _showWalletModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext modalContext) {
+        return Container(
+          height: 220,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromARGB(255, 1, 16, 64),
+                Color.fromARGB(255, 0, 0, 0),
+              ],
+            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Your Wallet",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            letterSpacing: 1.2,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black26,
+                                offset: Offset(1, 1),
+                                blurRadius: 3,
+                              ),
+                            ],
+                          ),
+                        ),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          child: IconButton(
+                            icon: state.walletAmount == null &&
+                                    state.walletErrorMessage == null
+                                ? const SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.refresh,
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
+                            onPressed: () {
+                              context.read<HomeCubit>().fetchWalletAmount();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    if (state.walletAmount != null) ...[
+                      Row(
+                        children: [
+                          const Text(
+                            "Rs.",
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white70,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "${state.walletAmount}",
+                            style: const TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'RobotoMono',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ] else if (state.walletErrorMessage != null)
+                      Text(
+                        state.walletErrorMessage!,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     for (final subscription in _streamSubscriptions) {
@@ -123,15 +235,9 @@ class _HomeViewState extends State<HomeView> {
                   padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
-                      /// **🔹 Search & Profile Row**
                       _buildSearchBar(state),
-
-                      /// **🔹 Info Cards (Promotions)**
                       const SizedBox(height: 20),
-                      _buildPromoCards(
-                          context), // Pass context for responsive sizing
-
-                      /// **🔹 Explore Projects Section**
+                      _buildPromoCards(context),
                       const SizedBox(height: 20),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
@@ -143,11 +249,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                       ),
-
-                      /// **🔹 Skill Tags**
                       _buildSkillTags(state),
-
-                      /// **🔹 Project List**
                       const SizedBox(height: 10),
                       _buildProjectList(state),
                     ],
@@ -161,7 +263,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  /// **🔹 Search Bar + Theme & Logout Menu**
   Widget _buildSearchBar(HomeState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,6 +310,9 @@ class _HomeViewState extends State<HomeView> {
                 } else if (value == 'theme') {
                   Provider.of<ThemeProvider>(context, listen: false)
                       .toggleTheme();
+                } else if (value == 'wallet') {
+                  context.read<HomeCubit>().fetchWalletAmount();
+                  _showWalletModal(context);
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -219,6 +323,16 @@ class _HomeViewState extends State<HomeView> {
                       Icon(Icons.brightness_6, color: Colors.blue),
                       SizedBox(width: 10),
                       Text('Change Theme'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'wallet',
+                  child: Row(
+                    children: [
+                      Icon(Icons.account_balance_wallet, color: Colors.green),
+                      SizedBox(width: 10),
+                      Text('Wallet'),
                     ],
                   ),
                 ),
@@ -248,16 +362,12 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  /// **🔹 Promo Cards (Carousel)**
   Widget _buildPromoCards(BuildContext context) {
-    // Get the screen dimensions
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Calculate a responsive height based on screen width
-    final carouselHeight = screenWidth > 600
-        ? screenHeight * 0.15 // For tablets, use 15% of screen height
-        : screenHeight * 0.2; // For phones, use 20% of screen height
+    final carouselHeight =
+        screenWidth > 600 ? screenHeight * 0.15 : screenHeight * 0.2;
 
     final List<Widget> promoCards = [
       Container(
@@ -309,14 +419,12 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  /// **🔹 Skill Tags**
   Widget _buildSkillTags(HomeState state) {
     return SizedBox(
       height: 40,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          // Add an "All" tag to clear the filter
           GestureDetector(
             onTap: () {
               context.read<HomeCubit>().setSelectedSkill(null);
@@ -351,7 +459,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  /// **🔹 Projects List**
   Widget _buildProjectList(HomeState state) {
     List<ProjectEntity> filteredProjects = state.projects;
 

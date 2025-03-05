@@ -5,14 +5,19 @@ part 'get_wallet_amount_dto.g.dart';
 
 @JsonSerializable()
 class GetWalletAmountDTO {
-  final WalletApiModel wallet;
+  @JsonKey(name: 'amount')
+  final int balance;
 
   GetWalletAmountDTO({
-    required this.wallet,
+    required this.balance,
   });
 
   factory GetWalletAmountDTO.fromJson(Map<String, dynamic> json) =>
       _$GetWalletAmountDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetWalletAmountDTOToJson(this);
+
+  WalletApiModel toWalletApiModel() {
+    return WalletApiModel(amount: balance);
+  }
 }

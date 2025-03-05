@@ -6,18 +6,21 @@ import 'package:projectsyeti/features/project/domain/use_case/get_all_projects_u
 import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_usecase.dart';
 import 'package:projectsyeti/features/freelancer/domain/entity/freelancer_entity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:projectsyeti/features/wallet/domain/usecase/get_wallet_amount_usecased.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   final GetAllProjectsUsecase _getAllProjectsUsecase;
   final GetAllSkillsUsecase _getAllSkillsUsecase;
   final GetFreelancerByIdUsecase _getFreelancerByIdUsecase;
+  final GetWalletAmountUsecase _getWalletAmountUsecase;
   final TokenSharedPrefs _tokenSharedPrefs;
 
   HomeCubit(
     this._getAllProjectsUsecase,
     this._getAllSkillsUsecase,
     this._getFreelancerByIdUsecase,
+    this._getWalletAmountUsecase,
     this._tokenSharedPrefs,
   ) : super(HomeState.initial()) {
     fetchFreelancerProfile();
@@ -101,18 +104,50 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
+  Future<void> fetchWalletAmount() async {
+    final userIdResult = await _tokenSharedPrefs.getUserId();
+
+    userIdResult.fold(
+      (failure) {
+        debugPrint(" Failed to retrieve userId: ${failure.toString()}");
+        emit(state.copyWith(walletErrorMessage: failure.toString()));
+      },
+      (userId) async {
+        if (userId.isEmpty) {
+          debugPrint("User ID not found in SharedPreferences");
+          emit(state.copyWith(walletErrorMessage: "User ID not found"));
+          return;
+        }
+
+        debugPrint(" Fetching wallet amount for user ID: $userId");
+
+        final walletResult = await _getWalletAmountUsecase(
+            GetWalletAmountParams(walletId: userId));
+
+        walletResult.fold(
+          (failure) {
+            debugPrint(" Error fetching wallet amount: ${failure.toString()}");
+            emit(state.copyWith(walletErrorMessage: failure.toString()));
+          },
+          (wallet) {
+            debugPrint(" Wallet Amount Fetched: ${wallet.amount}");
+            emit(state.copyWith(walletAmount: wallet.amount));
+          },
+        );
+      },
+    );
+  }
+
   Future<void> logout(BuildContext context) async {
     emit(state.copyWith(isLoggingOut: true));
 
     await _tokenSharedPrefs.clearTokenAndUserId();
 
-    emit(HomeState.initial()); // Reset to initial state
+    emit(HomeState.initial());
 
-    // Navigate to Login Screen
     Navigator.pushReplacementNamed(context, '/login');
   }
 
-  // New method to set the selected skill for filtering
   void setSelectedSkill(String? skill) {
     emit(state.copyWith(selectedSkill: skill));
   }

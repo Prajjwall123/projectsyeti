@@ -8,24 +8,28 @@ class HomeState extends Equatable {
   final List<ProjectEntity> projects;
   final List<SkillEntity> skills;
   final FreelancerEntity? freelancer;
+  final int? walletAmount;
   final bool isLoading;
   final bool isSkillsLoading;
   final bool isLoggingOut;
   final String? errorMessage;
   final String? skillsErrorMessage;
-  final String? selectedSkill; 
+  final String? walletErrorMessage;
+  final String? selectedSkill;
 
   const HomeState({
     required this.selectedIndex,
     required this.projects,
     required this.skills,
     this.freelancer,
+    this.walletAmount,
     required this.isLoading,
     required this.isSkillsLoading,
     required this.isLoggingOut,
     this.errorMessage,
     this.skillsErrorMessage,
-    this.selectedSkill, 
+    this.walletErrorMessage,
+    this.selectedSkill,
   });
 
   static HomeState initial() {
@@ -34,11 +38,13 @@ class HomeState extends Equatable {
       projects: [],
       skills: [],
       freelancer: null,
+      walletAmount: null,
       isLoading: false,
       isSkillsLoading: false,
       isLoggingOut: false,
       errorMessage: null,
       skillsErrorMessage: null,
+      walletErrorMessage: null,
       selectedSkill: null,
     );
   }
@@ -48,11 +54,13 @@ class HomeState extends Equatable {
     List<ProjectEntity>? projects,
     List<SkillEntity>? skills,
     FreelancerEntity? freelancer,
+    int? walletAmount,
     bool? isLoading,
     bool? isSkillsLoading,
     bool? isLoggingOut,
     String? errorMessage,
     String? skillsErrorMessage,
+    String? walletErrorMessage,
     String? selectedSkill,
   }) {
     return HomeState(
@@ -60,11 +68,13 @@ class HomeState extends Equatable {
       projects: projects ?? this.projects,
       skills: skills ?? this.skills,
       freelancer: freelancer ?? this.freelancer,
+      walletAmount: walletAmount ?? this.walletAmount,
       isLoading: isLoading ?? this.isLoading,
       isSkillsLoading: isSkillsLoading ?? this.isSkillsLoading,
       isLoggingOut: isLoggingOut ?? this.isLoggingOut,
       errorMessage: errorMessage,
       skillsErrorMessage: skillsErrorMessage,
+      walletErrorMessage: walletErrorMessage,
       selectedSkill: selectedSkill,
     );
   }
@@ -75,11 +85,13 @@ class HomeState extends Equatable {
         projects,
         skills,
         freelancer,
+        walletAmount,
         isLoading,
         isSkillsLoading,
         isLoggingOut,
         errorMessage,
         skillsErrorMessage,
-        selectedSkill, 
+        walletErrorMessage,
+        selectedSkill,
       ];
 }

@@ -16,7 +16,8 @@ class WalletRemoteDataSource implements IWalletDataSource {
           await _dio.get('${ApiEndpoints.getWalletAmount}/$walletId');
       if (response.statusCode == 200) {
         var walletDTO = GetWalletAmountDTO.fromJson(response.data);
-        return walletDTO.wallet.toEntity();
+        var walletApiModel = walletDTO.toWalletApiModel();
+        return walletApiModel.toEntity();
       } else {
         throw Exception(response.statusMessage);
       }

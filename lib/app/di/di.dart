@@ -49,6 +49,11 @@ import 'package:projectsyeti/features/skill/domain/use_case/get_all_skills_useca
 import 'package:projectsyeti/features/skill/domain/use_case/get_skill_by_id_usecase.dart';
 import 'package:projectsyeti/features/skill/presentation/view_model/bloc/skill_bloc.dart';
 import 'package:projectsyeti/features/company/presentation/view_model/bloc/company_bloc.dart';
+import 'package:projectsyeti/features/wallet/data/model/data_source/remote_data_source/wallet_remote_data_source.dart';
+import 'package:projectsyeti/features/wallet/data/model/data_source/wallet_data_source.dart';
+import 'package:projectsyeti/features/wallet/data/repository/wallet_remote_data_source.dart';
+import 'package:projectsyeti/features/wallet/domain/repository/wallet_repository.dart';
+import 'package:projectsyeti/features/wallet/domain/usecase/get_wallet_amount_usecased.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -60,6 +65,7 @@ Future<void> initDependencies() async {
   _initSkillDependencies();
   _initAuthDependencies();
   _initLoginDependencies();
+  _initWalletDependencies();
   _initHomeDependencies();
   _initCompanyDependencies();
   _initProjectDependencies();
@@ -153,12 +159,27 @@ void _initLoginDependencies() {
   );
 }
 
+void _initWalletDependencies() {
+  getIt.registerLazySingleton<WalletRemoteDataSource>(
+    () => WalletRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<IWalletRepository>(
+    () => WalletRemoteRepository(getIt<WalletRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<GetWalletAmountUsecase>(
+    () => GetWalletAmountUsecase(walletRepository: getIt<IWalletRepository>()),
+  );
+}
+
 void _initHomeDependencies() {
   getIt.registerLazySingleton<HomeCubit>(
     () => HomeCubit(
       getIt<GetAllProjectsUsecase>(),
       getIt<GetAllSkillsUsecase>(),
       getIt<GetFreelancerByIdUsecase>(),
+      getIt<GetWalletAmountUsecase>(),
       getIt<TokenSharedPrefs>(),
     ),
   );
