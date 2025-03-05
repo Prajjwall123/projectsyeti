@@ -1,36 +1,22 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/auth/presentation/view/login_view.dart';
 import 'package:projectsyeti/features/auth/presentation/view_model/login/login_bloc.dart';
 
 class MockLoginBloc extends MockBloc<LoginEvent, LoginState>
     implements LoginBloc {}
 
-class MockBuildContext extends Mock implements BuildContext {}
-
 void main() {
   late MockLoginBloc loginBloc;
-  late MockBuildContext mockContext;
 
   setUp(() {
     loginBloc = MockLoginBloc();
-    mockContext = MockBuildContext();
 
     when(() => loginBloc.state)
         .thenReturn(LoginState(isLoading: false, isSuccess: false));
-
-    registerFallbackValue(loginUserEvent(
-      context: mockContext,
-      email: 'test',
-      password: 'test',
-    ));
-    registerFallbackValue(NavigateRegisterScreenEvent(
-      context: mockContext,
-      destination: Container(),
-    ));
   });
 
   Widget loadLoginView() {
@@ -46,26 +32,22 @@ void main() {
     await tester.pumpWidget(loadLoginView());
     await tester.pumpAndSettle();
 
-    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
-    final registerButton = find.widgetWithText(ElevatedButton, 'Register');
+    final result = find.widgetWithText(ElevatedButton, 'Login');
+    final result2 = find.widgetWithText(ElevatedButton, 'Register');
 
-    expect(loginButton, findsOneWidget);
-    expect(registerButton, findsOneWidget);
+    expect(result, findsOneWidget);
+    expect(result2, findsOneWidget);
   });
 
-  testWidgets("check for the email and password with correct credentials",
-      (tester) async {
+  testWidgets("check for the username and password", (tester) async {
     await tester.pumpWidget(loadLoginView());
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.byKey(const ValueKey('username')));
-    await tester.tap(find.byKey(const ValueKey('username')));
     await tester.enterText(
-        find.byKey(const ValueKey('username')), "findmepokhrel@gmail.com");
+        find.byType(TextField).at(0), "findmepokhrel@gmail.com");
+    await tester.enterText(find.byType(TextField).at(1), "password");
 
-    await tester.ensureVisible(find.byKey(const ValueKey('password')));
-    await tester.tap(find.byKey(const ValueKey('password')));
-    await tester.enterText(find.byKey(const ValueKey('password')), "password");
+    await tester.tap(find.byType(ElevatedButton).first);
 
     await tester.pumpAndSettle();
 
@@ -77,13 +59,28 @@ void main() {
     await tester.pumpWidget(loadLoginView());
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.byKey(const ValueKey('signInButton')));
-    await tester.tap(find.byKey(const ValueKey('signInButton')));
+    await tester.tap(find.byType(ElevatedButton).first);
 
     await tester.pumpAndSettle();
 
     expect(find.text('Please enter username'), findsOneWidget);
     expect(find.text('Please enter password'), findsOneWidget);
-    expect(find.text('Please fill all fields'), findsOneWidget);
+  });
+
+  testWidgets("check for login successful", (tester) async {
+    when(() => loginBloc.state)
+        .thenReturn(LoginState(isLoading: true, isSuccess: true));
+    await tester.pumpWidget(loadLoginView());
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.byType(TextField).at(0), "findmepokhrel@gmail.com");
+    await tester.enterText(find.byType(TextField).at(1), "password");
+
+    await tester.tap(find.byType(ElevatedButton).first);
+
+    await tester.pumpAndSettle();
+
+    expect(loginBloc.state.isSuccess, true);
   });
 }

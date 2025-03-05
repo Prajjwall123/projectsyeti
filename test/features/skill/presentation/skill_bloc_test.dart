@@ -51,7 +51,7 @@ void main() {
     );
 
     blocTest<SkillBloc, SkillState>(
-      'emits [loading, error] when initial LoadSkills fails',
+      'emits loading, error when initial LoadSkills fails',
       build: () {
         when(() => mockGetAllSkillsUsecase.call())
             .thenAnswer((_) async => const Left(tFailure));

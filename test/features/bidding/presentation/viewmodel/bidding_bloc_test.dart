@@ -34,7 +34,7 @@ void main() {
   });
 
   blocTest<BiddingBloc, BiddingState>(
-    'emits [BiddingState] with loading and success when CreateBid succeeds',
+    'emits BiddingState with loading and success when CreateBid succeeds',
     build: () {
       when(() => mockCreateBidUseCase(any()))
           .thenAnswer((_) async => const Right(null));
@@ -57,7 +57,7 @@ void main() {
   );
 
   blocTest<BiddingBloc, BiddingState>(
-    'emits [BiddingState] with success when CreateBid succeeds with skip 1',
+    'emits BiddingState with success when CreateBid succeeds with skip 1',
     build: () {
       when(() => mockCreateBidUseCase(any()))
           .thenAnswer((_) async => const Right(null));
@@ -80,7 +80,7 @@ void main() {
   );
 
   blocTest<BiddingBloc, BiddingState>(
-    'emits [BiddingState] with error when CreateBid fails',
+    'emits BiddingState with error when CreateBid fails',
     build: () {
       when(() => mockCreateBidUseCase(any()))
           .thenAnswer((_) async => const Left(tFailure));

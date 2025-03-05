@@ -92,7 +92,7 @@ void main() {
   });
 
   blocTest<ProjectBloc, ProjectState>(
-    'emits [ProjectLoading, ProjectsLoaded] when GetAllProjects succeeds',
+    'emits ProjectLoading, ProjectsLoaded when GetAllProjects succeeds',
     build: () {
       when(() => mockGetAllProjectsUsecase(any()))
           .thenAnswer((_) async => Right(tProjects));
@@ -109,7 +109,7 @@ void main() {
   );
 
   blocTest<ProjectBloc, ProjectState>(
-    'emits [ProjectsLoaded] when GetAllProjects succeeds with skip 1',
+    'emits ProjectsLoaded when GetAllProjects succeeds with skip 1',
     build: () {
       when(() => mockGetAllProjectsUsecase(any()))
           .thenAnswer((_) async => Right(tProjects));
@@ -126,7 +126,7 @@ void main() {
   );
 
   blocTest<ProjectBloc, ProjectState>(
-    'emits [ProjectLoading, ProjectError] when GetAllProjects fails',
+    'emits ProjectLoading, ProjectError when GetAllProjects fails',
     build: () {
       when(() => mockGetAllProjectsUsecase(any()))
           .thenAnswer((_) async => const Left(tFailure));
@@ -143,7 +143,7 @@ void main() {
   );
 
   blocTest<ProjectBloc, ProjectState>(
-    'emits [ProjectLoading, ProjectsLoaded] when GetProjectsByFreelancerId succeeds',
+    'emits ProjectLoading, ProjectsLoaded when GetProjectsByFreelancerId succeeds',
     build: () {
       when(() => mockGetProjectsByFreelancerIdUsecase(any()))
           .thenAnswer((_) async => Right(tProjects));
@@ -162,7 +162,7 @@ void main() {
   );
 
   blocTest<ProjectBloc, ProjectState>(
-    'emits [ProjectLoading, ProjectLoaded] when GetProjectById succeeds',
+    'emits ProjectLoading, ProjectLoaded when GetProjectById succeeds',
     build: () {
       when(() => mockGetProjectByIdUsecase(any()))
           .thenAnswer((_) async => Right(tProject));
