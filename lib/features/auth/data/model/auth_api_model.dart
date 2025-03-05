@@ -15,20 +15,20 @@ class AuthApiModel extends Equatable{
   final List<SkillApiModel> skills;
   final String email;
   final String password;
-  final String portfolio;
-  final String availability;
-  final int experienceYears;
+  final String? portfolio;
+  final String? availability;
+  final int? experienceYears;
 
   const AuthApiModel({
     this.id,
     required this.freelancerName,
-    required this.portfolio,
+     this.portfolio,
     this.profileImage,
     required this.email,
     required this.password,
     required this.skills,
-    required this.availability,
-    required this.experienceYears,
+     this.availability,
+     this.experienceYears,
   });
 
   factory AuthApiModel.fromJson(Map<String, dynamic> json) =>

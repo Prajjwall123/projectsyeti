@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/core/app_theme/theme_provider.dart';
+import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:projectsyeti/features/certification/domain/entity/certification_entity.dart';
 import 'package:projectsyeti/features/experience/domain/entity/experience_entity.dart';
@@ -151,8 +152,9 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     }
   }
 
-  void _saveFreelancerDetails() {
-    _uploadImage().then((_) {
+  void _saveFreelancerDetails() async {
+    // Show loading indicator if needed
+    await _uploadImage().then((_) {
       final updatedFreelancer = FreelancerEntity(
         id: widget.freelancer.id,
         freelancerName: _nameController.text,
@@ -188,13 +190,15 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
           );
         }).toList(),
       );
-
       context
           .read<FreelancerBloc>()
           .add(UpdateFreelancerEvent(updatedFreelancer));
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')));
-      Navigator.pop(context); // Navigate back after saving
+      showMySnackBar(
+        context: context,
+        message: "Profile updated successfully",
+        color: Colors.green,
+      );
+      Navigator.pop(context, widget.freelancer.id);
     });
   }
 
@@ -204,7 +208,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final bool isDarkTheme = themeProvider.themeMode == ThemeMode.dark;
 
-    // Get the bottom padding for the safe area and BottomNavigationBar
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
     const double navBarHeight = 56.0;
 

@@ -77,10 +77,10 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
         skills: freelancer.skills
             .map((skill) => SkillApiModel.fromEntity(skill))
             .toList(),
-        experienceYears: freelancer.experienceYears,
+        experienceYears: freelancer.experienceYears!,
         freelancerName: freelancer.freelancerName,
-        availability: freelancer.availability,
-        portfolio: freelancer.portfolio,
+        availability: freelancer.availability!,
+        portfolio: freelancer.portfolio!,
         profileImage: freelancer.profileImage,
         projectsCompleted: freelancer.projectsCompleted,
         certifications: freelancer.certifications

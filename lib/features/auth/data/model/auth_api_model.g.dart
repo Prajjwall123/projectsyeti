@@ -9,15 +9,15 @@ part of 'auth_api_model.dart';
 AuthApiModel _$AuthApiModelFromJson(Map<String, dynamic> json) => AuthApiModel(
       id: json['_id'] as String?,
       freelancerName: json['freelancerName'] as String,
-      portfolio: json['portfolio'] as String,
+      portfolio: json['portfolio'] as String?,
       profileImage: json['profileImage'] as String?,
       email: json['email'] as String,
       password: json['password'] as String,
       skills: (json['skills'] as List<dynamic>)
           .map((e) => SkillApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      availability: json['availability'] as String,
-      experienceYears: (json['experienceYears'] as num).toInt(),
+      availability: json['availability'] as String?,
+      experienceYears: (json['experienceYears'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$AuthApiModelToJson(AuthApiModel instance) =>

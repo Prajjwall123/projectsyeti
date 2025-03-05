@@ -56,11 +56,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     final result = await _registerUseCase.call(RegisterUserParams(
       freelancerName: event.freelancerName,
-      portfolio: event.portfolio,
+      // portfolio: event.portfolio,
       email: event.email,
       skills: event.skills,
-      availability: event.availability,
-      experienceYears: event.experienceYears,
+      // availability: event.availability,
+      // experienceYears: event.experienceYears,
       password: event.password,
       profileImage: state.profileImage ?? "",
     ));
@@ -69,13 +69,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (l) {
         emit(state.copyWith(isLoading: false, isSuccess: false));
         showMySnackBar(
-            context: event.context, message: l.message, color: Colors.red);
+          context: event.context,
+          message: l.message,
+          color: Colors.red,
+        );
       },
       (r) {
         emit(state.copyWith(
-            isLoading: false, isSuccess: true, email: event.email));
+          isLoading: false,
+          isSuccess: true,
+          email: event.email,
+        ));
         showMySnackBar(
-            context: event.context, message: "OTP sent to your email");
+          context: event.context,
+          message: "Registration successful",
+          color: Colors.green,
+        );
 
         Navigator.push(
           event.context,
@@ -104,14 +113,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (l) {
         emit(state.copyWith(isLoading: false, isOtpVerified: false));
         showMySnackBar(
-            context: event.context, message: l.message, color: Colors.red);
+          context: event.context,
+          message: "OTP Verified Successfully",
+          color: Colors.green,
+        );
+        Navigator.pushReplacementNamed(event.context, '/login');
       },
       (r) {
         emit(state.copyWith(isLoading: false, isOtpVerified: true));
         showMySnackBar(
-            context: event.context, message: "OTP Verified Successfully");
-
-        Navigator.pushReplacementNamed(event.context, '/login');
+            context: event.context,
+            color: Colors.red,
+            message: "OTP is incorrect");
       },
     );
   }
@@ -131,7 +144,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (imageUrl) {
         debugPrint(imageUrl);
         emit(state.copyWith(
-            isLoading: false, isSuccess: true, profileImage: imageUrl));
+          isLoading: false,
+          isSuccess: true,
+          profileImage: imageUrl,
+        ));
       },
     );
   }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projectsyeti/core/common/snackbar/my_snackbar.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
 import 'package:projectsyeti/features/project/presentation/view/provide_feedback_view.dart';
 import 'package:projectsyeti/features/project/presentation/view_model/bloc/project_bloc.dart';
 
 class ProjectsByFreelancerView extends StatefulWidget {
-  final String freelancerId;
+  final String? freelancerId;
 
   const ProjectsByFreelancerView({super.key, required this.freelancerId});
 
@@ -21,14 +22,15 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
   void initState() {
     super.initState();
     final projectBloc = context.read<ProjectBloc>();
-    if (!projectBloc.isClosed) {
-      projectBloc.add(GetProjectsByFreelancerIdEvent(widget.freelancerId));
+    if (!projectBloc.isClosed && widget.freelancerId != null) {
+      projectBloc.add(GetProjectsByFreelancerIdEvent(widget.freelancerId!));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkTheme = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -47,8 +49,10 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                   return project;
                 }).toList();
               });
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Project updated successfully')),
+              showMySnackBar(
+                context: context,
+                message: "Project Status updated successfully",
+                color: Colors.green,
               );
             } else if (state is ProjectError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -61,19 +65,39 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is ProjectsLoaded) {
               projects = state.projects;
+              if (projects.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No Projects Available",
+                    style: TextStyle(
+                      color: isDarkTheme ? Colors.white70 : Colors.black54,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
+              }
               return _buildProjectList();
             } else if (state is ProjectError) {
               return Center(
                 child: Text(
                   "Error: ${state.message}",
                   style: TextStyle(
-                    color: theme.colorScheme.error,
+                    color:
+                        isDarkTheme ? Colors.red[300] : theme.colorScheme.error,
                     fontSize: 18,
                   ),
                 ),
               );
             }
-            return const Center(child: Text("No Projects Available"));
+            return Center(
+              child: Text(
+                "No Projects Available",
+                style: TextStyle(
+                  color: isDarkTheme ? Colors.white70 : Colors.black54,
+                  fontSize: 18,
+                ),
+              ),
+            );
           },
         ),
       ),
@@ -102,6 +126,7 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
             borderRadius: BorderRadius.circular(12),
           ),
           margin: const EdgeInsets.only(bottom: 16.0),
+          color: isDarkTheme ? Colors.grey[900] : Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -118,7 +143,9 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 const SizedBox(height: 4),
                 Text(
                   project.title,
-                  style: theme.textTheme.bodyLarge,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 12),
 
@@ -133,7 +160,9 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 const SizedBox(height: 4),
                 Text(
                   project.companyName ?? 'Unknown',
-                  style: theme.textTheme.bodyLarge,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 12),
 
@@ -188,15 +217,27 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
       "Done",
     ];
 
+    // Normalize the project status to match the statuses list
+    String? normalizedStatus = project.status;
+    // Find a matching status in the list (case-insensitive)
+    normalizedStatus = statuses.firstWhere(
+      (status) => status.toLowerCase() == normalizedStatus!.toLowerCase(),
+      orElse: () => "To Do", // Default to "To Do" if no match is found
+    );
+
     return DropdownButton<String>(
-      value: project.status,
+      value: normalizedStatus,
       isDense: true,
       items: statuses.map((status) {
         return DropdownMenuItem<String>(
           value: status,
           child: Text(
             status,
-            style: theme.textTheme.bodyMedium,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.brightness == Brightness.dark
+                  ? Colors.white70
+                  : Colors.black87,
+            ),
             softWrap: true,
           ),
         );
@@ -227,8 +268,10 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 ));
               }
             } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Project ID is missing")),
+              showMySnackBar(
+                context: context,
+                message: "Project ID is missing",
+                color: Colors.red,
               );
             }
           }
@@ -260,15 +303,19 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
   }
 
   void _showFeedback(ProjectEntity project) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     if (project.feedbackRespondMessage != null &&
         project.feedbackRespondMessage!.isNotEmpty) {
       showDialog(
         context: context,
         builder: (dialogContext) {
           return AlertDialog(
+            backgroundColor: isDarkTheme ? Colors.grey[900] : Colors.white,
             title: Text(
               "Feedback for ${project.title}",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: isDarkTheme ? Colors.white : Colors.black,
+                  ),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -276,12 +323,16 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
               children: [
                 Text(
                   "Progress Link: ${project.link ?? 'Not provided'}",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isDarkTheme ? Colors.white70 : Colors.black87,
+                      ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   "Message: ${project.feedbackRespondMessage}",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isDarkTheme ? Colors.white70 : Colors.black87,
+                      ),
                 ),
               ],
             ),
@@ -291,7 +342,9 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
                 child: Text(
                   "Close",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: isDarkTheme
+                        ? Colors.white70
+                        : Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ),
@@ -301,15 +354,20 @@ class _ProjectsByFreelancerViewState extends State<ProjectsByFreelancerView> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("No feedback response available for this project")),
+        showMySnackBar(
+          context: context,
+          message: "No feedback available for this project",
+          color: Colors.red,
+        ),
       );
     }
   }
 
   void _viewDetails(ProjectEntity project) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Viewing details for ${project.title}")),
+    showMySnackBar(
+      context: context,
+      message: "Viewing details for ${project.title}",
+      color: Colors.green,
     );
   }
 }

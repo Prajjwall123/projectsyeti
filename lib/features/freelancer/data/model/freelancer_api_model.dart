@@ -12,10 +12,10 @@ class FreelancerApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
   final List<SkillApiModel> skills;
-  final int experienceYears;
+  final int? experienceYears;
   final String freelancerName;
-  final String availability;
-  final String portfolio;
+  final String? availability;
+  final String? portfolio;
   final String? profileImage;
   final int projectsCompleted;
   final DateTime? createdAt;
@@ -33,10 +33,10 @@ class FreelancerApiModel extends Equatable {
   const FreelancerApiModel({
     this.id,
     required this.skills,
-    required this.experienceYears,
+    this.experienceYears,
     required this.freelancerName,
-    required this.availability,
-    required this.portfolio,
+    this.availability,
+    this.portfolio,
     this.profileImage,
     required this.projectsCompleted,
     this.createdAt,

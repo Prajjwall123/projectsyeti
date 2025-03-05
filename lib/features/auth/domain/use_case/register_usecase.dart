@@ -12,31 +12,31 @@ class RegisterUserParams extends Equatable {
   final List<SkillEntity> skills;
   final String email;
   final String password;
-  final String portfolio;
-  final String availability;
-  final int experienceYears;
+  final String? portfolio;
+  final String? availability;
+  final int? experienceYears;
 
   const RegisterUserParams({
     required this.freelancerName,
-    required this.portfolio,
+    this.portfolio,
     this.profileImage,
     required this.email,
     required this.password,
     required this.skills,
-    required this.availability,
-    required this.experienceYears,
+    this.availability,
+    this.experienceYears,
   });
 
   //initial constructor
   const RegisterUserParams.initial({
     required this.freelancerName,
-    required this.portfolio,
+    this.portfolio,
     this.profileImage,
     required this.email,
     required this.password,
     required this.skills,
-    required this.availability,
-    required this.experienceYears,
+    this.availability,
+    this.experienceYears,
   });
 
   @override

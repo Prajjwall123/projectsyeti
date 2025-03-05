@@ -28,31 +28,46 @@ class _CompanyViewState extends State<CompanyView> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the theme is dark
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Company Details'),
+        // AppBar will automatically adapt to the theme
       ),
       body: BlocBuilder<CompanyBloc, CompanyState>(
         builder: (context, state) {
           if (state is CompanyLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is CompanyLoaded) {
-            return _buildCompanyDetails(state.company);
+            return _buildCompanyDetails(state.company, isDarkTheme);
           } else if (state is CompanyError) {
             return Center(
               child: Text(
                 state.message,
-                style: const TextStyle(color: Colors.red, fontSize: 18),
+                style: TextStyle(
+                  color: isDarkTheme ? Colors.red[300] : Colors.red,
+                  fontSize: 18,
+                ),
               ),
             );
           }
-          return const Center(child: Text("No Company Data Available"));
+          return Center(
+            child: Text(
+              "No Company Data Available",
+              style: TextStyle(
+                color: isDarkTheme ? Colors.white70 : Colors.black54,
+                fontSize: 18,
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget _buildCompanyDetails(CompanyEntity company) {
+  Widget _buildCompanyDetails(CompanyEntity company, bool isDarkTheme) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -62,7 +77,7 @@ class _CompanyViewState extends State<CompanyView> {
             // COMPANY HEADER
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: _boxDecoration(),
+              decoration: _boxDecoration(isDarkTheme),
               child: Column(
                 children: [
                   if (company.logo != null)
@@ -74,22 +89,29 @@ class _CompanyViewState extends State<CompanyView> {
                   const SizedBox(height: 12),
                   Text(
                     company.companyName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: isDarkTheme ? Colors.white : Colors.black,
                     ),
                   ),
                   if (company.headquarters != null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.location_on,
-                            size: 18, color: Colors.blue),
+                        Icon(
+                          Icons.location_on,
+                          size: 18,
+                          color: isDarkTheme ? Colors.blue[300] : Colors.blue,
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           company.headquarters!,
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black87),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color:
+                                isDarkTheme ? Colors.grey[400] : Colors.black87,
+                          ),
                         ),
                       ],
                     ),
@@ -99,36 +121,53 @@ class _CompanyViewState extends State<CompanyView> {
 
             const SizedBox(height: 16),
 
-            // PROJECTS SECTION (Moved Above Bio)
-            const Text(
+            // PROJECTS SECTION
+            Text(
               "Projects",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: isDarkTheme ? Colors.white : Colors.black,
+              ),
             ),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildColoredStatCard("Posted",
-                    company.projectsPosted.toString(), Colors.blue.shade50),
-                _buildColoredStatCard("Awarded",
-                    company.projectsAwarded.toString(), Colors.green.shade50),
                 _buildColoredStatCard(
-                    "Completed",
-                    company.projectsCompleted.toString(),
-                    Colors.yellow.shade50),
+                  "Posted",
+                  company.projectsPosted.toString(),
+                  isDarkTheme ? Colors.blue[900]! : Colors.blue.shade50,
+                  isDarkTheme,
+                ),
+                _buildColoredStatCard(
+                  "Awarded",
+                  company.projectsAwarded.toString(),
+                  isDarkTheme ? Colors.green[900]! : Colors.green.shade50,
+                  isDarkTheme,
+                ),
+                _buildColoredStatCard(
+                  "Completed",
+                  company.projectsCompleted.toString(),
+                  isDarkTheme ? Colors.yellow[900]! : Colors.yellow.shade50,
+                  isDarkTheme,
+                ),
               ],
             ),
 
             const SizedBox(height: 16),
 
-            // BIO SECTION (Now Below Projects)
+            // BIO SECTION
             Container(
               padding: const EdgeInsets.all(18),
-              decoration: _boxDecoration(),
+              decoration: _boxDecoration(isDarkTheme),
               child: Text(
                 company.companyBio ?? "",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: isDarkTheme ? Colors.white70 : Colors.black87,
+                ),
               ),
             ),
 
@@ -137,18 +176,39 @@ class _CompanyViewState extends State<CompanyView> {
             // OTHER DETAILS SECTION
             Container(
               padding: const EdgeInsets.all(18),
-              decoration: _boxDecoration(),
+              decoration: _boxDecoration(isDarkTheme),
               child: Column(
                 children: [
-                  _buildDetailRow(Icons.calendar_today, "Founded",
-                      company.founded?.toString() ?? "N/A"),
-                  _buildDetailRow(Icons.person, "CEO", company.ceo ?? "N/A"),
                   _buildDetailRow(
-                      Icons.business, "Industry", company.industry ?? "N/A"),
+                    Icons.calendar_today,
+                    "Founded",
+                    company.founded?.toString() ?? "N/A",
+                    isDarkTheme,
+                  ),
                   _buildDetailRow(
-                      Icons.people, "Employees", company.employees.toString()),
+                    Icons.person,
+                    "CEO",
+                    company.ceo ?? "N/A",
+                    isDarkTheme,
+                  ),
                   _buildDetailRow(
-                      Icons.public, "Website", company.website ?? "N/A"),
+                    Icons.business,
+                    "Industry",
+                    company.industry ?? "N/A",
+                    isDarkTheme,
+                  ),
+                  _buildDetailRow(
+                    Icons.people,
+                    "Employees",
+                    company.employees.toString(),
+                    isDarkTheme,
+                  ),
+                  _buildDetailRow(
+                    Icons.public,
+                    "Website",
+                    company.website ?? "N/A",
+                    isDarkTheme,
+                  ),
                 ],
               ),
             ),
@@ -159,7 +219,8 @@ class _CompanyViewState extends State<CompanyView> {
   }
 
   // Individual colored cards for stats
-  Widget _buildColoredStatCard(String label, String value, Color color) {
+  Widget _buildColoredStatCard(
+      String label, String value, Color color, bool isDarkTheme) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -169,7 +230,9 @@ class _CompanyViewState extends State<CompanyView> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
+              color: isDarkTheme
+                  ? Colors.black.withOpacity(0.3)
+                  : Colors.grey.withOpacity(0.2),
               blurRadius: 6,
               spreadRadius: 1,
               offset: const Offset(0, 3),
@@ -180,15 +243,18 @@ class _CompanyViewState extends State<CompanyView> {
           children: [
             Text(
               value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                color: isDarkTheme ? Colors.white : Colors.blue,
               ),
             ),
             Text(
               label,
-              style: const TextStyle(fontSize: 14, color: Colors.black87),
+              style: TextStyle(
+                fontSize: 14,
+                color: isDarkTheme ? Colors.white70 : Colors.black87,
+              ),
             ),
           ],
         ),
@@ -197,25 +263,33 @@ class _CompanyViewState extends State<CompanyView> {
   }
 
   // Row for other details with icons
-  Widget _buildDetailRow(IconData icon, String label, String value) {
+  Widget _buildDetailRow(
+      IconData icon, String label, String value, bool isDarkTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, size: 24, color: Colors.blue),
+          Icon(
+            icon,
+            size: 24,
+            color: isDarkTheme ? Colors.blue[300] : Colors.blue,
+          ),
           const SizedBox(width: 12),
           Text(
             "$label: ",
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Colors.black,
+              color: isDarkTheme ? Colors.white : Colors.black,
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
+              style: TextStyle(
+                fontSize: 16,
+                color: isDarkTheme ? Colors.white70 : Colors.black87,
+              ),
             ),
           ),
         ],
@@ -224,13 +298,15 @@ class _CompanyViewState extends State<CompanyView> {
   }
 
   // Box decoration for sections
-  BoxDecoration _boxDecoration() {
+  BoxDecoration _boxDecoration(bool isDarkTheme) {
     return BoxDecoration(
-      color: Colors.white,
+      color: isDarkTheme ? Colors.grey[900] : Colors.white,
       borderRadius: BorderRadius.circular(14),
       boxShadow: [
         BoxShadow(
-          color: Colors.grey.withOpacity(0.3),
+          color: isDarkTheme
+              ? Colors.black.withOpacity(0.3)
+              : Colors.grey.withOpacity(0.3),
           blurRadius: 8,
           spreadRadius: 2,
           offset: const Offset(0, 4),

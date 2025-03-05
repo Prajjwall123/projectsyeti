@@ -55,27 +55,46 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the theme is dark
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Submit Bid")),
+      appBar: AppBar(
+        title: const Text("Submit Bid"),
+        // AppBar will automatically adapt to the theme
+      ),
       body: BlocBuilder<ProjectBloc, ProjectState>(
         builder: (context, state) {
           if (state is ProjectLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProjectLoaded) {
-            return _buildBidForm(state.project);
+            return _buildBidForm(state.project, isDarkTheme);
           } else if (state is ProjectError) {
             return Center(
-              child: Text(state.message,
-                  style: const TextStyle(color: Colors.red, fontSize: 18)),
+              child: Text(
+                state.message,
+                style: TextStyle(
+                  color: isDarkTheme ? Colors.red[300] : Colors.red,
+                  fontSize: 18,
+                ),
+              ),
             );
           }
-          return const Center(child: Text("Project details not available"));
+          return Center(
+            child: Text(
+              "Project details not available",
+              style: TextStyle(
+                color: isDarkTheme ? Colors.white70 : Colors.black54,
+                fontSize: 18,
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
-  Widget _buildBidForm(ProjectEntity project) {
+  Widget _buildBidForm(ProjectEntity project, bool isDarkTheme) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -87,55 +106,113 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
           const SizedBox(height: 20),
 
           // ✅ Bid Amount Input
-          const Text("Bid Amount",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            "Bid Amount",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: _bidAmountController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: "Enter your bid amount",
+              hintStyle: TextStyle(
+                color: isDarkTheme ? Colors.grey[500] : Colors.grey[600],
+              ),
               filled: true,
-              fillColor: Colors.grey[100], // Light background
+              fillColor: isDarkTheme ? Colors.grey[800] : Colors.grey[100],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.grey[700]! : Colors.grey.shade300,
+                ),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.grey[700]! : Colors.grey.shade300,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.blue[300]! : Colors.blue,
+                ),
+              ),
+            ),
+            style: TextStyle(
+              color: isDarkTheme ? Colors.white : Colors.black,
             ),
           ),
 
           const SizedBox(height: 20),
 
           // ✅ Proposal Input
-          const Text("Proposal",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            "Proposal",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: _proposalController,
             maxLines: 4,
             decoration: InputDecoration(
               hintText: "Write your proposal...",
+              hintStyle: TextStyle(
+                color: isDarkTheme ? Colors.grey[500] : Colors.grey[600],
+              ),
               filled: true,
-              fillColor: Colors.grey[100], // Light background
+              fillColor: isDarkTheme ? Colors.grey[800] : Colors.grey[100],
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.grey[700]! : Colors.grey.shade300,
+                ),
               ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.grey[700]! : Colors.grey.shade300,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: isDarkTheme ? Colors.blue[300]! : Colors.blue,
+                ),
+              ),
+            ),
+            style: TextStyle(
+              color: isDarkTheme ? Colors.white : Colors.black,
             ),
           ),
 
           const SizedBox(height: 20),
 
           // ✅ File Upload Button
-          const Text("Attach File",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            "Attach File",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
+          ),
           const SizedBox(height: 8),
           GestureDetector(
             onTap: _pickFile,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: Colors.blue, // Dark blue like buttons
+                color: const Color(0xFF001F3F), // Keep consistent with buttons
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -147,7 +224,10 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
                       _selectedFile != null
                           ? _selectedFile!.path.split('/').last
                           : "No file selected",
-                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -159,7 +239,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
           const SizedBox(height: 20),
 
           SizedBox(
-            width: double.infinity, // Full width button
+            width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
                 if (_bidAmountController.text.isEmpty ||
@@ -167,31 +247,49 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
                     _selectedFile == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                        content:
-                            Text("Please fill all fields and attach a file")),
+                      content: Text("Please fill all fields and attach a file"),
+                    ),
                   );
                   return;
                 }
 
-                context.read<BiddingBloc>().add(CreateBidEvent(
-                      freelancer: widget.freelancerId, // Freelancer ID passed
-                      project: widget.projectId,
-                      amount: double.parse(_bidAmountController.text),
-                      message: _proposalController.text,
-                      file: _selectedFile!,
-                    ));
+                try {
+                  final amount = double.parse(_bidAmountController.text);
+                  context.read<BiddingBloc>().add(CreateBidEvent(
+                        freelancer: widget.freelancerId,
+                        project: widget.projectId,
+                        amount: amount,
+                        message: _proposalController.text,
+                        file: _selectedFile!,
+                      ));
+                  // Show green success SnackBar immediately after adding the event
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Bid for project successful"),
+                      backgroundColor: Colors.green,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please enter a valid bid amount"),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16), // Bigger button
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                backgroundColor: const Color(0xFF001F3F), // Dark blue theme
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                backgroundColor: const Color(0xFF001F3F),
               ),
               child: const Text(
                 "Submit Bid",
                 style: TextStyle(
-                  fontSize: 18, // Bigger text
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),

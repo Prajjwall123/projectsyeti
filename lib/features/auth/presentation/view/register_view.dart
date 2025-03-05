@@ -22,10 +22,10 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _key = GlobalKey<FormState>();
   final _freelancerNameController = TextEditingController();
-  final _portfolioController = TextEditingController();
+  // final _portfolioController = TextEditingController();
   final _emailController = TextEditingController();
-  final _experienceController = TextEditingController();
-  final _availabilityController = TextEditingController();
+  // final _experienceController = TextEditingController();
+  // final _availabilityController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final List<SkillEntity> _selectedSkills = [];
@@ -164,7 +164,7 @@ class _RegisterViewState extends State<RegisterView> {
                       TextFormField(
                         controller: _freelancerNameController,
                         decoration: InputDecoration(
-                          labelText: 'Freelancer Name',
+                          labelText: 'Your Name',
                           hintText: 'Enter your name',
                           prefixIcon: const Icon(Icons.person),
                           border: OutlineInputBorder(
@@ -175,21 +175,21 @@ class _RegisterViewState extends State<RegisterView> {
                             value!.isEmpty ? 'Please enter name' : null,
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _portfolioController,
-                        decoration: InputDecoration(
-                          labelText: 'Portfolio URL',
-                          prefixIcon: const Icon(Icons.link),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
+                      // TextFormField(
+                      //   controller: _portfolioController,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Portfolio URL',
+                      //     prefixIcon: const Icon(Icons.link),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: 'Your Email',
                           prefixIcon: const Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -223,37 +223,37 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        controller: _availabilityController,
-                        decoration: InputDecoration(
-                          labelText: 'Availability (e.g., Full-time)',
-                          prefixIcon: const Icon(Icons.schedule),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _experienceController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: 'Experience (in years)',
-                          prefixIcon: const Icon(Icons.work),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter experience years';
-                          }
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                      ),
+                      // TextFormField(
+                      //   controller: _availabilityController,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Availability (e.g., Full-time)',
+                      //     prefixIcon: const Icon(Icons.schedule),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 20),
+                      // TextFormField(
+                      //   controller: _experienceController,
+                      //   keyboardType: TextInputType.number,
+                      //   decoration: InputDecoration(
+                      //     labelText: 'Experience (in years)',
+                      //     prefixIcon: const Icon(Icons.work),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(8),
+                      //     ),
+                      //   ),
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return 'Please enter experience years';
+                      //     }
+                      //     if (int.tryParse(value) == null) {
+                      //       return 'Please enter a valid number';
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _passwordController,
@@ -287,12 +287,12 @@ class _RegisterViewState extends State<RegisterView> {
                             RegisterUser(
                               context: context,
                               freelancerName: _freelancerNameController.text,
-                              portfolio: _portfolioController.text,
+                              // portfolio: _portfolioController.text,
                               email: _emailController.text,
-                              experienceYears:
-                                  int.parse(_experienceController.text),
+                              // experienceYears:
+                              //     int.parse(_experienceController.text),
                               skills: _selectedSkills,
-                              availability: _availabilityController.text,
+                              // availability: _availabilityController.text,
                               password: _passwordController.text,
                               profileImage: _img?.path ?? "",
                             ),

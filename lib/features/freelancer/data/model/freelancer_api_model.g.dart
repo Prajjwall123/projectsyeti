@@ -12,10 +12,10 @@ FreelancerApiModel _$FreelancerApiModelFromJson(Map<String, dynamic> json) =>
       skills: (json['skills'] as List<dynamic>)
           .map((e) => SkillApiModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      experienceYears: (json['experienceYears'] as num).toInt(),
+      experienceYears: (json['experienceYears'] as num?)?.toInt(),
       freelancerName: json['freelancerName'] as String,
-      availability: json['availability'] as String,
-      portfolio: json['portfolio'] as String,
+      availability: json['availability'] as String?,
+      portfolio: json['portfolio'] as String?,
       profileImage: json['profileImage'] as String?,
       projectsCompleted: (json['projectsCompleted'] as num).toInt(),
       createdAt: json['createdAt'] == null

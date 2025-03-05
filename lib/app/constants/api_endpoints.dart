@@ -34,6 +34,9 @@ class ApiEndpoints {
   // ====================== Bidding Routes ======================
   static const String createBid = "biddings/create";
 
+  // ====================== Wallet Routes ======================
+  static const String getWalletAmount = "wallets/balance/freelancer/";
+
   // ====================== Notification Routes ======================
   static const String getNotificationByFreelancer = "notifications/";
   static const String seenNotificationByFreelancerId =

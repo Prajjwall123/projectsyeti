@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:dartz/dartz.dart';
@@ -85,7 +86,9 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
     result.fold(
       (failure) => emit(ProjectError(_mapFailureToMessage(failure))),
-      (updatedProject) => emit(ProjectUpdated(updatedProject)),
+      (updatedProject) {
+        emit(ProjectUpdated(updatedProject));
+      },
     );
   }
 

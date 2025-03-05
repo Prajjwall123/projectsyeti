@@ -14,16 +14,16 @@ class UpdateFreelancerByIdDTO {
   final List<SkillApiModel> skills;
 
   @JsonKey(name: 'experienceYears')
-  final int experienceYears;
+  final int? experienceYears;
 
   @JsonKey(name: 'freelancerName')
   final String freelancerName;
 
   @JsonKey(name: 'availability')
-  final String availability;
+  final String? availability;
 
   @JsonKey(name: 'portfolio')
-  final String portfolio;
+  final String? portfolio;
 
   @JsonKey(name: 'profileImage')
   final String profileImage;
@@ -61,10 +61,10 @@ class UpdateFreelancerByIdDTO {
   UpdateFreelancerByIdDTO({
     required this.id,
     required this.skills,
-    required this.experienceYears,
+    this.experienceYears,
     required this.freelancerName,
-    required this.availability,
-    required this.portfolio,
+    this.availability,
+    this.portfolio,
     required this.profileImage,
     required this.projectsCompleted,
     this.certifications,

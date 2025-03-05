@@ -6,10 +6,10 @@ import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 class FreelancerEntity extends Equatable {
   final String id;
   final List<SkillEntity> skills;
-  final int experienceYears;
+  final int? experienceYears;
   final String freelancerName;
-  final String availability;
-  final String portfolio;
+  final String? availability;
+  final String? portfolio;
   final String profileImage;
   final int projectsCompleted;
   final DateTime? createdAt;
@@ -26,10 +26,10 @@ class FreelancerEntity extends Equatable {
   const FreelancerEntity({
     required this.id,
     required this.skills,
-    required this.experienceYears,
+    this.experienceYears,
     required this.freelancerName,
-    required this.availability,
-    required this.portfolio,
+    this.availability,
+    this.portfolio,
     required this.profileImage,
     required this.projectsCompleted,
     this.createdAt,

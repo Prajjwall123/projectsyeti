@@ -48,53 +48,79 @@ class _ProjectViewState extends State<ProjectView> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the theme is dark
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Project Details'),
+        // Ensure the AppBar adapts to the theme (Flutter handles this automatically)
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocBuilder<ProjectBloc, ProjectState>(
           builder: (context, state) {
-            if (state is ProjectLoading)
+            if (state is ProjectLoading) {
               return const Center(child: CircularProgressIndicator());
-            if (state is ProjectLoaded)
-              return _buildProjectDetails(state.project);
-            if (state is ProjectError)
+            }
+            if (state is ProjectLoaded) {
+              return _buildProjectDetails(state.project, isDarkTheme);
+            }
+            if (state is ProjectError) {
               return Center(
-                  child: Text(state.message,
-                      style: const TextStyle(color: Colors.red, fontSize: 18)));
-            return const Center(child: Text("No Project Data Available"));
+                child: Text(
+                  state.message,
+                  style: TextStyle(
+                    color: isDarkTheme ? Colors.red[300] : Colors.red,
+                    fontSize: 18,
+                  ),
+                ),
+              );
+            }
+            return Center(
+              child: Text(
+                "No Project Data Available",
+                style: TextStyle(
+                  color: isDarkTheme ? Colors.white70 : Colors.black54,
+                  fontSize: 18,
+                ),
+              ),
+            );
           },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _buildBidButton(),
+      floatingActionButton: _buildBidButton(isDarkTheme),
     );
   }
 
-  Widget _buildProjectDetails(ProjectEntity project) {
+  Widget _buildProjectDetails(ProjectEntity project, bool isDarkTheme) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(project.title,
-              style:
-                  const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(
+            project.title,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
+          ),
           const SizedBox(height: 10),
-          _buildCompanyInfo(project),
+          _buildCompanyInfo(project, isDarkTheme),
           const SizedBox(height: 16),
-          _buildDetails(project),
+          _buildDetails(project, isDarkTheme),
           const SizedBox(height: 16),
-          _buildCategories(project.category),
+          _buildCategories(project.category, isDarkTheme),
           const SizedBox(height: 16),
-          _buildRequirements(project.requirements),
+          _buildRequirements(project.requirements, isDarkTheme),
         ],
       ),
     );
   }
 
-  Widget _buildCompanyInfo(ProjectEntity project) {
+  Widget _buildCompanyInfo(ProjectEntity project, bool isDarkTheme) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -106,7 +132,7 @@ class _ProjectViewState extends State<ProjectView> {
       },
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: _boxDecoration(),
+        decoration: _boxDecoration(isDarkTheme),
         child: Row(
           children: [
             CircleAvatar(
@@ -122,12 +148,20 @@ class _ProjectViewState extends State<ProjectView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(project.companyName,
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text(
+                    project.companyName,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkTheme ? Colors.white : Colors.black,
+                    ),
+                  ),
                   Text(
                     project.headquarters ?? "Headquarters not available",
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDarkTheme ? Colors.grey[400] : Colors.grey,
+                    ),
                   ),
                 ],
               ),
@@ -138,61 +172,38 @@ class _ProjectViewState extends State<ProjectView> {
     );
   }
 
-  Widget _buildProjectInfo(ProjectEntity project) {
+  Widget _buildDetails(ProjectEntity project, bool isDarkTheme) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: _boxDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 📌 Categories First
-          const Text(
-            "Categories:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          _buildCategories(project.category),
-
-          const SizedBox(height: 14),
-
-          // 📌 Posted Date & Duration in a Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildInfoTag(
-                  Icons.calendar_today, _formatDate(project.postedDate)),
-              _buildInfoTag(Icons.access_time, "${project.duration} months"),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-// 📌 Styled Details Section (Posted Date & Duration)
-  Widget _buildDetails(ProjectEntity project) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: _boxDecoration(),
+      decoration: _boxDecoration(isDarkTheme),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildDetailCard(Icons.calendar_today, "Posted Date:",
-              _formatDate(project.postedDate)),
           _buildDetailCard(
-              Icons.access_time, "Duration:", "${project.duration} months"),
+            Icons.calendar_today,
+            "Posted Date:",
+            _formatDate(project.postedDate),
+            isDarkTheme,
+          ),
+          _buildDetailCard(
+            Icons.access_time,
+            "Duration:",
+            "${project.duration} months",
+            isDarkTheme,
+          ),
         ],
       ),
     );
   }
 
-// 📌 Compact Styled Cards for Posted Date & Duration
-  Widget _buildDetailCard(IconData icon, String label, String value) {
+  Widget _buildDetailCard(
+      IconData icon, String label, String value, bool isDarkTheme) {
     return Expanded(
       child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.grey.shade100, // Soft background
+          color: isDarkTheme ? Colors.grey[800] : Colors.grey[100],
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -200,31 +211,34 @@ class _ProjectViewState extends State<ProjectView> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF001F3F),
+                color:
+                    const Color(0xFF001F3F), // Keep this color for consistency
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 18, color: Colors.white),
             ),
             const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkTheme ? Colors.white70 : Colors.black87,
+                    ),
                   ),
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDarkTheme ? Colors.grey[400] : Colors.black54,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -232,8 +246,7 @@ class _ProjectViewState extends State<ProjectView> {
     );
   }
 
-// 📌 Styled Category Tags in a Row
-  Widget _buildCategories(List<String> categories) {
+  Widget _buildCategories(List<String> categories, bool isDarkTheme) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -241,7 +254,7 @@ class _ProjectViewState extends State<ProjectView> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: const Color(0xFF001F3F), // Matches Buttons & Icons
+            color: const Color(0xFF001F3F),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -253,39 +266,21 @@ class _ProjectViewState extends State<ProjectView> {
     );
   }
 
-// 📌 Compact Info Tags for Posted Date & Duration
-  Widget _buildInfoTag(IconData icon, String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: const Color(0xFF001F3F)),
-          const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
-    );
-  }
-
-// 📌 Styled Requirements Section - Compact & Elegant
-  Widget _buildRequirements(String requirements) {
+  Widget _buildRequirements(String requirements, bool isDarkTheme) {
     List<String> requirementList = requirements.split('\n');
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: _boxDecoration(),
+      decoration: _boxDecoration(isDarkTheme),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Requirements:",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isDarkTheme ? Colors.white : Colors.black,
+            ),
           ),
           const SizedBox(height: 8),
           Column(
@@ -308,7 +303,10 @@ class _ProjectViewState extends State<ProjectView> {
                     Expanded(
                       child: Text(
                         requirementList[index],
-                        style: const TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkTheme ? Colors.white70 : Colors.black87,
+                        ),
                       ),
                     ),
                   ],
@@ -321,14 +319,15 @@ class _ProjectViewState extends State<ProjectView> {
     );
   }
 
-// 📌 Box Decoration for Sections
-  BoxDecoration _boxDecoration() {
+  BoxDecoration _boxDecoration(bool isDarkTheme) {
     return BoxDecoration(
-      color: Colors.white,
+      color: isDarkTheme ? Colors.grey[900] : Colors.white,
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.grey.withOpacity(0.15),
+          color: isDarkTheme
+              ? Colors.black.withOpacity(0.3)
+              : Colors.grey.withOpacity(0.15),
           blurRadius: 6,
           spreadRadius: 2,
           offset: const Offset(0, 3),
@@ -337,7 +336,7 @@ class _ProjectViewState extends State<ProjectView> {
     );
   }
 
-  Widget _buildBidButton() {
+  Widget _buildBidButton(bool isDarkTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
@@ -358,8 +357,9 @@ class _ProjectViewState extends State<ProjectView> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            backgroundColor:
-                freelancerId.isNotEmpty ? const Color(0xFF001F3F) : Colors.grey,
+            backgroundColor: freelancerId.isNotEmpty
+                ? const Color(0xFF001F3F)
+                : (isDarkTheme ? Colors.grey[700] : Colors.grey),
           ),
           child: const Text(
             "Bid for Project",

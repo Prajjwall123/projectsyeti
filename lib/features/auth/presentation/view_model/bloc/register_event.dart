@@ -35,22 +35,22 @@ class UploadImage extends RegisterEvent {
 
 class RegisterUser extends RegisterEvent {
   final String freelancerName;
-  final String portfolio;
+  final String? portfolio;
   final String email;
   final List<SkillEntity> skills;
-  final String availability;
-  final int experienceYears;
+  final String? availability;
+  final int? experienceYears;
   final String password;
   final String profileImage;
   final BuildContext context;
 
   const RegisterUser({
     required this.freelancerName,
-    required this.portfolio,
+    this.portfolio,
     required this.email,
     required this.skills,
-    required this.availability,
-    required this.experienceYears,
+    this.availability,
+    this.experienceYears,
     required this.password,
     required this.profileImage,
     required this.context,
@@ -59,11 +59,8 @@ class RegisterUser extends RegisterEvent {
   @override
   List<Object> get props => [
         freelancerName,
-        portfolio,
         email,
         skills,
-        availability,
-        experienceYears,
         password,
         profileImage,
         context,

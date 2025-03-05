@@ -11,10 +11,13 @@ class BidProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine if the theme is dark
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       elevation: 6,
       margin: const EdgeInsets.symmetric(vertical: 8),
-      color: Colors.white,
+      color: isDarkTheme ? Colors.grey[900] : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -28,12 +31,19 @@ class BidProjectCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today_outlined,
-                        size: 16, color: Colors.grey),
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 16,
+                      color: isDarkTheme ? Colors.grey[400] : Colors.grey,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       _formatDate(project.postedDate),
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:
+                            isDarkTheme ? Colors.grey[400] : Colors.grey[700],
+                      ),
                     ),
                   ],
                 ),
@@ -74,16 +84,18 @@ class BidProjectCard extends StatelessWidget {
                     children: [
                       Text(
                         project.companyName,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkTheme ? Colors.grey[400] : Colors.grey,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         project.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: isDarkTheme ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -113,11 +125,18 @@ class BidProjectCard extends StatelessWidget {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                Icon(
+                  Icons.access_time,
+                  size: 16,
+                  color: isDarkTheme ? Colors.grey[400] : Colors.grey,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   "${project.duration} months",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDarkTheme ? Colors.grey[400] : Colors.grey[700],
+                  ),
                 ),
               ],
             ),

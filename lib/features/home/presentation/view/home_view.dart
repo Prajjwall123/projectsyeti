@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectsyeti/features/project/domain/entity/project_entity.dart';
@@ -7,7 +8,6 @@ import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:projectsyeti/app/widgets/my_card.dart';
 import 'package:projectsyeti/app/widgets/my_tag.dart';
-import 'package:projectsyeti/app/widgets/my_voucher.dart';
 import 'package:projectsyeti/core/app_theme/theme_provider.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_cubit.dart';
 import 'package:projectsyeti/features/home/presentation/view_model/home_state.dart';
@@ -25,8 +25,7 @@ class _HomeViewState extends State<HomeView> {
   final List<StreamSubscription<dynamic>> _streamSubscriptions = [];
   bool _isLoggingOut = false;
   bool _isNear = false;
-  final TextEditingController _searchController =
-      TextEditingController(); // Add this for search
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -98,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
     for (final subscription in _streamSubscriptions) {
       subscription.cancel();
     }
-    _searchController.dispose(); // Dispose of the controller
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -129,7 +128,8 @@ class _HomeViewState extends State<HomeView> {
 
                       /// **🔹 Info Cards (Promotions)**
                       const SizedBox(height: 20),
-                      _buildPromoCards(),
+                      _buildPromoCards(
+                          context), // Pass context for responsive sizing
 
                       /// **🔹 Explore Projects Section**
                       const SizedBox(height: 20),
@@ -182,19 +182,18 @@ class _HomeViewState extends State<HomeView> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
-                    controller: _searchController, // Attach the controller
+                    controller: _searchController,
                     decoration: const InputDecoration(
                       hintText: 'Search Projects',
                       border: InputBorder.none,
                     ),
                   ),
                 ),
-                if (_searchController
-                    .text.isNotEmpty) // Show clear button if there's text
+                if (_searchController.text.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.clear, color: Colors.grey),
                     onPressed: () {
-                      _searchController.clear(); // Clear the search bar
+                      _searchController.clear();
                     },
                   ),
               ],
@@ -249,28 +248,63 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildPromoCards() {
+  /// **🔹 Promo Cards (Carousel)**
+  Widget _buildPromoCards(BuildContext context) {
+    // Get the screen dimensions
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate a responsive height based on screen width
+    final carouselHeight = screenWidth > 600
+        ? screenHeight * 0.15 // For tablets, use 15% of screen height
+        : screenHeight * 0.2; // For phones, use 20% of screen height
+
+    final List<Widget> promoCards = [
+      Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          image: DecorationImage(
+            image: AssetImage('assets/images/1.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          image: DecorationImage(
+            image: AssetImage('assets/images/2.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          image: DecorationImage(
+            image: AssetImage('assets/images/3.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ];
+
     return SizedBox(
-      height: 120,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: const [
-          VoucherCard(
-            title: 'Become A Premium Member',
-            description: 'Find better freelancing opportunities',
-            backgroundColor: Color.fromARGB(255, 77, 173, 45),
-          ),
-          VoucherCard(
-            title: 'Referral Awards',
-            description: 'Invite a colleague and get Rs. 500 in credit',
-            backgroundColor: Color.fromARGB(255, 92, 103, 178),
-          ),
-          VoucherCard(
-            title: 'Optimize Your Profile',
-            description: 'Become more attractive to potential clients',
-            backgroundColor: Colors.purpleAccent,
-          ),
-        ],
+      height: carouselHeight,
+      width: double.infinity,
+      child: CarouselSlider(
+        options: CarouselOptions(
+          autoPlay: true,
+          autoPlayInterval: const Duration(seconds: 3),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayCurve: Curves.easeInOut,
+          enlargeCenterPage: true,
+          viewportFraction: 0.85,
+          scrollDirection: Axis.horizontal,
+          enableInfiniteScroll: true,
+          padEnds: true,
+        ),
+        items: promoCards,
       ),
     );
   }
@@ -285,12 +319,12 @@ class _HomeViewState extends State<HomeView> {
           // Add an "All" tag to clear the filter
           GestureDetector(
             onTap: () {
-              context.read<HomeCubit>().setSelectedSkill(null); // Clear filter
+              context.read<HomeCubit>().setSelectedSkill(null);
             },
             child: MyTag(
               skill: const SkillEntity(name: "All"),
               backgroundColor: state.selectedSkill == null
-                  ? Colors.blue // Highlight if no filter is applied
+                  ? Colors.blue
                   : const Color(0xFF001F3F),
               textColor: Colors.white,
               borderColor: Colors.white,
@@ -305,7 +339,7 @@ class _HomeViewState extends State<HomeView> {
               child: MyTag(
                 skill: skill,
                 backgroundColor: state.selectedSkill == skill.name
-                    ? Colors.blue // Highlight the selected tag
+                    ? Colors.blue
                     : const Color(0xFF001F3F),
                 textColor: Colors.white,
                 borderColor: Colors.white,
@@ -319,10 +353,8 @@ class _HomeViewState extends State<HomeView> {
 
   /// **🔹 Projects List**
   Widget _buildProjectList(HomeState state) {
-    // Start with all projects
     List<ProjectEntity> filteredProjects = state.projects;
 
-    // Apply skill filter if a skill is selected
     if (state.selectedSkill != null) {
       filteredProjects = filteredProjects
           .where((project) => project.category
@@ -331,7 +363,6 @@ class _HomeViewState extends State<HomeView> {
           .toList();
     }
 
-    // Apply search filter if there's a search query
     final String searchQuery = _searchController.text.trim().toLowerCase();
     if (searchQuery.isNotEmpty) {
       filteredProjects = filteredProjects.where((project) {
