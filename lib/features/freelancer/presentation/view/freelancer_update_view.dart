@@ -361,7 +361,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                     ),
                     const SizedBox(height: 16),
                     _buildTextField(
-                      label: 'Location',
+                      label: 'Address',
                       controller: _locationController,
                       theme: theme,
                       isDarkTheme: isDarkTheme,
@@ -375,7 +375,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                     ),
                     const SizedBox(height: 16),
                     _buildTextField(
-                      label: 'Languages (comma-separated)',
+                      label: 'Languages',
                       controller: _languagesController,
                       theme: theme,
                       isDarkTheme: isDarkTheme,
