@@ -47,12 +47,11 @@ class _NotificationViewState extends State<NotificationView> {
                   );
                 }
                 if (state is NotificationSeenSuccess) {
-                  // Refresh the list after marking a notification as seen
                   context.read<NotificationBloc>().add(
                         GetNotificationByFreelancerIdEvent(widget.freelancerId),
                       );
                 }
-                // Check for unread "Congratulations" notifications when the state updates
+
                 if (state is NotificationLoaded) {
                   final hasUnreadAwardedNotification = state.notifications.any(
                     (notification) =>

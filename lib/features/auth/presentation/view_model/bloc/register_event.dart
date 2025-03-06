@@ -67,7 +67,6 @@ class RegisterUser extends RegisterEvent {
       ];
 }
 
-// New event for verifying OTP
 class VerifyOtpEvent extends RegisterEvent {
   final String email;
   final String otp;

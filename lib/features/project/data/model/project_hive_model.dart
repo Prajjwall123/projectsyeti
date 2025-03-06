@@ -79,7 +79,6 @@ class ProjectHiveModel extends Equatable {
     this.feedbackRespondMessage,
   }) : id = id ?? const Uuid().v4();
 
-  // Initial Constructor
   ProjectHiveModel.initial()
       : id = '',
         companyId = '',
@@ -99,7 +98,6 @@ class ProjectHiveModel extends Equatable {
         link = '',
         feedbackRespondMessage = '';
 
-  // From JSON
   factory ProjectHiveModel.fromJson(Map<String, dynamic> json) {
     return ProjectHiveModel(
       id: json['projectId'] as String?,
@@ -122,7 +120,6 @@ class ProjectHiveModel extends Equatable {
     );
   }
 
-  // To JSON
   Map<String, dynamic> toJson() {
     return {
       'projectId': id,
@@ -145,7 +142,6 @@ class ProjectHiveModel extends Equatable {
     };
   }
 
-  // To Entity
   ProjectEntity toEntity() {
     return ProjectEntity(
       projectId: id,

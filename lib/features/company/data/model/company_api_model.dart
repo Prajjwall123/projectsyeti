@@ -42,7 +42,6 @@ class CompanyApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$CompanyApiModelToJson(this);
 
-  // To Entity
   CompanyEntity toEntity() {
     return CompanyEntity(
       userId: id,
@@ -61,7 +60,6 @@ class CompanyApiModel extends Equatable {
     );
   }
 
-  // From Entity
   factory CompanyApiModel.fromEntity(CompanyEntity entity) {
     return CompanyApiModel(
       id: entity.userId,

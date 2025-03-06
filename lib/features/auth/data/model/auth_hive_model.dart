@@ -26,7 +26,6 @@ class UserHiveModel extends Equatable {
     required this.phone,
   }) : id = id ?? const Uuid().v4();
 
-  // Initial Constructor
   const UserHiveModel.initial()
       : id = '',
         email = '',
@@ -34,7 +33,6 @@ class UserHiveModel extends Equatable {
         fname = '',
         phone = '';
 
-  // From Entity
   factory UserHiveModel.fromJson(Map<String, dynamic> json) {
     return UserHiveModel(
       id: json['id'] as String?,
@@ -45,7 +43,6 @@ class UserHiveModel extends Equatable {
     );
   }
 
-  // To Entity
   Map<String, dynamic> toJson() {
     return {
       'id': id,

@@ -55,8 +55,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     result.fold(
       (failure) =>
           emit(NotificationError(failure.message ?? "Failed to mark as read")),
-      (message) => emit(NotificationSeenSuccess(
-          message)), // Now holds a success message string
+      (message) => emit(NotificationSeenSuccess(message)),
     );
   }
 }

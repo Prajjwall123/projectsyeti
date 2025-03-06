@@ -63,7 +63,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
   Future<FreelancerEntity> updateFreelancerById(
       String freelancerId, FreelancerEntity freelancer) async {
     try {
-      // Retrieve the token from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
 
@@ -71,7 +70,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
         throw Exception('Token is missing');
       }
 
-      // Create the DTO with all required fields
       final updateDTO = UpdateFreelancerByIdDTO(
         id: freelancer.id,
         skills: freelancer.skills
@@ -97,7 +95,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
       );
       debugPrint(updateDTO.toJson().toString());
 
-      // Send the PUT request with the token in headers
       var response = await _dio.put(
         '${ApiEndpoints.updateFreelancerById}/$freelancerId',
         data: updateDTO.toJson(),
@@ -111,7 +108,6 @@ class FreelancerRemoteDataSource implements IFreelancerDataSource {
       debugPrint("Response: ${response.data}");
 
       if (response.statusCode == 200) {
-        // On success, map the response to a FreelancerEntity
         GetFreelancerByIdDTO freelancerDTO =
             GetFreelancerByIdDTO.fromJson(response.data);
         return FreelancerEntity(

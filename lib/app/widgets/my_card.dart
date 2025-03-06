@@ -178,12 +178,10 @@ class MyCard extends StatelessWidget {
     );
   }
 
-  /// **Formats Date**
   String _formatDate(DateTime date) {
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 
-  /// **Trims Description to 100 Characters**
   String _trimDescription(String description) {
     const maxLength = 100;
     return description.length <= maxLength
@@ -191,7 +189,6 @@ class MyCard extends StatelessWidget {
         : "${description.substring(0, maxLength)}...";
   }
 
-  /// **Status Color Based on Project Status**
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'posted':

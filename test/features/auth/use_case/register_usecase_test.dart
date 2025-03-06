@@ -25,12 +25,10 @@ void main() {
   });
 
   test('should register user and return void on success', () async {
-    // Arrange
     when(() => repository.registerUser(any())).thenAnswer(
       (_) async => const Right(null),
     );
 
-    // Act
     final result = await usecase(const RegisterUserParams(
       freelancerName: "Prajwal Pokhrel",
       portfolio: "https://portfolio.com",
@@ -42,21 +40,17 @@ void main() {
       experienceYears: 5,
     ));
 
-    // Assert
     expect(result, const Right(null));
 
-    // Verify
     verify(() => repository.registerUser(any())).called(1);
     verifyNoMoreInteractions(repository);
   });
 
   test('should return Failure when repository fails', () async {
-    // Arrange
     when(() => repository.registerUser(any())).thenAnswer(
       (_) async => const Left(ApiFailure(message: "user already esists")),
     );
 
-    // Act
     final result = await usecase(const RegisterUserParams(
       freelancerName: "Prajwal Pokhrel",
       portfolio: "https://portfolio.com",
@@ -68,10 +62,8 @@ void main() {
       experienceYears: 5,
     ));
 
-    // Assert
     expect(result, isA<Left<Failure, void>>());
 
-    // Verify
     verify(() => repository.registerUser(any())).called(1);
     verifyNoMoreInteractions(repository);
   });

@@ -11,7 +11,6 @@ class BidProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if the theme is dark
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Card(

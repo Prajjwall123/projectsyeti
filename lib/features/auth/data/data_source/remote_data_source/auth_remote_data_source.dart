@@ -16,14 +16,12 @@ class AuthRemoteDataSource implements IAuthDataSource {
 
   @override
   Future<AuthEntity> getCurrentUser() {
-    // TODO: implement getCurrentUser
     throw UnimplementedError();
   }
 
   @override
   Future<String> loginUser(String email, String password) async {
     try {
-      // Send the login request
       Response response = await _dio.post(
         ApiEndpoints.login,
         data: {

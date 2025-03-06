@@ -40,8 +40,6 @@ class _OtpViewState extends State<OtpView> {
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 30),
-
-            // OTP Input Field
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               decoration: BoxDecoration(
@@ -69,7 +67,6 @@ class _OtpViewState extends State<OtpView> {
               ),
             ),
             const SizedBox(height: 30),
-
             BlocConsumer<RegisterBloc, RegisterState>(
               listener: (context, state) {
                 if (state.isOtpVerified) {

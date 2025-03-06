@@ -23,8 +23,8 @@ class BiddingApiModel extends Equatable {
     required this.amount,
     required this.message,
     required this.fileName,
-     this.createdAt,
-     this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory BiddingApiModel.fromJson(Map<String, dynamic> json) =>
@@ -32,7 +32,6 @@ class BiddingApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$BiddingApiModelToJson(this);
 
-  // To Entity
   BiddingEntity toEntity() {
     return BiddingEntity(
       id: id ?? '',
@@ -46,7 +45,6 @@ class BiddingApiModel extends Equatable {
     );
   }
 
-  // From Entity
   factory BiddingApiModel.fromEntity(BiddingEntity entity) {
     return BiddingApiModel(
       id: entity.id,

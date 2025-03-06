@@ -119,7 +119,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
   Future<ProjectEntity> updateProjectById(
       String projectId, ProjectEntity updatedProject) async {
     try {
-      // Fetch the token from TokenSharedPrefs
       final tokenResult = await _tokenSharedPrefs.getToken();
       String token = tokenResult.fold(
         (failure) =>
@@ -134,7 +133,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         throw Exception("Authentication token is missing");
       }
 
-      // Fetch the userId from TokenSharedPrefs
       final userIdResult = await _tokenSharedPrefs.getUserId();
       String userId = userIdResult.fold(
         (failure) =>
@@ -149,7 +147,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         throw Exception("User ID is missing");
       }
 
-      // Fetch all skills to map category names to ObjectIds
       Either<Failure, List<SkillEntity>> skillsResult =
           await _skillRepository.getSkills();
       List<SkillEntity> allSkills = skillsResult.fold(
@@ -158,7 +155,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         (skills) => skills,
       );
 
-      // Map category names to ObjectIds
       List<String> categoryIds = [];
       for (String categoryName in updatedProject.category) {
         SkillEntity? matchingSkill = allSkills.firstWhere(
@@ -174,7 +170,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         }
       }
 
-      // Create a new ProjectApiModel with category ObjectIds and userId as awardedTo
       final projectModel = ProjectApiModel(
         projectId: updatedProject.projectId,
         companyId: updatedProject.companyId,
@@ -182,20 +177,19 @@ class ProjectRemoteDataSource implements IProjectDataSource {
         companyLogo: updatedProject.companyLogo,
         title: updatedProject.title,
         headquarters: updatedProject.headquarters,
-        category: categoryIds, // Use ObjectIds instead of names
+        category: categoryIds,
         requirements: updatedProject.requirements,
         description: updatedProject.description,
         duration: updatedProject.duration,
         postedDate: updatedProject.postedDate,
         status: updatedProject.status,
         bidCount: updatedProject.bidCount,
-        awardedTo: userId, // Set awardedTo to the userId
+        awardedTo: userId,
         feedbackRequestedMessage: updatedProject.feedbackRequestedMessage,
         link: updatedProject.link,
         feedbackRespondMessage: updatedProject.feedbackRespondMessage,
       );
 
-      // Make the PUT request with the token in headers
       var response = await _dio.put(
         '${ApiEndpoints.updateProjectById}/$projectId',
         data: projectModel.toJson(),
@@ -211,7 +205,6 @@ class ProjectRemoteDataSource implements IProjectDataSource {
             ProjectApiModel.fromJson(response.data);
         debugPrint('Updated Project ID: ${updatedProjectModel.projectId}');
 
-        // Now fetch projects again by Freelancer ID to ensure updated data
         final projectsResult = await getProjectsByFreelancerId(userId);
 
         return updatedProjectModel.toEntity();

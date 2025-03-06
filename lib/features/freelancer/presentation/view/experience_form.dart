@@ -45,7 +45,6 @@ class ExperienceForm extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Experience Title
                 Text(
                   'Experience Title',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -69,8 +68,6 @@ class ExperienceForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Company
                 Text(
                   'Company',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -94,8 +91,6 @@ class ExperienceForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // From Year
                 Text(
                   'From Year',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -120,8 +115,6 @@ class ExperienceForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // To Year
                 Text(
                   'To Year',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -146,8 +139,6 @@ class ExperienceForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Description
                 Text(
                   'Description',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -171,8 +162,6 @@ class ExperienceForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                // Remove Button
                 Align(
                   alignment: Alignment.centerRight,
                   child: IconButton(

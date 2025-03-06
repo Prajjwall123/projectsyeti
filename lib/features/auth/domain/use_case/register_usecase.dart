@@ -27,7 +27,6 @@ class RegisterUserParams extends Equatable {
     this.experienceYears,
   });
 
-  //initial constructor
   const RegisterUserParams.initial({
     required this.freelancerName,
     this.portfolio,
@@ -40,7 +39,6 @@ class RegisterUserParams extends Equatable {
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [
         freelancerName,
         portfolio,

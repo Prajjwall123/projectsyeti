@@ -19,7 +19,6 @@ class NotificationRemoteDataSource implements INotificationDataSource {
           '${ApiEndpoints.getNotificationByFreelancer}/$freelancerId/Freelancer');
 
       if (response.statusCode == 200) {
-        // Assuming the response data is a list of notification JSON objects.
         List<dynamic> notificationsJson = response.data;
         return notificationsJson
             .map((json) => NotificationApiModel.fromJson(json).toEntity())
@@ -37,14 +36,12 @@ class NotificationRemoteDataSource implements INotificationDataSource {
   @override
   Future<String> seenNotificationByFreelancerId(String notificationId) async {
     try {
-      // Retrieve the token from SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
       if (token == null) {
         throw Exception('Token is missing');
       }
 
-      // Send the PUT request to mark the notification as seen.
       var response = await _dio.put(
         '${ApiEndpoints.seenNotificationByFreelancerId}/$notificationId',
         options: Options(

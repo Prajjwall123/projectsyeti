@@ -39,7 +39,6 @@ class CertificationForm extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Certification Name
                 Text(
                   'Certification Name',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -63,8 +62,6 @@ class CertificationForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-
-                // Organization
                 Text(
                   'Organization',
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -88,8 +85,6 @@ class CertificationForm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                // Remove Button
                 Align(
                   alignment: Alignment.centerRight,
                   child: IconButton(

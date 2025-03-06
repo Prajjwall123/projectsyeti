@@ -32,14 +32,12 @@ class _ProjectViewState extends State<ProjectView>
   @override
   void initState() {
     super.initState();
-    // Initialize the AnimationController for fade-in animations
-    _fadeController = AnimationController(
-      duration: const Duration(
-          milliseconds: 2000), // Total duration for all animations
-      vsync: this,
-    )..forward(); // Start the animation
 
-    // Define staggered fade animations for each section
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..forward();
+
     _titleFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _fadeController,
@@ -101,7 +99,7 @@ class _ProjectViewState extends State<ProjectView>
 
   @override
   void dispose() {
-    _fadeController.dispose(); // Dispose of the fade controller
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -156,7 +154,6 @@ class _ProjectViewState extends State<ProjectView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Fade-in for the project title
           FadeTransition(
             opacity: _titleFade,
             child: Text(
@@ -169,25 +166,21 @@ class _ProjectViewState extends State<ProjectView>
             ),
           ),
           const SizedBox(height: 10),
-          // Fade-in for the company info
           FadeTransition(
             opacity: _companyFade,
             child: _buildCompanyInfo(project, isDarkTheme),
           ),
           const SizedBox(height: 16),
-          // Fade-in for the posted date and duration
           FadeTransition(
             opacity: _detailsFade,
             child: _buildDetails(project, isDarkTheme),
           ),
           const SizedBox(height: 16),
-          // Fade-in for the categories
           FadeTransition(
             opacity: _categoriesFade,
             child: _buildCategories(project.category, isDarkTheme),
           ),
           const SizedBox(height: 16),
-          // Fade-in for the requirements
           FadeTransition(
             opacity: _requirementsFade,
             child: _buildRequirements(project.requirements, isDarkTheme),

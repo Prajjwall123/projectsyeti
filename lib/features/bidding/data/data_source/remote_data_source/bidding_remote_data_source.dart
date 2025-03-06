@@ -14,7 +14,6 @@ class BiddingRemoteDataSource implements IBiddingDataSource {
   @override
   Future<void> createBid(BiddingEntity bid, File file) async {
     try {
-      // Create FormData to send the bid details and the file
       FormData formData = FormData.fromMap({
         "freelancer": bid.freelancerId,
         "project": bid.projectId,
@@ -27,7 +26,6 @@ class BiddingRemoteDataSource implements IBiddingDataSource {
         ),
       });
 
-      // Send the request
       Response response = await _dio.post(
         ApiEndpoints.createBid,
         data: formData,

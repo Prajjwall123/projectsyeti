@@ -34,19 +34,15 @@ class _ProjectStatusCardState extends State<ProjectStatusCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // **Project Title**
             Text(
               widget.project.title,
               style: theme.textTheme.titleMedium
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6),
-
-            // **Dropdown to Change Status**
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // **Status Dropdown**
                 DropdownButton<String>(
                   value: selectedStatus,
                   items: _statusOptions.map((status) {
@@ -72,7 +68,6 @@ class _ProjectStatusCardState extends State<ProjectStatusCard> {
     );
   }
 
-  /// **List of Available Status Options**
   final List<String> _statusOptions = [
     "awarded",
     "In Progress",

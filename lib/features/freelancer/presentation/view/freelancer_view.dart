@@ -27,14 +27,12 @@ class _FreelancerViewState extends State<FreelancerView>
   @override
   void initState() {
     super.initState();
-    // Initialize the AnimationController for fade-in animations
-    _fadeController = AnimationController(
-      duration: const Duration(
-          milliseconds: 2000), // Total duration for all animations
-      vsync: this,
-    )..forward(); // Start the animation
 
-    // Define staggered fade animations for each section
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..forward();
+
     _profileFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _fadeController,
@@ -73,7 +71,7 @@ class _FreelancerViewState extends State<FreelancerView>
 
   @override
   void dispose() {
-    _fadeController.dispose(); // Dispose of the fade controller
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -126,7 +124,6 @@ class _FreelancerViewState extends State<FreelancerView>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // PROFILE SECTION with Fade-In
             FadeTransition(
               opacity: _profileFade,
               child: Center(
@@ -204,8 +201,6 @@ class _FreelancerViewState extends State<FreelancerView>
               ),
             ),
             const SizedBox(height: 20),
-
-            // ABOUT ME SECTION with Fade-In
             FadeTransition(
               opacity: _aboutMeFade,
               child: Column(
@@ -233,10 +228,7 @@ class _FreelancerViewState extends State<FreelancerView>
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // EXPERIENCE SECTION with Fade-In
             FadeTransition(
               opacity: _experienceFade,
               child: Column(
@@ -254,10 +246,7 @@ class _FreelancerViewState extends State<FreelancerView>
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // SKILLS SECTION with Fade-In
             FadeTransition(
               opacity: _skillsFade,
               child: Column(
@@ -280,10 +269,7 @@ class _FreelancerViewState extends State<FreelancerView>
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // CERTIFICATIONS SECTION with Fade-In
             FadeTransition(
               opacity: _certificationsFade,
               child: Column(
@@ -308,7 +294,6 @@ class _FreelancerViewState extends State<FreelancerView>
     );
   }
 
-  // Skills Chips
   Widget _buildSkillChips(List<String> skills, bool isDarkTheme) {
     return Wrap(
       spacing: 8,
@@ -328,7 +313,6 @@ class _FreelancerViewState extends State<FreelancerView>
     );
   }
 
-  // Section Header
   Widget _buildSectionHeader(String title, bool isDarkTheme) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -343,7 +327,6 @@ class _FreelancerViewState extends State<FreelancerView>
     );
   }
 
-  // Detail Cards
   Widget _buildCard(List<Widget> children, bool isDarkTheme) {
     return Container(
       padding: const EdgeInsets.all(12),
@@ -387,7 +370,6 @@ class _FreelancerViewState extends State<FreelancerView>
     );
   }
 
-  // Experience Card
   Widget _buildExperienceCard(dynamic exp, bool isDarkTheme) {
     return Container(
       padding: const EdgeInsets.all(12),
@@ -432,7 +414,6 @@ class _FreelancerViewState extends State<FreelancerView>
     );
   }
 
-  // Certifications
   Widget _buildCertificationRow(dynamic cert, bool isDarkTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),

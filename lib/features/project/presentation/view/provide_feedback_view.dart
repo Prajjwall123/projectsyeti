@@ -56,8 +56,7 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => ProjectsByFreelancerView(
-                    freelancerId: state.updatedProject
-                        .awardedTo!, // Use updated project's awardedTo
+                    freelancerId: state.updatedProject.awardedTo!,
                   ),
                 ),
               );
@@ -71,7 +70,7 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
           }
         },
         builder: (context, state) {
-          bool isSubmitting = state is ProjectLoading; // Use state for loading
+          bool isSubmitting = state is ProjectLoading;
           return SingleChildScrollView(
             child: Padding(
               padding:
@@ -79,7 +78,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Project Summary Card
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -91,7 +89,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Project Title
                           Text(
                             "Project",
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -111,8 +108,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                             ),
                           ),
                           const SizedBox(height: 12),
-
-                          // Company
                           Text(
                             "Company",
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -131,8 +126,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                             ),
                           ),
                           const SizedBox(height: 12),
-
-                          // Status
                           Text(
                             "Status",
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -161,8 +154,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                       ),
                     ),
                   ),
-
-                  // Progress Link Field
                   Text(
                     "Progress Link",
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -215,8 +206,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                     keyboardType: TextInputType.url,
                   ),
                   const SizedBox(height: 24),
-
-                  // Message Field
                   Text(
                     "Message",
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -270,8 +259,6 @@ class _ProvideFeedbackViewState extends State<ProvideFeedbackView> {
                     ),
                   ),
                   const SizedBox(height: 32),
-
-                  // Submit Button
                   Center(
                     child: isSubmitting
                         ? CircularProgressIndicator(

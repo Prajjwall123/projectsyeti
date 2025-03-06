@@ -7,7 +7,7 @@ import 'package:projectsyeti/features/skill/domain/entity/skill_entity.dart';
 part 'auth_api_model.g.dart';
 
 @JsonSerializable()
-class AuthApiModel extends Equatable{
+class AuthApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
   final String freelancerName;
@@ -22,13 +22,13 @@ class AuthApiModel extends Equatable{
   const AuthApiModel({
     this.id,
     required this.freelancerName,
-     this.portfolio,
+    this.portfolio,
     this.profileImage,
     required this.email,
     required this.password,
     required this.skills,
-     this.availability,
-     this.experienceYears,
+    this.availability,
+    this.experienceYears,
   });
 
   factory AuthApiModel.fromJson(Map<String, dynamic> json) =>
@@ -36,7 +36,6 @@ class AuthApiModel extends Equatable{
 
   Map<String, dynamic> toJson() => _$AuthApiModelToJson(this);
 
-  // To Entity
   AuthEntity toEntity() {
     return AuthEntity(
       userId: id,
@@ -44,14 +43,13 @@ class AuthApiModel extends Equatable{
       portfolio: portfolio,
       profileImage: profileImage,
       email: email,
-      experienceYears:experienceYears,
+      experienceYears: experienceYears,
       skills: skills.map((e) => e.toEntity()).toList(),
       availability: availability,
       password: password ?? '',
     );
   }
 
-  // From Entity
   factory AuthApiModel.fromEntity(AuthEntity entity) {
     return AuthApiModel(
       freelancerName: entity.freelancerName,
@@ -65,7 +63,16 @@ class AuthApiModel extends Equatable{
     );
   }
 
-   @override
-  List<Object?> get props =>
-      [id, freelancerName, portfolio, profileImage, email, skills, availability, experienceYears, password];
+  @override
+  List<Object?> get props => [
+        id,
+        freelancerName,
+        portfolio,
+        profileImage,
+        email,
+        skills,
+        availability,
+        experienceYears,
+        password
+      ];
 }

@@ -15,7 +15,6 @@ class BiddingRemoteRepository implements IBiddingRepository {
   @override
   Future<Either<Failure, void>> createBid(BiddingEntity bid, File file) async {
     try {
-      // Pass both the bid and the file to the data source
       await _biddingRemoteDataSource.createBid(bid, file);
       return const Right(null);
     } catch (e) {

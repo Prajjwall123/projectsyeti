@@ -95,7 +95,6 @@ class _DashboardViewState extends State<DashboardView> {
 
     userIdResult.fold(
       (failure) {
-        // Handle failure
         showMySnackBar(
           context: context,
           message: "Failed to retrieve userId",

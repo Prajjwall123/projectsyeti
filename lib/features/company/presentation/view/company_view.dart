@@ -23,14 +23,12 @@ class _CompanyViewState extends State<CompanyView>
   @override
   void initState() {
     super.initState();
-    // Initialize the AnimationController for fade-in animations
-    _fadeController = AnimationController(
-      duration: const Duration(
-          milliseconds: 1600), // Total duration for all animations
-      vsync: this,
-    )..forward(); // Start the animation
 
-    // Define staggered fade animations for each section
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 1600),
+      vsync: this,
+    )..forward();
+
     _headerFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _fadeController,
@@ -61,7 +59,7 @@ class _CompanyViewState extends State<CompanyView>
 
   @override
   void dispose() {
-    _fadeController.dispose(); // Dispose of the fade controller
+    _fadeController.dispose();
     super.dispose();
   }
 
@@ -118,7 +116,6 @@ class _CompanyViewState extends State<CompanyView>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // COMPANY HEADER with Fade-In
             FadeTransition(
               opacity: _headerFade,
               child: Container(
@@ -166,10 +163,7 @@ class _CompanyViewState extends State<CompanyView>
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // PROJECTS SECTION with Fade-In
             FadeTransition(
               opacity: _projectsFade,
               child: Column(
@@ -211,10 +205,7 @@ class _CompanyViewState extends State<CompanyView>
                 ],
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // BIO SECTION with Fade-In
             FadeTransition(
               opacity: _bioFade,
               child: Container(
@@ -230,10 +221,7 @@ class _CompanyViewState extends State<CompanyView>
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // OTHER DETAILS SECTION with Fade-In
             FadeTransition(
               opacity: _detailsFade,
               child: Container(
@@ -281,7 +269,6 @@ class _CompanyViewState extends State<CompanyView>
     );
   }
 
-  // Individual colored cards for stats
   Widget _buildColoredStatCard(
       String label, String value, Color color, bool isDarkTheme) {
     return Expanded(
@@ -325,7 +312,6 @@ class _CompanyViewState extends State<CompanyView>
     );
   }
 
-  // Row for other details with icons
   Widget _buildDetailRow(
       IconData icon, String label, String value, bool isDarkTheme) {
     return Padding(
@@ -360,7 +346,6 @@ class _CompanyViewState extends State<CompanyView>
     );
   }
 
-  // Box decoration for sections
   BoxDecoration _boxDecoration(bool isDarkTheme) {
     return BoxDecoration(
       color: isDarkTheme ? Colors.grey[900] : Colors.white,

@@ -219,7 +219,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Image Section
               _buildSectionCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,10 +307,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 ),
                 isDarkTheme: isDarkTheme,
               ),
-
               const SizedBox(height: 24),
-
-              // Personal Details Section
               _buildSectionCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -392,10 +388,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 ),
                 isDarkTheme: isDarkTheme,
               ),
-
               const SizedBox(height: 24),
-
-              // Certifications Section
               _buildSectionCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,10 +422,7 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 ),
                 isDarkTheme: isDarkTheme,
               ),
-
               const SizedBox(height: 24),
-
-              // Experience Section
               _buildSectionCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -474,8 +464,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
                 ),
                 isDarkTheme: isDarkTheme,
               ),
-
-              // Add extra padding at the bottom to ensure content is not obscured by the floating button
               const SizedBox(height: 80),
             ],
           ),
@@ -510,7 +498,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     );
   }
 
-  // Helper method to build a styled section card
   Widget _buildSectionCard({required Widget child, required bool isDarkTheme}) {
     return Container(
       width: double.infinity,
@@ -531,7 +518,6 @@ class _FreelancerUpdateViewState extends State<FreelancerUpdateView> {
     );
   }
 
-  // Helper method to build a styled TextField
   Widget _buildTextField({
     required String label,
     required TextEditingController controller,

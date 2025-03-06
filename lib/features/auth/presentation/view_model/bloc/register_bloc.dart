@@ -56,11 +56,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     final result = await _registerUseCase.call(RegisterUserParams(
       freelancerName: event.freelancerName,
-      // portfolio: event.portfolio,
       email: event.email,
       skills: event.skills,
-      // availability: event.availability,
-      // experienceYears: event.experienceYears,
       password: event.password,
       profileImage: state.profileImage ?? "",
     ));

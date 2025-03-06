@@ -32,7 +32,6 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
     _bidAmountController = TextEditingController();
     _proposalController = TextEditingController();
 
-    // Fetch project details when page loads
     context.read<ProjectBloc>().add(GetProjectByIdEvent(widget.projectId));
   }
 
@@ -43,7 +42,6 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
     super.dispose();
   }
 
-  // 📌 Function to Pick a File
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
@@ -55,13 +53,11 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine if the theme is dark
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Submit Bid"),
-        // AppBar will automatically adapt to the theme
       ),
       body: BlocBuilder<ProjectBloc, ProjectState>(
         builder: (context, state) {
@@ -100,12 +96,8 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ✅ Display the BidProjectCard component with project details
           BidProjectCard(project: project),
-
           const SizedBox(height: 20),
-
-          // ✅ Bid Amount Input
           Text(
             "Bid Amount",
             style: TextStyle(
@@ -148,10 +140,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
               color: isDarkTheme ? Colors.white : Colors.black,
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // ✅ Proposal Input
           Text(
             "Proposal",
             style: TextStyle(
@@ -194,10 +183,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
               color: isDarkTheme ? Colors.white : Colors.black,
             ),
           ),
-
           const SizedBox(height: 20),
-
-          // ✅ File Upload Button
           Text(
             "Attach File",
             style: TextStyle(
@@ -212,7 +198,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: const Color(0xFF001F3F), // Keep consistent with buttons
+                color: const Color(0xFF001F3F),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -235,9 +221,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
               ),
             ),
           ),
-
           const SizedBox(height: 20),
-
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -262,7 +246,7 @@ class _BidSubmissionViewState extends State<BidSubmissionView> {
                         message: _proposalController.text,
                         file: _selectedFile!,
                       ));
-                  // Show green success SnackBar immediately after adding the event
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Bid for project successful"),

@@ -8,49 +8,49 @@ class UpdateProjectByIdDTO {
   final String projectId;
 
   @JsonKey(name: 'title')
-  final String? title; // Allow null values safely
+  final String? title;
 
   @JsonKey(name: 'company')
-  final String? companyId; // Allow null values safely
+  final String? companyId;
 
   @JsonKey(name: 'companyName')
-  final String? companyName; // Allow null values safely
+  final String? companyName;
 
   @JsonKey(name: 'category')
-  final List<String>? category; // Ensure null safety for category
+  final List<String>? category;
 
   @JsonKey(name: 'requirements')
-  final String? requirements; // Allow null values safely
+  final String? requirements;
 
   @JsonKey(name: 'description')
-  final String? description; // Allow null values safely
+  final String? description;
 
   @JsonKey(name: 'duration')
-  final String? duration; // Allow null values safely
+  final String? duration;
 
   @JsonKey(name: 'postedDate')
-  final DateTime? postedDate; // Allow null values safely
+  final DateTime? postedDate;
 
   @JsonKey(name: 'status')
-  final String? status; // Allow null values safely
+  final String? status;
 
   @JsonKey(name: 'awardedTo')
-  final String? awardedTo; // Keep nullable
+  final String? awardedTo;
 
   @JsonKey(name: 'feedbackRequestedMessage')
-  final String? feedbackRequestedMessage; // Keep nullable
+  final String? feedbackRequestedMessage;
 
   @JsonKey(name: 'feedbackRespondMessage')
-  final String? feedbackRespondMessage; // Keep nullable
+  final String? feedbackRespondMessage;
 
   @JsonKey(name: 'link')
-  final String? link; // Keep nullable
+  final String? link;
 
   @JsonKey(name: 'createdAt')
-  final DateTime? createdAt; // Allow null safety
+  final DateTime? createdAt;
 
   @JsonKey(name: 'updatedAt')
-  final DateTime? updatedAt; // Allow null safety
+  final DateTime? updatedAt;
 
   UpdateProjectByIdDTO({
     required this.projectId,

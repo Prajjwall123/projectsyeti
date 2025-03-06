@@ -78,10 +78,8 @@ class UpdateFreelancerByIdDTO {
     this.updatedAt,
   });
 
-  // Factory method to create DTO from JSON
   factory UpdateFreelancerByIdDTO.fromJson(Map<String, dynamic> json) =>
       _$UpdateFreelancerByIdDTOFromJson(json);
 
-  // Method to convert DTO to JSON
   Map<String, dynamic> toJson() => _$UpdateFreelancerByIdDTOToJson(this);
 }

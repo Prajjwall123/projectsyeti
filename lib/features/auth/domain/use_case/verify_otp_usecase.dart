@@ -13,7 +13,6 @@ class VerifyOtpParams extends Equatable {
     required this.otp,
   });
 
-  // Empty constructor
   const VerifyOtpParams.empty()
       : email = '_empty.email',
         otp = '_empty.otp';

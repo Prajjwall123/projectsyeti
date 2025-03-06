@@ -56,7 +56,6 @@ class FreelancerApiModel extends Equatable {
 
   Map<String, dynamic> toJson() => _$FreelancerApiModelToJson(this);
 
-  // ✅ Convert Model to Entity
   FreelancerEntity toEntity() {
     return FreelancerEntity(
       id: id ?? "",
